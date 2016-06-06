@@ -13,6 +13,9 @@
         private PhotonIdentifier m_PhotonIdentifier = null;
         private IEnumerator m_RequestRoomList_Coroutine = null;
 
+        [SerializeField]
+        private string m_Anonymous = string.Empty;
+
         [Header("Events")]
         public UnityTypedEvent.StringEvent onPhotonEvent = new UnityTypedEvent.StringEvent();
         public UnityTypedEvent.PhotonRoomInfoArrayEvent onRoomListUpdate = new UnityTypedEvent.PhotonRoomInfoArrayEvent();
@@ -44,10 +47,28 @@
             onPhotonEvent.Invoke("已连接至PUN。");
         }
 
+        public override void OnDisconnectedFromPhoton()
+        {
+            base.OnDisconnectedFromPhoton();
+            onPhotonEvent.Invoke("已从PUN断开。");
+        }
+
+        public override void OnConnectionFail(DisconnectCause cause)
+        {
+            base.OnConnectionFail(cause);
+            onPhotonEvent.Invoke("<color=#800000ff>连接被中断。</color>");
+        }
+
         public override void OnJoinedLobby()
         {
             base.OnJoinedLobby();
-            onPhotonEvent.Invoke("已接入Photon服务器。");
+            onPhotonEvent.Invoke("已接入大厅。");
+        }
+
+        public override void OnLeftLobby()
+        {
+            base.OnLeftLobby();
+            onPhotonEvent.Invoke("已离开大厅。");
         }
 
         public override void OnReceivedRoomListUpdate()
@@ -57,11 +78,50 @@
             onPhotonEvent.Invoke("房间列表已更新。");
         }
 
+        public override void OnCreatedRoom()
+        {
+            base.OnCreatedRoom();
+            PhotonNetwork.SetMasterClient(PhotonNetwork.player);
+            onPhotonEvent.Invoke("已创建房间\"" + PhotonNetwork.room.name + "\"。");
+        }
+
+        public override void OnPhotonCreateRoomFailed(object[] codeAndMsg)
+        {
+            base.OnPhotonCreateRoomFailed(codeAndMsg);
+            short code = (short)codeAndMsg[0];
+            string msg = (string)codeAndMsg[1];
+            onPhotonEvent.Invoke("<color=#800000ff>创建房间失败。</color>");
+        }
+
         public override void OnJoinedRoom()
         {
             base.OnJoinedRoom();
             onJoinRoom.Invoke();
+            if (PhotonNetwork.masterClient == null)
+            {
+                PhotonNetwork.SetMasterClient(PhotonNetwork.player);
+            }
             onPhotonEvent.Invoke("已加入房间\"" + PhotonNetwork.room.name + "\"，当前人数为" + PhotonNetwork.room.playerCount + "人。");
+        }
+
+        public override void OnMasterClientSwitched(PhotonPlayer newMasterClient)
+        {            
+            base.OnMasterClientSwitched(newMasterClient);
+            if (PhotonNetwork.player.Equals(newMasterClient))
+            {
+                onPhotonEvent.Invoke("已获得房主权限。");
+            }
+            else
+            {
+                onPhotonEvent.Invoke("玩家\"" + (!string.IsNullOrEmpty(newMasterClient.name) ? newMasterClient.name : m_Anonymous) + "\"已成为房主。");
+            }
+            
+        }
+
+        public override void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
+        {
+            base.OnPhotonPlayerConnected(newPlayer);
+            onPhotonEvent.Invoke("玩家\"" + (!string.IsNullOrEmpty(newPlayer.name) ? newPlayer.name : m_Anonymous) + "\"已加入房间，当前人数为" + PhotonNetwork.room.playerCount + "人。");
         }
 
         public override void OnLeftRoom()

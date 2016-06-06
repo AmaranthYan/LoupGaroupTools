@@ -54,7 +54,7 @@ public class RoomListView : MonoBehaviour {
         }
         else
         {
-            if (m_SelectedRoom.Equals(name))
+            if (!string.IsNullOrEmpty(m_SelectedRoom) && m_SelectedRoom.Equals(name))
             {
                 m_SelectedRoom = null;
             }
