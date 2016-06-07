@@ -8,15 +8,18 @@ using System.Collections.Generic;
 public class ScrollListView : MonoBehaviour
 {
     [SerializeField]
-    protected ToggleGroup m_ToggleGroup = null;
-    public ToggleGroup ToggleGroup { get { return m_ToggleGroup; } }
-    [SerializeField]
     protected ScrollListItemView m_ScrollListItemPrefab = null;
+    [SerializeField]
+    protected ToggleGroup m_DefaultToggleGroup = null;
+    [SerializeField]
+    protected bool m_AllowMultiSelect = false;
 
     protected Dictionary<string, ScrollListItemView> m_CurrentScrollList = new Dictionary<string, ScrollListItemView>();
-    protected string m_SelectedRoom = null;
+    protected string m_SelectedItemId = null;
+    protected HashSet<string> m_MultiSelectedItemIds = new HashSet<string>();
 
-    public UnityTypedEvent.StringEvent onSelectedRoomChange = new UnityTypedEvent.StringEvent();
+    public UnityTypedEvent.ScrollListItemViewEvent onSelectedItemChange = new UnityTypedEvent.ScrollListItemViewEvent();
+    public UnityTypedEvent.ScrollListItemViewListEvent onMultiSelectedItemsChange = new UnityTypedEvent.ScrollListItemViewListEvent();
 
     public void UpdateList(Hashtable itemTable)
     {
@@ -35,7 +38,9 @@ public class ScrollListView : MonoBehaviour
                 itemInstance.transform.SetParent(transform);
                 itemInstance.transform.localPosition = Vector3.zero;
                 itemInstance.transform.localScale = Vector3.one;
-                itemInstance.InitItemView(itemId, this);
+
+                ToggleGroup toggleGroup = m_AllowMultiSelect ? null : m_DefaultToggleGroup;
+                itemInstance.InitItemView(itemId, toggleGroup, this);
                 itemInstance.UpdateItem(itemTable[itemId]);
                 newScrollList[itemId] = itemInstance;
             }
@@ -50,19 +55,44 @@ public class ScrollListView : MonoBehaviour
         m_CurrentScrollList = newScrollList;
     }
 
-	public void SelectItemInList(string name, bool isSelected)
+	public void SelectItemInList(string idInList, bool isSelected)
     {
-        if (isSelected)
+        if (!m_AllowMultiSelect)
         {
-            m_SelectedRoom = name;
+            if (isSelected)
+            {
+                m_SelectedItemId = idInList;
+            }
+            else
+            {
+                if ((m_SelectedItemId != null) && m_SelectedItemId.Equals(idInList))
+                {
+                    m_SelectedItemId = null;
+                }
+            }
+
+            onSelectedItemChange.Invoke(m_CurrentScrollList.ContainsKey(idInList) ? m_CurrentScrollList[idInList] : null);
         }
         else
         {
-            if (!string.IsNullOrEmpty(m_SelectedRoom) && m_SelectedRoom.Equals(name))
+            if (isSelected)
             {
-                m_SelectedRoom = null;
+                m_MultiSelectedItemIds.Add(idInList);
             }
+            else
+            {
+                m_MultiSelectedItemIds.Remove(idInList);
+            }
+
+            List<ScrollListItemView> itemViews = m_MultiSelectedItemIds.Count() > 0 ? new List<ScrollListItemView>() : null;
+            foreach (string itemId in m_MultiSelectedItemIds)
+            {
+                if (m_CurrentScrollList.ContainsKey(itemId))
+                {
+                    itemViews.Add(m_CurrentScrollList[itemId]);
+                }
+            }
+            onMultiSelectedItemsChange.Invoke(itemViews);
         }
-        onSelectedRoomChange.Invoke(m_SelectedRoom);
     }
 }

@@ -1,7 +1,7 @@
-﻿using Photon;
-using UnityEngine.Events;
+﻿using UnityEngine.Events;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class UnityTypedEvent
 {
@@ -11,6 +11,11 @@ public class UnityTypedEvent
     public class StringEvent : UnityEvent<string> { }
     [Serializable]
     public class HashtableEvent : UnityEvent<Hashtable> { }
+
+    [Serializable]
+    public class ScrollListItemViewEvent : UnityEvent<ScrollListItemView> { }
+    [Serializable]
+    public class ScrollListItemViewListEvent : UnityEvent<List<ScrollListItemView>> { }
 
     [Serializable]
     public class PhotonRoomInfoArrayEvent : UnityEvent<RoomInfo[]> { }

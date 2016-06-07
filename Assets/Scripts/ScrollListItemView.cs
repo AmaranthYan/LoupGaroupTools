@@ -18,14 +18,14 @@ public class ScrollListItemView : MonoBehaviour
         IsSelectedInList(false);
     }
 
-    public virtual void InitItemView(string idInList, ScrollListView scrollListView)
+    public virtual void InitItemView(string idInList, ToggleGroup toggleGroup, ScrollListView scrollListView)
     {
         m_IdInList = idInList;
         m_ScrollListView = scrollListView;
 
         if (m_Toggle)
         {
-            m_Toggle.group = m_ScrollListView.ToggleGroup;
+            m_Toggle.group = toggleGroup;
         }
     }
 
