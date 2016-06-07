@@ -18,7 +18,7 @@
 
         [Header("Events")]
         public UnityTypedEvent.StringEvent onPhotonEvent = new UnityTypedEvent.StringEvent();
-        public UnityTypedEvent.PhotonRoomInfoArrayEvent onRoomListUpdate = new UnityTypedEvent.PhotonRoomInfoArrayEvent();
+        public UnityTypedEvent.HashtableEvent onRoomListUpdate = new UnityTypedEvent.HashtableEvent();
         public UnityEvent onJoinRoom = new UnityEvent();
         public UnityEvent onLeaveRoom = new UnityEvent();
 
@@ -135,7 +135,12 @@
         public void FetchRoomList()
         {
             RoomInfo[] roomInfo = PhotonNetwork.GetRoomList();
-            onRoomListUpdate.Invoke(roomInfo);
+            Hashtable hashtable = new Hashtable();
+            foreach (RoomInfo rI in roomInfo)
+            {
+                hashtable.Add(rI.name, rI);
+            }
+            onRoomListUpdate.Invoke(hashtable);
         }
 
         private void ConnectToPUN()

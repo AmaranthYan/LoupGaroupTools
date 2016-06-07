@@ -1,44 +1,34 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.Events;
 using System.Collections;
 
-public class RoomView : MonoBehaviour {
-    [SerializeField]
-    private Toggle m_Toggle = null;
+public class RoomView : ScrollListItemView
+{
     [SerializeField]
     private string m_RoomStateFormat = string.Empty;
 
-    private RoomListView m_RoomListView = null;
-    public RoomListView RoomListView { get { return m_RoomListView; } set { m_RoomListView = value; } }
     private RoomInfo m_RoomInfo = null;
     public RoomInfo RoomInfo { get { return m_RoomInfo; } }
 
     [Header("Events")]
     public UnityTypedEvent.StringEvent onRoomNameUpdate = new UnityTypedEvent.StringEvent();
     public UnityTypedEvent.StringEvent onRoomStateUpdate = new UnityTypedEvent.StringEvent();
-    public UnityTypedEvent.BoolEvent onRoomOpen = new UnityTypedEvent.BoolEvent();
+    public UnityEvent onRoomOpen = new UnityEvent();
+    public UnityEvent onRoomClose = new UnityEvent();
 
-    void OnDestroy()
+    public override void UpdateItem(object value)
     {
-        IsSelectedInList(false);
-    }
-
-    public void InitRoomView(RoomListView roomListView)
-    {
-        m_RoomListView = roomListView;
-        if (m_Toggle) { m_Toggle.group = roomListView.ToggleGroup; }
-    }
-
-    public void UpdateRoomInfo(RoomInfo roomInfo)
-    {
-        m_RoomInfo = roomInfo;
-        onRoomNameUpdate.Invoke(roomInfo.name);
-        onRoomStateUpdate.Invoke(string.Format(m_RoomStateFormat, roomInfo.playerCount, roomInfo.maxPlayers == 0 ? "无限" : roomInfo.maxPlayers.ToString(), roomInfo.open ? "开放" : "锁定"));
-        onRoomOpen.Invoke(roomInfo.open);
-    }    
-
-    public void IsSelectedInList(bool isSelected)
-    {
-        if (m_RoomListView && (m_RoomInfo != null)) { m_RoomListView.SelectRoomInList(m_RoomInfo.name, isSelected); }
+        base.UpdateItem(value);
+        m_RoomInfo = (RoomInfo)value;
+        onRoomNameUpdate.Invoke(m_RoomInfo.name);
+        onRoomStateUpdate.Invoke(string.Format(m_RoomStateFormat, m_RoomInfo.playerCount, m_RoomInfo.maxPlayers == 0 ? "无限" : m_RoomInfo.maxPlayers.ToString(), m_RoomInfo.open ? "开放" : "锁定"));
+        if (m_RoomInfo.open)
+        {
+            onRoomOpen.Invoke();
+        }
+        else
+        {
+            onRoomClose.Invoke();
+        }        
     }
 }

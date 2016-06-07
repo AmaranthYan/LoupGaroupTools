@@ -2,7 +2,8 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class CreateNewRoomView : MonoBehaviour {
+public class CreateNewRoomView : MonoBehaviour
+{
     [SerializeField]
     private Text m_RoomName = null;
     [SerializeField]

@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class NetLogger : MonoBehaviour {
+public class NetLogger : MonoBehaviour
+{
     private static string Log = string.Empty;
 
     [Header("Events")]

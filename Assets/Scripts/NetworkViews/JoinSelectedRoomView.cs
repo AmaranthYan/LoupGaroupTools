@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class JoinSelectedRoomView : MonoBehaviour {
+public class JoinSelectedRoomView : MonoBehaviour
+{
     private string m_RoomName = null;
     public string RoomName { set { m_RoomName = value; } }
 

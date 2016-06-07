@@ -3,7 +3,8 @@ using System;
 using System.Collections;
 
 [CreateAssetMenu(fileName = "PhotonIdentifierSettings", menuName = "Photon/PhotonIdentifier", order = 1)]
-public class PhotonIdentifier : ScriptableObject {
+public class PhotonIdentifier : ScriptableObject
+{
     [SerializeField]
     private string m_GameIdentifier = string.Empty;
     [SerializeField]
