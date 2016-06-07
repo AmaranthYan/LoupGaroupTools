@@ -19,6 +19,7 @@
         [Header("Events")]
         public UnityTypedEvent.StringEvent onPhotonEvent = new UnityTypedEvent.StringEvent();
         public UnityTypedEvent.HashtableEvent onRoomListUpdate = new UnityTypedEvent.HashtableEvent();
+        public UnityTypedEvent.HashtableEvent onPlayerListUpdate = new UnityTypedEvent.HashtableEvent();
         public UnityEvent onJoinRoom = new UnityEvent();
         public UnityEvent onLeaveRoom = new UnityEvent();
 
@@ -88,8 +89,8 @@
         public override void OnPhotonCreateRoomFailed(object[] codeAndMsg)
         {
             base.OnPhotonCreateRoomFailed(codeAndMsg);
-            short code = (short)codeAndMsg[0];
-            string msg = (string)codeAndMsg[1];
+            //short code = (short)codeAndMsg[0];
+            //string msg = (string)codeAndMsg[1];
             onPhotonEvent.Invoke("<color=#800000ff>创建房间失败。</color>");
         }
 
@@ -101,6 +102,7 @@
             {
                 PhotonNetwork.SetMasterClient(PhotonNetwork.player);
             }
+            FetchPlayerList();
             onPhotonEvent.Invoke("已加入房间\"" + PhotonNetwork.room.name + "\"，当前人数为" + PhotonNetwork.room.playerCount + "人。");
         }
 
@@ -121,6 +123,7 @@
         public override void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
         {
             base.OnPhotonPlayerConnected(newPlayer);
+            FetchPlayerList();
             onPhotonEvent.Invoke("玩家\"" + (!string.IsNullOrEmpty(newPlayer.name) ? newPlayer.name : m_Anonymous) + "\"已加入房间，当前人数为" + PhotonNetwork.room.playerCount + "人。");
         }
 
@@ -141,6 +144,19 @@
                 hashtable.Add(rI.name, rI);
             }
             onRoomListUpdate.Invoke(hashtable);
+        }
+
+        public void FetchPlayerList()
+        {
+            if (PhotonNetwork.room == null) { return; }
+
+            PhotonPlayer[] photonPlayer = PhotonNetwork.playerList;
+            Hashtable hashtable = new Hashtable();
+            foreach (PhotonPlayer pP in photonPlayer)
+            {
+                hashtable.Add(pP.ID, pP);
+            }
+            onPlayerListUpdate.Invoke(hashtable);
         }
 
         private void ConnectToPUN()
