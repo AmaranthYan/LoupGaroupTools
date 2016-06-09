@@ -48,6 +48,13 @@
             onPhotonEvent.Invoke("已连接至PUN。");
         }
 
+        public override void OnFailedToConnectToPhoton(DisconnectCause cause)
+        {
+            base.OnFailedToConnectToPhoton(cause);
+            Debug.LogError("连接PUN失败，原因[" + cause + "]");
+            onPhotonEvent.Invoke("<color=#800000ff>连接PUN失败！</color>");
+        }
+
         public override void OnDisconnectedFromPhoton()
         {
             base.OnDisconnectedFromPhoton();
@@ -57,7 +64,13 @@
         public override void OnConnectionFail(DisconnectCause cause)
         {
             base.OnConnectionFail(cause);
-            onPhotonEvent.Invoke("<color=#800000ff>连接被中断。</color>");
+            onPhotonEvent.Invoke("<color=#800000ff>连接被中断！</color>");
+        }
+
+        public override void OnPhotonMaxCccuReached()
+        {
+            base.OnPhotonMaxCccuReached();
+            onPhotonEvent.Invoke("<color=#800000ff>当前服务器连接已达到上限！</color>");
         }
 
         public override void OnJoinedLobby()
@@ -91,7 +104,7 @@
             base.OnPhotonCreateRoomFailed(codeAndMsg);
             //short code = (short)codeAndMsg[0];
             //string msg = (string)codeAndMsg[1];
-            onPhotonEvent.Invoke("<color=#800000ff>创建房间失败。</color>");
+            onPhotonEvent.Invoke("<color=#800000ff>创建房间失败！</color>");
         }
 
         public override void OnJoinedRoom()
@@ -127,6 +140,13 @@
             onPhotonEvent.Invoke("玩家\"" + (!string.IsNullOrEmpty(newPlayer.name) ? newPlayer.name : m_Anonymous) + "\"已加入房间，当前人数为" + PhotonNetwork.room.playerCount + "人。");
         }
 
+        public override void OnPhotonPlayerDisconnected(PhotonPlayer otherPlayer)
+        {
+            base.OnPhotonPlayerDisconnected(otherPlayer);
+            FetchPlayerList();
+            onPhotonEvent.Invoke("玩家\"" + (!string.IsNullOrEmpty(otherPlayer.name) ? otherPlayer.name : m_Anonymous) + "\"已离开房间，当前人数为" + PhotonNetwork.room.playerCount + "人。");
+        }
+
         public override void OnLeftRoom()
         {
             base.OnLeftRoom();
@@ -154,7 +174,7 @@
             Hashtable hashtable = new Hashtable();
             foreach (PhotonPlayer pP in photonPlayer)
             {
-                hashtable.Add(pP.ID, pP);
+                hashtable.Add(pP.ID.ToString(), pP);
             }
             onPlayerListUpdate.Invoke(hashtable);
         }

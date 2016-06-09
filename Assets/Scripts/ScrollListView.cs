@@ -46,9 +46,9 @@ public class ScrollListView : MonoBehaviour
             }
         }
 
-        foreach (RoomView rV in m_CurrentScrollList.Values)
+        foreach (ScrollListItemView itemView in m_CurrentScrollList.Values)
         {
-            Destroy(rV.gameObject);
+            Destroy(itemView.gameObject);
         }
         m_CurrentScrollList.Clear();
 
@@ -57,42 +57,52 @@ public class ScrollListView : MonoBehaviour
 
 	public void SelectItemInList(string idInList, bool isSelected)
     {
+        bool isChanged = false;
+
         if (!m_AllowMultiSelect)
         {
             if (isSelected)
             {
                 m_SelectedItemId = idInList;
+                isChanged = true;
             }
             else
             {
                 if ((m_SelectedItemId != null) && m_SelectedItemId.Equals(idInList))
                 {
                     m_SelectedItemId = null;
+                    isChanged = true;
                 }
             }
 
-            onSelectedItemChange.Invoke(m_CurrentScrollList.ContainsKey(idInList) ? m_CurrentScrollList[idInList] : null);
+            if (isChanged)
+            {
+                onSelectedItemChange.Invoke((m_SelectedItemId != null) && m_CurrentScrollList.ContainsKey(m_SelectedItemId) ? m_CurrentScrollList[m_SelectedItemId] : null);
+            }
         }
         else
         {
             if (isSelected)
             {
-                m_MultiSelectedItemIds.Add(idInList);
+                isChanged = m_MultiSelectedItemIds.Add(idInList);
             }
             else
             {
-                m_MultiSelectedItemIds.Remove(idInList);
+                isChanged = m_MultiSelectedItemIds.Remove(idInList);
             }
 
-            List<ScrollListItemView> itemViews = m_MultiSelectedItemIds.Count() > 0 ? new List<ScrollListItemView>() : null;
-            foreach (string itemId in m_MultiSelectedItemIds)
+            if (isChanged)
             {
-                if (m_CurrentScrollList.ContainsKey(itemId))
+                List<ScrollListItemView> itemViews = m_MultiSelectedItemIds.Count() > 0 ? new List<ScrollListItemView>() : null;
+                foreach (string itemId in m_MultiSelectedItemIds)
                 {
-                    itemViews.Add(m_CurrentScrollList[itemId]);
+                    if (m_CurrentScrollList.ContainsKey(itemId))
+                    {
+                        itemViews.Add(m_CurrentScrollList[itemId]);
+                    }
                 }
-            }
-            onMultiSelectedItemsChange.Invoke(itemViews);
+                onMultiSelectedItemsChange.Invoke(itemViews);
+            }            
         }
     }
 }
