@@ -5,7 +5,9 @@ using System.Collections;
 public class PlayerView : ScrollListItemView
 {
     [SerializeField]
-    private string m_PlayerStateFormat = string.Empty;
+    private string m_Anonymous = string.Empty;
+    [SerializeField]
+    private string m_AnonymousFormat = string.Empty;
 
     private PhotonPlayer m_PhotonPlayer = null;
     public PhotonPlayer PhotonPlayer { get { return m_PhotonPlayer; } }
@@ -18,6 +20,6 @@ public class PlayerView : ScrollListItemView
     {
         base.UpdateItem(value);
         m_PhotonPlayer = (PhotonPlayer)value;
-        onPlayerInfoUpdate.Invoke(m_PhotonPlayer.ToString());                
+        onPlayerInfoUpdate.Invoke((string.IsNullOrEmpty(m_PhotonPlayer.name) ? string.Format(m_AnonymousFormat, m_Anonymous, m_PhotonPlayer.ID) : m_PhotonPlayer.name) + (m_PhotonPlayer.isMasterClient ? " (房主)" : string.Empty));                
     }
 }
