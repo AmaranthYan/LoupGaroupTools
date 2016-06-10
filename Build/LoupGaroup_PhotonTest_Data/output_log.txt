@@ -16,6 +16,51 @@ Platform assembly: D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_D
 Loading D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
 Platform assembly: D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\Photon3Unity3D.dll (this message is harmless)
 Loading D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\Photon3Unity3D.dll into Unity Child Domain
+- Completed reload, in  0.547 seconds
+Platform assembly: D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\System.dll (this message is harmless)
+<RI> Initializing input.
+<RI> Input initialized.
+desktop: 1920x1080 60Hz; virtual: 3840x1080 at 0,0
+<RI> Initialized touch support.
+UnloadTime: 0.545257 ms
+Best region found in PlayerPrefs. Connecting to: eu
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+Setting up 2 worker threads for Enlighten.
+  Thread -> id: 32b0 -> priority: 1 
+  Thread -> id: 584 -> priority: 1 
+Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/PhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/.\PhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/PhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/libPhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/.\libPhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/libPhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/PhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/.\PhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/PhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/libPhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/.\libPhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/libPhotonCryptoPlugin
+Initialize engine version: 5.3.5f1 (960ebf59018a)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: NVIDIA GeForce GTX 765M        (ID=0x11e2)
+    Vendor:   NVIDIA
+    VRAM:     1990 MB
+Begin MonoManager ReloadAssembly
+Platform assembly: D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\Photon3Unity3D.dll (this message is harmless)
+Loading D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\Photon3Unity3D.dll into Unity Child Domain
 - Completed reload, in  0.045 seconds
 Platform assembly: D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\System.dll (this message is harmless)
@@ -23,19 +68,23 @@ Platform assembly: D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_D
 <RI> Input initialized.
 desktop: 1920x1080 60Hz; virtual: 3840x1080 at 0,0
 <RI> Initialized touch support.
-UnloadTime: 0.649604 ms
+UnloadTime: 0.549106 ms
 Best region found in PlayerPrefs. Connecting to: eu
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
 
 Setting up 2 worker threads for Enlighten.
-  Thread -> id: 5f9c -> priority: 1 
-  Thread -> id: 497c -> priority: 1 
-TimeoutDisconnect while connecting to: ns.exitgames.com:5058. Check if the server is available.
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
-
-连接PUN失败，原因[TimeoutDisconnect]
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
-
+  Thread -> id: 543c -> priority: 1 
+  Thread -> id: 3fdc -> priority: 1 
+Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/PhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/.\PhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/PhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/libPhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/.\libPhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/libPhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/PhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/.\PhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/PhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/libPhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/.\libPhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/libPhotonCryptoPlugin
