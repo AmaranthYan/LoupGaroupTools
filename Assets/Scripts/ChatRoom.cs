@@ -24,7 +24,7 @@ public class ChatRoom : PunBehaviour
     public void SendChatMessage(string chatMsg)
     {
         PhotonView photonView = PhotonView.Get(this);
-        photonView.RPC("ReceiveChatMessage", PhotonTargets.All, chatMsg);
+        photonView.RPC("ReceiveChatMessage", PhotonTargets.All, "[" + NetPlayer.FetchPlayerName(PhotonNetwork.player) + "]:" + chatMsg);
     }
 
     [PunRPC]
