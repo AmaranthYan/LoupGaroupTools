@@ -3,7 +3,7 @@ using System.Collections;
 
 public class NetLogger : MonoBehaviour
 {
-    private static string Log = string.Empty;
+    private string Log = string.Empty;
 
     [Header("Events")]
     public UnityTypedEvent.StringEvent onLogUpdate = new UnityTypedEvent.StringEvent();
