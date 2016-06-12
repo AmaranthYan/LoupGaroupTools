@@ -4,6 +4,9 @@ using System.Collections;
 
 public class PlayerView : ScrollListItemView
 {
+    [SerializeField]
+    private SetMasterPlayerView m_SetMasterPlayerView = null;
+
     [Header("Events")]
     public UnityTypedEvent.StringEvent onPlayerInfoUpdate = new UnityTypedEvent.StringEvent();
     public UnityTypedEvent.BoolEvent onPlayerStateUpdate = new UnityTypedEvent.BoolEvent();
@@ -15,6 +18,11 @@ public class PlayerView : ScrollListItemView
     {
         base.UpdateItem(value);
         m_PhotonPlayer = (PhotonPlayer)value;
-        onPlayerInfoUpdate.Invoke(NetPlayer.FetchPlayerName(m_PhotonPlayer) + (m_PhotonPlayer.isMasterClient ? " (房主)" : string.Empty));                
+        if (m_SetMasterPlayerView)
+        {
+            m_SetMasterPlayerView.InitView(m_PhotonPlayer);
+            m_SetMasterPlayerView.UpdateView();
+        }
+        onPlayerInfoUpdate.Invoke(NetPlayer.FetchPlayerName(m_PhotonPlayer));                
     }
 }
