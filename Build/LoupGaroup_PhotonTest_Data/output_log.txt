@@ -16,21 +16,21 @@ Platform assembly: D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_D
 Loading D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
 Platform assembly: D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\Photon3Unity3D.dll (this message is harmless)
 Loading D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\Photon3Unity3D.dll into Unity Child Domain
-- Completed reload, in  0.073 seconds
+- Completed reload, in  0.048 seconds
 Platform assembly: D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\System.dll (this message is harmless)
 <RI> Initializing input.
 <RI> Input initialized.
 desktop: 1920x1080 60Hz; virtual: 3840x1080 at 0,0
 <RI> Initialized touch support.
-UnloadTime: 0.563646 ms
+UnloadTime: 0.632498 ms
 Best region found in PlayerPrefs. Connecting to: eu
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
 
 Setting up 2 worker threads for Enlighten.
-  Thread -> id: 247c -> priority: 1 
-  Thread -> id: 40d8 -> priority: 1 
+  Thread -> id: 5dac -> priority: 1 
+  Thread -> id: 1e94 -> priority: 1 
 Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/PhotonCryptoPlugin
 Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/.\PhotonCryptoPlugin
 Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/PhotonCryptoPlugin
@@ -43,3 +43,7 @@ Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/Lo
 Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/libPhotonCryptoPlugin
 Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/.\libPhotonCryptoPlugin
 Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/libPhotonCryptoPlugin
+CreateRoom failed. Client is not on Master Server or not yet ready to call operations. Wait for callback: OnJoinedLobby or OnConnectedToMaster.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
