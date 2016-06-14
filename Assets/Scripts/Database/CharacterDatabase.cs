@@ -4,7 +4,7 @@
     using System;
     using System.Collections;
 
-    [CreateAssetMenu(fileName = "LoupsGarousCharacterDatabase", menuName = "LoupsGarous/CharacterDatabase", order = 1)]
+    [CreateAssetMenu(fileName = "CharacterDatabase", menuName = "LoupsGarous/CharacterDatabase", order = 1)]
     public class CharacterDatabase : ScriptableObject
     {
         [SerializeField]
