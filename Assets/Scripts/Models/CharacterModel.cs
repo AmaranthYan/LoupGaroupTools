@@ -18,7 +18,7 @@
         [SerializeField]
         private int m_CollateralCharacters;
         [SerializeField]
-        private Texture2D m_Icon;
+        private Sprite m_Icon;
         [SerializeField]
         private Texture2D m_Image;
 
@@ -27,7 +27,7 @@
         public string DisplayName { get { return m_DisplayName; } }
         public string AmountRegex { get { return m_AmountRegex; } }
         public int CollateralCharacters { get { return m_CollateralCharacters; } }
-        public Texture2D Icon { get { return m_Icon; } }
+        public Sprite Icon { get { return m_Icon; } }
         public Texture2D Image { get { return m_Image; } }
     }
 }
