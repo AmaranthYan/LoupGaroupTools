@@ -60,12 +60,19 @@
         {
             if (!m_GameModeDatabase || m_GameModeDatabase.GameModeModels.Length <= modeIndex) { return; }
             m_CurrentGameMode = m_GameModeDatabase.GameModeModels[modeIndex];
-            UpdateCharacterList();
+            UpdateCharacterList(m_CurrentGameMode);
         }
 
-        public void UpdateCharacterList()
+        public void UpdateCharacterList(GameModeModel gameMode)
         {
+            if (!m_CharacterDatabase) { return; }
             Hashtable hashtable = new Hashtable();
+            CharacterModel[] enabledCharacters = m_CharacterDatabase.CharacterModels.Where(c => !gameMode.DisabledCharacters.Contains(c.Id)).ToArray();
+            foreach (CharacterModel character in enabledCharacters)
+            {
+                hashtable.Add(character.Id.ToString(), character);
+            }
+            onCharacterListUpdate.Invoke(hashtable);
         }
     }
 }
