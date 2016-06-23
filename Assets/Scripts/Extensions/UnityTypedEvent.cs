@@ -19,10 +19,10 @@ public class UnityTypedEvent
     [Serializable]
     public class SpriteEvent : UnityEvent<Sprite> { }
 
-    [Serializable]
-    public class ScrollListItemViewEvent : UnityEvent<ScrollListItemView> { }
-    [Serializable]
-    public class ScrollListItemViewListEvent : UnityEvent<List<ScrollListItemView>> { }
+    //[Serializable]
+    //public class ScrollListItemViewEvent : UnityEvent<ScrollListItemView> { }
+    //[Serializable]
+    //public class ScrollListItemViewListEvent : UnityEvent<List<ScrollListItemView>> { }
 
     [Serializable]
     public class PhotonRoomInfoArrayEvent : UnityEvent<RoomInfo[]> { }

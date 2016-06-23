@@ -3,7 +3,7 @@
     using UnityEngine;
     using System.Collections;
 
-    public class CharacterSettingView : ScrollListItemView
+    public class CharacterSettingView : ScrollListItemView<CharacterModel>
     {
         [Header("Events")]
         public UnityTypedEvent.SpriteEvent onCharacterSettingIconUpdate = new UnityTypedEvent.SpriteEvent();
@@ -11,24 +11,21 @@
         public UnityTypedEvent.BoolEvent onLocalEnabledStateLoad = new UnityTypedEvent.BoolEvent();
         public UnityTypedEvent.StringEvent onLocalAmountLoad = new UnityTypedEvent.StringEvent();
 
-        private CharacterModel m_Character = null;
-        public CharacterModel Character { get { return m_Character; } }
-
         private CharacterSetting m_CharacterSetting = null;
 
         public override void UpdateItem(object value)
         {
             base.UpdateItem(value);
-            m_Character = (CharacterModel)value;
-            onCharacterSettingIconUpdate.Invoke(m_Character.Icon);
-            onCharacterSettingNameUpdate.Invoke(m_Character.DisplayName);
+            m_Item = (CharacterModel)value;
+            onCharacterSettingIconUpdate.Invoke(m_Item.Icon);
+            onCharacterSettingNameUpdate.Invoke(m_Item.DisplayName);
 
             RetrieveLocalCharacterSetting();
         }
 
         private void RetrieveLocalCharacterSetting()
         {
-            m_CharacterSetting = SettingStorageService.Instance.RetrieveCharacterSetting(m_Character.Id);
+            m_CharacterSetting = SettingStorageService.Instance.RetrieveCharacterSetting(m_Item.Id);
             if (m_CharacterSetting != null)
             {
                 onLocalEnabledStateLoad.Invoke(m_CharacterSetting.IsEnabled);
@@ -44,7 +41,7 @@
             }
             else
             {
-                m_CharacterSetting = new CharacterSetting() { Id = m_Character.Id, Name = m_Character.DisplayName, IsEnabled = isEnabled, Amount = 0 };
+                m_CharacterSetting = new CharacterSetting() { Id = m_Item.Id, Name = m_Item.DisplayName, IsEnabled = isEnabled, Amount = 0 };
             }
             StoreLocalCharacterSetting();
         }
@@ -60,7 +57,7 @@
                 }
                 else
                 {
-                    m_CharacterSetting = new CharacterSetting() { Id = m_Character.Id, Name = m_Character.DisplayName, IsEnabled = true, Amount = amount };
+                    m_CharacterSetting = new CharacterSetting() { Id = m_Item.Id, Name = m_Item.DisplayName, IsEnabled = true, Amount = amount };
                 }
                 StoreLocalCharacterSetting();
             }

@@ -1,29 +1,31 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(ToggleGroup))]
-public class ScrollListView : MonoBehaviour
+public class ScrollListView<T> : MonoBehaviour
 {
     [SerializeField]
-    protected ScrollListItemView m_ScrollListItemPrefab = null;
+    protected GameObject m_ScrollListItemPrefab = null;
     [SerializeField]
     protected ToggleGroup m_DefaultToggleGroup = null;
     [SerializeField]
     protected bool m_AllowMultiSelect = false;
 
-    protected Dictionary<string, ScrollListItemView> m_CurrentScrollList = new Dictionary<string, ScrollListItemView>();
+    protected Dictionary<string, ScrollListItemView<T>> m_CurrentScrollList = new Dictionary<string, ScrollListItemView<T>>();
     protected string m_SelectedItemId = null;
     protected HashSet<string> m_MultiSelectedItemIds = new HashSet<string>();
 
-    public UnityTypedEvent.ScrollListItemViewEvent onSelectedItemChange = new UnityTypedEvent.ScrollListItemViewEvent();
-    public UnityTypedEvent.ScrollListItemViewListEvent onMultiSelectedItemsChange = new UnityTypedEvent.ScrollListItemViewListEvent();
+    public UnityEvent<T> onSelectedItemChange = null;
+    public UnityEvent<List<T>> onMultiSelectedItemsChange = null;
 
     public void UpdateList(Hashtable itemTable)
     {
-        Dictionary<string, ScrollListItemView> newScrollList = new Dictionary<string, ScrollListItemView>();
+        Dictionary<string, ScrollListItemView<T>> newScrollList = new Dictionary<string, ScrollListItemView<T>>();
         foreach (string itemId in itemTable.Keys)
         {
             if (m_CurrentScrollList.ContainsKey(itemId))
@@ -34,7 +36,7 @@ public class ScrollListView : MonoBehaviour
             }
             else
             {
-                ScrollListItemView itemInstance = Instantiate(m_ScrollListItemPrefab);
+                ScrollListItemView<T> itemInstance = Instantiate(m_ScrollListItemPrefab).GetComponent<ScrollListItemView<T>>();
                 itemInstance.transform.SetParent(transform);
                 itemInstance.transform.localPosition = Vector3.zero;
                 itemInstance.transform.localScale = Vector3.one;
@@ -46,7 +48,7 @@ public class ScrollListView : MonoBehaviour
             }
         }
 
-        foreach (ScrollListItemView itemView in m_CurrentScrollList.Values)
+        foreach (ScrollListItemView<T> itemView in m_CurrentScrollList.Values)
         {
             Destroy(itemView.gameObject);
         }
@@ -77,7 +79,7 @@ public class ScrollListView : MonoBehaviour
 
             if (isChanged)
             {
-                onSelectedItemChange.Invoke((m_SelectedItemId != null) && m_CurrentScrollList.ContainsKey(m_SelectedItemId) ? m_CurrentScrollList[m_SelectedItemId] : null);
+                onSelectedItemChange.Invoke((m_SelectedItemId != null) && m_CurrentScrollList.ContainsKey(m_SelectedItemId) ? m_CurrentScrollList[m_SelectedItemId].Item : default(T));
             }
         }
         else
@@ -93,12 +95,12 @@ public class ScrollListView : MonoBehaviour
 
             if (isChanged)
             {
-                List<ScrollListItemView> itemViews = m_MultiSelectedItemIds.Count() > 0 ? new List<ScrollListItemView>() : null;
+                List<T> itemViews = m_MultiSelectedItemIds.Count() > 0 ? new List<T>() : null;
                 foreach (string itemId in m_MultiSelectedItemIds)
                 {
                     if (m_CurrentScrollList.ContainsKey(itemId))
                     {
-                        itemViews.Add(m_CurrentScrollList[itemId]);
+                        itemViews.Add(m_CurrentScrollList[itemId].Item);
                     }
                 }
                 onMultiSelectedItemsChange.Invoke(itemViews);

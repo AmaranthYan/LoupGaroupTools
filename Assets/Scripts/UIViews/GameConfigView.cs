@@ -74,5 +74,10 @@
             }
             onCharacterListUpdate.Invoke(hashtable);
         }
+
+        public void ValidateGameConfig()
+        {
+
+        }
     }
 }

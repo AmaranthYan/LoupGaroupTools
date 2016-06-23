@@ -3,21 +3,21 @@ using System.Collections;
 
 public class JoinSelectedRoomView : MonoBehaviour
 {
-    private RoomView m_RoomView = null;
-    public RoomView RoomView { set { m_RoomView = value; } }
+    private RoomInfo m_SelectedRoom = null;
+    public RoomInfo SelectedRoom { set { m_SelectedRoom = value; } }
 
-    public void SetRoomView(ScrollListItemView roomView)
+    public void SetRoomView(RoomInfo roomInfo)
     {
-        m_RoomView = (RoomView)roomView;
+        m_SelectedRoom = roomInfo;
     }
 
     public void JoinSelectedRoom()
     {
-        if (!m_RoomView)
+        if (m_SelectedRoom == null)
         {
             Debug.Log("房间名称为空。");
             return;
         }
-        PhotonNetwork.JoinRoom(m_RoomView.RoomInfo.name);
+        PhotonNetwork.JoinRoom(m_SelectedRoom.name);
     }
 }
