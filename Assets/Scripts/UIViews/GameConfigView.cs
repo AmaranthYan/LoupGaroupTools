@@ -18,6 +18,7 @@
         //private Dropdown m_GameModeDropdown = null;
 
         public UnityTypedEvent.StringListEvent onGameModeInit = new UnityTypedEvent.StringListEvent();
+        public UnityTypedEvent.BoolEvent onGameModeValidate = new UnityTypedEvent.BoolEvent();
         public UnityTypedEvent.HashtableEvent onCharacterListUpdate = new UnityTypedEvent.HashtableEvent();
 
         private GameModeModel m_CurrentGameMode = null;
@@ -60,6 +61,7 @@
         {
             if (!m_GameModeDatabase || m_GameModeDatabase.GameModeModels.Length <= modeIndex) { return; }
             m_CurrentGameMode = m_GameModeDatabase.GameModeModels[modeIndex];
+            ValidateGameMode(m_CurrentGameMode);
             UpdateCharacterList(m_CurrentGameMode);
         }
 
@@ -73,6 +75,11 @@
                 hashtable.Add(character.Id.ToString(), character);
             }
             onCharacterListUpdate.Invoke(hashtable);
+        }
+
+        public void ValidateGameMode(GameModeModel gameMode)
+        {
+            onGameModeValidate.Invoke(gameMode.GameLogic != null);
         }
     }
 }
