@@ -44,7 +44,7 @@
             }
             catch (Exception e)
             {
-                Debug.LogError("");
+                Debug.LogError("设置读取失败！");
                 return new SettingStorageService();
             }
         }
@@ -60,7 +60,7 @@
             }
             catch (Exception e)
             {
-                
+                Debug.LogError("设置保存失败！");
             }
         }
 
