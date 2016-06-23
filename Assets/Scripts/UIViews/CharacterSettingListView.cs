@@ -4,12 +4,12 @@
     using System;
     using System.Collections.Generic;
 
-    public class CharacterSettingListView : ScrollListView<CharacterModel>
+    public class CharacterSettingListView : ScrollListView<DataPair<CharacterModel, CharacterSetting>>
     {
         [Serializable]
-        public class SingleItemEvent : UnityEvent<CharacterModel> { }
+        public class SingleItemEvent : UnityEvent<DataPair<CharacterModel, CharacterSetting>> { }
         [Serializable]
-        public class MultiItemEvent : UnityEvent<List<CharacterModel>> { }
+        public class MultiItemEvent : UnityEvent<List<DataPair<CharacterModel, CharacterSetting>>> { }
 
         public new SingleItemEvent onSelectedItemChange = new SingleItemEvent();
         public new MultiItemEvent onMultiSelectedItemsChange = new MultiItemEvent();
