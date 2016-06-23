@@ -3,16 +3,16 @@
     using UnityEngine;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.IO;
     using System.Xml.Serialization;
 
+    [XmlRoot("SettingCache")]
     public class SettingCacheService
     {
         [XmlIgnore]
         public const string CACHE_FILE_NAME = "DefaultSettings.cache";
 
-        private List<CharacterSetting> m_CharacterSettings = null;
+        private List<CharacterSetting> m_CharacterSettings = new List<CharacterSetting>();
         [XmlArray("DefaultCharacterSettings")]
         [XmlArrayItem("CharacterSetting")]
         public List<CharacterSetting> CharacterSettings { get { return m_CharacterSettings; } set { m_CharacterSettings = value; } }
@@ -35,18 +35,31 @@
         private static SettingCacheService LoadCache()
         {
             XmlSerializer serializer = new XmlSerializer(typeof(SettingCacheService));
-            using (FileStream stream = new FileStream(Path.Combine(Application.persistentDataPath, CACHE_FILE_NAME), FileMode.OpenOrCreate))
+            try
             {
-                return serializer.Deserialize(stream) as SettingCacheService;
-            }          
+                using (FileStream stream = new FileStream(Path.Combine(Application.persistentDataPath, CACHE_FILE_NAME), FileMode.OpenOrCreate))
+                {                
+                    return serializer.Deserialize(stream) as SettingCacheService;                
+                }
+            }
+            catch (Exception e)
+            {
+                return new SettingCacheService();
+            }
         }
 
         private void SaveCache()
         {
             XmlSerializer serializer = new XmlSerializer(typeof(SettingCacheService));
-            using (FileStream stream = new FileStream(Path.Combine(Application.persistentDataPath, CACHE_FILE_NAME), FileMode.Create))
+            try { 
+                using (FileStream stream = new FileStream(Path.Combine(Application.persistentDataPath, CACHE_FILE_NAME), FileMode.Create))
+                {
+                    serializer.Serialize(stream, this);
+                }
+            }
+            catch (Exception e)
             {
-                serializer.Serialize(stream, this);
+                
             }
         }
 

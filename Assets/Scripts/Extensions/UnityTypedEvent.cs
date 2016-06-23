@@ -9,6 +9,8 @@ public class UnityTypedEvent
     [Serializable]
     public class BoolEvent : UnityEvent<bool> { }
     [Serializable]
+    public class IntEvent : UnityEvent<int> { }
+    [Serializable]
     public class StringEvent : UnityEvent<string> { }
     [Serializable]
     public class StringListEvent : UnityEvent<List<string>> { }
