@@ -1,7 +1,6 @@
 ﻿namespace LoupsGarous
 {
     using UnityEngine;
-    using UnityEngine.Events;
     using System.Collections;
 
     public class CharacterSettingView : ScrollListItemView
@@ -9,8 +8,8 @@
         [Header("Events")]
         public UnityTypedEvent.SpriteEvent onCharacterSettingIconUpdate = new UnityTypedEvent.SpriteEvent();
         public UnityTypedEvent.StringEvent onCharacterSettingNameUpdate = new UnityTypedEvent.StringEvent();
-        public UnityTypedEvent.BoolEvent onDefaultEnabledStateLoad = new UnityTypedEvent.BoolEvent();
-        public UnityTypedEvent.StringEvent onDefaultAmountLoad = new UnityTypedEvent.StringEvent();
+        public UnityTypedEvent.BoolEvent onLocalEnabledStateLoad = new UnityTypedEvent.BoolEvent();
+        public UnityTypedEvent.StringEvent onLocalAmountLoad = new UnityTypedEvent.StringEvent();
 
         private CharacterModel m_Character = null;
         public CharacterModel Character { get { return m_Character; } }
@@ -24,16 +23,16 @@
             onCharacterSettingIconUpdate.Invoke(m_Character.Icon);
             onCharacterSettingNameUpdate.Invoke(m_Character.DisplayName);
 
-            LoadFromDefaultCharacterSetting();
+            RetrieveLocalCharacterSetting();
         }
 
-        private void LoadFromDefaultCharacterSetting()
+        private void RetrieveLocalCharacterSetting()
         {
-            m_CharacterSetting = SettingCacheService.Instance.LoadCharacterSettingFromCache(m_Character.Id);
+            m_CharacterSetting = SettingStorageService.Instance.RetrieveCharacterSetting(m_Character.Id);
             if (m_CharacterSetting != null)
             {
-                onDefaultEnabledStateLoad.Invoke(m_CharacterSetting.IsEnabled);
-                onDefaultAmountLoad.Invoke(m_CharacterSetting.Amount.ToString());
+                onLocalEnabledStateLoad.Invoke(m_CharacterSetting.IsEnabled);
+                onLocalAmountLoad.Invoke(m_CharacterSetting.Amount.ToString());
             }
         }
 
@@ -47,7 +46,7 @@
             {
                 m_CharacterSetting = new CharacterSetting() { Id = m_Character.Id, Name = m_Character.DisplayName, IsEnabled = isEnabled, Amount = 0 };
             }
-            SaveToDefaultCharacterSetting();
+            StoreLocalCharacterSetting();
         }
 
         public void SaveAmount(string amountText)
@@ -63,13 +62,13 @@
                 {
                     m_CharacterSetting = new CharacterSetting() { Id = m_Character.Id, Name = m_Character.DisplayName, IsEnabled = true, Amount = amount };
                 }
-                SaveToDefaultCharacterSetting();
+                StoreLocalCharacterSetting();
             }
         }
 
-        private void SaveToDefaultCharacterSetting()
-        {            
-            SettingCacheService.Instance.SaveCharacterSettingToCache(m_CharacterSetting);
+        private void StoreLocalCharacterSetting()
+        {
+            SettingStorageService.Instance.StoreCharacterSetting(m_CharacterSetting);
         }
     }
 }
