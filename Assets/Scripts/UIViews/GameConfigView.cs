@@ -6,6 +6,7 @@
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.RegularExpressions;
 
     public class GameConfigView : MonoBehaviour
     {
@@ -22,6 +23,7 @@
         public UnityTypedEvent.HashtableEvent onCharacterListUpdate = new UnityTypedEvent.HashtableEvent();
 
         private GameModeModel m_CurrentGameMode = null;
+        private List<DataPair<CharacterModel, CharacterSetting>> m_CurrentCharacters = null;
 
         void Start()
         {
@@ -80,6 +82,11 @@
         public void ValidateGameMode(GameModeModel gameMode)
         {
             onGameModeValidate.Invoke(gameMode.GameLogic != null);
+        }
+
+        public void SelectCharacters(List<DataPair<CharacterModel, CharacterSetting>> characters)
+        {
+            m_CurrentCharacters = characters;
         }
     }
 }
