@@ -89,10 +89,6 @@
         public void SelectCharacters(List<DataPair<CharacterModel, CharacterSetting>> characters)
         {
             m_CurrentCharacters = characters;
-            foreach(DataPair<CharacterModel, CharacterSetting> c in characters)
-            {
-                Debug.Log(c.Value1.Id + " : " + c.Value2.Amount);
-            }
         }
     }
 }

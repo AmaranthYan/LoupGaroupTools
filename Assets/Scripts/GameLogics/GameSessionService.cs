@@ -28,8 +28,20 @@
                     UnityEngine.Object.Destroy(m_GameSession);
                 }
                 m_GameSession = UnityEngine.Object.Instantiate(gameMode.GameSessionPrefab);
-                //m_GameSession.GetComponent<GameLogicBase>();
 
+                GameLogicBase gameLogic = m_GameSession.GetComponent<GameLogicBase>();
+                if (!gameLogic)
+                {
+                    Debug.LogError("无法生成有效的游戏逻辑，游戏未能成功创建！");
+                    EndGameSession();
+                    return;
+                }
+                Dictionary<int, int> characterSet = new Dictionary<int, int>();
+                foreach (DataPair<CharacterModel, CharacterSetting> character in characters)
+                {
+                    characterSet[character.Value1.Id] = character.Value2.Amount;
+                }
+                gameLogic.InitGameLogic(players, characterSet);
             }            
         }
 
