@@ -11,4 +11,10 @@ public class RoomListView: ScrollListView<RoomInfo>
 
     public new SingleItemEvent onSelectedItemChange = new SingleItemEvent();
     public new MultiItemEvent onMultiSelectedItemsChange = new MultiItemEvent();
+
+    protected override void Awake()
+    {
+        base.onSelectedItemChange = onSelectedItemChange;
+        base.onMultiSelectedItemsChange = onMultiSelectedItemsChange;
+    }
 }

@@ -23,7 +23,9 @@
         public UnityTypedEvent.HashtableEvent onCharacterListUpdate = new UnityTypedEvent.HashtableEvent();
 
         private GameModeModel m_CurrentGameMode = null;
+        public GameModeModel CurrentGameMode { get { return m_CurrentGameMode; } }
         private List<DataPair<CharacterModel, CharacterSetting>> m_CurrentCharacters = null;
+        public List<DataPair<CharacterModel, CharacterSetting>> CurrentCharacters { get { return m_CurrentCharacters; } }
 
         void Start()
         {
@@ -81,12 +83,16 @@
 
         public void ValidateGameMode(GameModeModel gameMode)
         {
-            onGameModeValidate.Invoke(gameMode.GameLogic != null);
+            onGameModeValidate.Invoke(gameMode.GameSessionPrefab != null);
         }
 
         public void SelectCharacters(List<DataPair<CharacterModel, CharacterSetting>> characters)
         {
             m_CurrentCharacters = characters;
+            foreach(DataPair<CharacterModel, CharacterSetting> c in characters)
+            {
+                Debug.Log(c.Value1.Id + " : " + c.Value2.Amount);
+            }
         }
     }
 }

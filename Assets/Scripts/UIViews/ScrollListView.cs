@@ -7,7 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(ToggleGroup))]
-public class ScrollListView<T> : MonoBehaviour
+public abstract class ScrollListView<T> : MonoBehaviour
 {
     [SerializeField]
     protected GameObject m_ScrollListItemPrefab = null;
@@ -23,16 +23,28 @@ public class ScrollListView<T> : MonoBehaviour
     public UnityEvent<T> onSelectedItemChange = null;
     public UnityEvent<List<T>> onMultiSelectedItemsChange = null;
 
+    protected abstract void Awake();
+
     public void UpdateList(Hashtable itemTable)
     {
-        Dictionary<string, ScrollListItemView<T>> newScrollList = new Dictionary<string, ScrollListItemView<T>>();
+        List<string> keys = m_CurrentScrollList.Keys.ToList();
+        foreach (string itemId in keys)
+        {
+            if (!itemTable.ContainsKey(itemId))
+            {
+                Destroy(m_CurrentScrollList[itemId].gameObject);
+                m_CurrentScrollList.Remove(itemId);
+            }
+        }
+
+        //Dictionary<string, ScrollListItemView<T>> newScrollList = new Dictionary<string, ScrollListItemView<T>>();
         foreach (string itemId in itemTable.Keys)
         {
             if (m_CurrentScrollList.ContainsKey(itemId))
             {
-                newScrollList[itemId] = m_CurrentScrollList[itemId];
-                newScrollList[itemId].UpdateItem(itemTable[itemId]);
-                m_CurrentScrollList.Remove(itemId);
+                //m_CurrentScrollList[itemId] = m_CurrentScrollList[itemId];
+                m_CurrentScrollList[itemId].UpdateItem(itemTable[itemId]);
+                //m_CurrentScrollList.Remove(itemId);
             }
             else
             {
@@ -41,20 +53,13 @@ public class ScrollListView<T> : MonoBehaviour
                 itemInstance.transform.localPosition = Vector3.zero;
                 itemInstance.transform.localScale = Vector3.one;
 
+                m_CurrentScrollList[itemId] = itemInstance;
+
                 ToggleGroup toggleGroup = m_AllowMultiSelect ? null : m_DefaultToggleGroup;
-                itemInstance.InitItemView(itemId, toggleGroup, this);
-                itemInstance.UpdateItem(itemTable[itemId]);
-                newScrollList[itemId] = itemInstance;
+                m_CurrentScrollList[itemId].InitItemView(itemId, toggleGroup, this);
+                m_CurrentScrollList[itemId].UpdateItem(itemTable[itemId]);
             }
         }
-
-        foreach (ScrollListItemView<T> itemView in m_CurrentScrollList.Values)
-        {
-            Destroy(itemView.gameObject);
-        }
-        m_CurrentScrollList.Clear();
-
-        m_CurrentScrollList = newScrollList;
     }
 
 	public void SelectItemInList(string idInList, bool isSelected)
