@@ -6,44 +6,62 @@ Direct3D:
     Vendor:   NVIDIA
     VRAM:     1990 MB
 Begin MonoManager ReloadAssembly
-Platform assembly: D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\UnityEngine.dll (this message is harmless)
-Loading D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\UnityEngine.dll into Unity Child Domain
-Platform assembly: D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\Assembly-CSharp.dll (this message is harmless)
-Loading D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
-Platform assembly: D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\UnityEngine.UI.dll (this message is harmless)
-Loading D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
-Platform assembly: D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
-Loading D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-Platform assembly: D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\Photon3Unity3D.dll (this message is harmless)
-Loading D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\Photon3Unity3D.dll into Unity Child Domain
-- Completed reload, in  0.048 seconds
-Platform assembly: D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\System.Core.dll (this message is harmless)
-Platform assembly: D:\Unity Project\LoupGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\System.dll (this message is harmless)
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\Photon3Unity3D.dll (this message is harmless)
+Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\Photon3Unity3D.dll into Unity Child Domain
+- Completed reload, in  0.077 seconds
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\System.dll (this message is harmless)
 <RI> Initializing input.
 <RI> Input initialized.
 desktop: 1920x1080 60Hz; virtual: 3840x1080 at 0,0
 <RI> Initialized touch support.
-UnloadTime: 0.632498 ms
+UnloadTime: 0.594863 ms
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\System.Xml.dll (this message is harmless)
+设置读取失败！
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
 Best region found in PlayerPrefs. Connecting to: eu
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
 
 Setting up 2 worker threads for Enlighten.
-  Thread -> id: 5dac -> priority: 1 
-  Thread -> id: 1e94 -> priority: 1 
-Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/PhotonCryptoPlugin
-Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/.\PhotonCryptoPlugin
-Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/PhotonCryptoPlugin
-Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/libPhotonCryptoPlugin
-Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/.\libPhotonCryptoPlugin
-Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/libPhotonCryptoPlugin
-Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/PhotonCryptoPlugin
-Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/.\PhotonCryptoPlugin
-Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/PhotonCryptoPlugin
-Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/libPhotonCryptoPlugin
-Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/.\libPhotonCryptoPlugin
-Fallback handler could not load library D:/Unity Project/LoupGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/libPhotonCryptoPlugin
-CreateRoom failed. Client is not on Master Server or not yet ready to call operations. Wait for callback: OnJoinedLobby or OnConnectedToMaster.
+  Thread -> id: 52c -> priority: 1 
+  Thread -> id: 41ec -> priority: 1 
+Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/PhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/.\PhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/PhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/libPhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/.\libPhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/libPhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/PhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/.\PhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/PhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/libPhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/.\libPhotonCryptoPlugin
+Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/libPhotonCryptoPlugin
+NullReferenceException: Object reference not set to an instance of an object
+  at LoupsGarous.GameSessionService.StartGameSession (LoupsGarous.GameConfigView gameConfig) [0x00000] in <filename unknown>:0 
+  at LoupsGarous.GameSessionServiceView.StartGameSession () [0x00000] in <filename unknown>:0 
+  at (wrapper managed-to-native) System.Reflection.MonoMethod:InternalInvoke (object,object[],System.Exception&)
+  at System.Reflection.MonoMethod.Invoke (System.Object obj, BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x00000] in <filename unknown>:0 
+Rethrow as TargetInvocationException: Exception has been thrown by the target of an invocation.
+  at System.Reflection.MonoMethod.Invoke (System.Object obj, BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x00000] in <filename unknown>:0 
+  at System.Reflection.MethodBase.Invoke (System.Object obj, System.Object[] parameters) [0x00000] in <filename unknown>:0 
+  at NetworkingPeer.ExecuteRpc (ExitGames.Client.Photon.Hashtable rpcData, .PhotonPlayer sender) [0x00000] in <filename unknown>:0 
+  at NetworkingPeer.OnEvent (ExitGames.Client.Photon.EventData photonEvent) [0x00000] in <filename unknown>:0 
+  at ExitGames.Client.Photon.PeerBase.DeserializeMessageAndCallback (System.Byte[] inBuff) [0x00000] in <filename unknown>:0 
+  at ExitGames.Client.Photon.EnetPeer.DispatchIncomingCommands () [0x00000] in <filename unknown>:0 
+  at ExitGames.Client.Photon.PhotonPeer.DispatchIncomingCommands () [0x00000] in <filename unknown>:0 
+  at PhotonHandler.Update () [0x00000] in <filename unknown>:0 
  
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+(Filename:  Line: -1)
 
