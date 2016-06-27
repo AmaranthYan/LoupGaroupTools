@@ -25,7 +25,8 @@
                 PhotonNetwork.room.open = false;
                 if (m_GameSession)
                 {
-                    UnityEngine.Object.Destroy(m_GameSession);
+                    Debug.LogWarning("当前游戏进程不为空，请先结束当前进程。");
+                    return;
                 }
                 m_GameSession = UnityEngine.Object.Instantiate(gameMode.GameSessionPrefab);
 
@@ -47,9 +48,13 @@
 
         public static void EndGameSession()
         {
-            if (!m_GameSession)
+            if (m_GameSession)
             {
                 UnityEngine.Object.Destroy(m_GameSession);
+            }
+            else
+            {
+                Debug.LogWarning("当前游戏进程为空。");
             }
             m_GameSession = null;
             PhotonNetwork.room.open = true;

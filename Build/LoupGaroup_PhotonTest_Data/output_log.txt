@@ -16,14 +16,14 @@ Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_
 Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
 Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\Photon3Unity3D.dll (this message is harmless)
 Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\Photon3Unity3D.dll into Unity Child Domain
-- Completed reload, in  0.077 seconds
+- Completed reload, in  0.551 seconds
 Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\System.dll (this message is harmless)
 <RI> Initializing input.
 <RI> Input initialized.
 desktop: 1920x1080 60Hz; virtual: 3840x1080 at 0,0
 <RI> Initialized touch support.
-UnloadTime: 0.594863 ms
+UnloadTime: 0.582461 ms
 Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\System.Xml.dll (this message is harmless)
 设置读取失败！
  
@@ -34,8 +34,8 @@ Best region found in PlayerPrefs. Connecting to: eu
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
 
 Setting up 2 worker threads for Enlighten.
-  Thread -> id: 52c -> priority: 1 
-  Thread -> id: 41ec -> priority: 1 
+  Thread -> id: 1db0 -> priority: 1 
+  Thread -> id: 3e54 -> priority: 1 
 Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/PhotonCryptoPlugin
 Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/.\PhotonCryptoPlugin
 Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/PhotonCryptoPlugin
@@ -48,20 +48,3 @@ Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/L
 Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/libPhotonCryptoPlugin
 Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/.\libPhotonCryptoPlugin
 Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/libPhotonCryptoPlugin
-NullReferenceException: Object reference not set to an instance of an object
-  at LoupsGarous.GameSessionService.StartGameSession (LoupsGarous.GameConfigView gameConfig) [0x00000] in <filename unknown>:0 
-  at LoupsGarous.GameSessionServiceView.StartGameSession () [0x00000] in <filename unknown>:0 
-  at (wrapper managed-to-native) System.Reflection.MonoMethod:InternalInvoke (object,object[],System.Exception&)
-  at System.Reflection.MonoMethod.Invoke (System.Object obj, BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x00000] in <filename unknown>:0 
-Rethrow as TargetInvocationException: Exception has been thrown by the target of an invocation.
-  at System.Reflection.MonoMethod.Invoke (System.Object obj, BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x00000] in <filename unknown>:0 
-  at System.Reflection.MethodBase.Invoke (System.Object obj, System.Object[] parameters) [0x00000] in <filename unknown>:0 
-  at NetworkingPeer.ExecuteRpc (ExitGames.Client.Photon.Hashtable rpcData, .PhotonPlayer sender) [0x00000] in <filename unknown>:0 
-  at NetworkingPeer.OnEvent (ExitGames.Client.Photon.EventData photonEvent) [0x00000] in <filename unknown>:0 
-  at ExitGames.Client.Photon.PeerBase.DeserializeMessageAndCallback (System.Byte[] inBuff) [0x00000] in <filename unknown>:0 
-  at ExitGames.Client.Photon.EnetPeer.DispatchIncomingCommands () [0x00000] in <filename unknown>:0 
-  at ExitGames.Client.Photon.PhotonPeer.DispatchIncomingCommands () [0x00000] in <filename unknown>:0 
-  at PhotonHandler.Update () [0x00000] in <filename unknown>:0 
- 
-(Filename:  Line: -1)
-
