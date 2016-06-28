@@ -7,8 +7,11 @@
 
     public abstract class GameLogicBase : PunBehaviour
     {
-        private PhotonPlayer[] m_Players = null;
-        private Dictionary<int, int> m_CharacterSet = null;
+        [SerializeField]
+        protected CharacterDatabase m_CharacterDatabase = null;
+
+        protected PhotonPlayer[] m_Players = null;
+        protected Dictionary<int, int> m_CharacterSet = null;
 
         public void InitGameLogic(PhotonPlayer[] players, Dictionary<int, int> characterSet)
         {
