@@ -18,14 +18,19 @@
         {
             if (PhotonNetwork.player.isMasterClient)
             {
-                photonView.RPC("StartGameSession", PhotonTargets.AllViaServer);
+                PhotonNetwork.room.open = false;
+                photonView.RPC("StartRemoteGameSession", PhotonTargets.AllViaServer, PhotonNetwork.playerList, m_GameConfigView);
             }
         }
 
         [PunRPC]
-        private void StartRemoteGameSession()
+        private void StartRemoteGameSession(PhotonPlayer[] players, GameConfigView gameConfig)
         {
-            GameSessionService.StartGameSession(m_GameConfigView);
+            bool hasStarted = GameSessionService.StartGameSession(players, gameConfig);
+            if (PhotonNetwork.player.isMasterClient)
+            {
+                PhotonNetwork.room.open = !hasStarted;
+            }
             GameSessionService.GameSession.transform.parent = this.transform;
             onStartRemoteGameSession.Invoke();
         }
@@ -34,7 +39,8 @@
         {
             if (PhotonNetwork.player.isMasterClient)
             {
-                photonView.RPC("EndGameSession", PhotonTargets.AllViaServer);
+                photonView.RPC("EndRemoteGameSession", PhotonTargets.AllViaServer);
+                PhotonNetwork.room.open = true;
             }
         }
 
