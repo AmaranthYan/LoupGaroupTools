@@ -4,6 +4,8 @@ using System.Collections;
 
 public class CreateNewRoomView : MonoBehaviour
 {
+    private const int MAX_PLAYER_TTL_MILLISECONDS = 10000;
+
     [SerializeField]
     private Text m_RoomName = null;
     [SerializeField]
@@ -17,8 +19,9 @@ public class CreateNewRoomView : MonoBehaviour
         string name = !string.IsNullOrEmpty(m_RoomName.text) ? m_RoomName.text : null;
         RoomOptions options = new RoomOptions();
         if (!byte.TryParse(m_MaxPlayers.text, out options.maxPlayers)) { options.maxPlayers = 0; };
+        options.PlayerTtl = MAX_PLAYER_TTL_MILLISECONDS;
         options.isOpen = true;
-        options.cleanupCacheOnLeave = true;
+        options.isVisible = true;
         PhotonNetwork.CreateRoom(name, options, TypedLobby.Default);
     }
 }
