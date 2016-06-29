@@ -9,9 +9,8 @@
         private static GameObject m_GameSession = null;
         public static GameObject GameSession { get { return m_GameSession; } }
 
-        public static void StartGameSession(GameConfigView gameConfig)
+        public static bool StartGameSession(PhotonPlayer[] players, GameConfigView gameConfig)
         {
-            PhotonPlayer[] players = PhotonNetwork.playerList;
             GameModeModel gameMode = gameConfig.CurrentGameMode;
             List<DataPair<CharacterModel, CharacterSetting>> characters = gameConfig.CurrentCharacters;
 
@@ -22,11 +21,10 @@
             }
             if (players.Length <= minPlayersNumber)
             {
-                PhotonNetwork.room.open = false;
                 if (m_GameSession)
                 {
                     Debug.LogWarning("当前游戏进程不为空，请先结束当前进程。");
-                    return;
+                    return false;
                 }
                 m_GameSession = UnityEngine.Object.Instantiate(gameMode.GameSessionPrefab);
 
@@ -35,7 +33,7 @@
                 {
                     Debug.LogError("无法生成有效的游戏逻辑，游戏未能成功创建！");
                     EndGameSession();
-                    return;
+                    return false;
                 }
                 Dictionary<int, int> characterSet = new Dictionary<int, int>();
                 foreach (DataPair<CharacterModel, CharacterSetting> character in characters)
@@ -43,7 +41,12 @@
                     characterSet[character.Value1.Id] = character.Value2.Amount;
                 }
                 gameLogic.InitGameLogic(players, characterSet);
-            }            
+                return true;
+            } else
+            {
+                Debug.LogError("玩家与角色数量不匹配！");
+                return false;
+            }
         }
 
         public static void EndGameSession()
@@ -57,7 +60,6 @@
                 Debug.LogWarning("当前游戏进程为空。");
             }
             m_GameSession = null;
-            PhotonNetwork.room.open = true;
         }
     }
 }
