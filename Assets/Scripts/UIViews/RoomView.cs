@@ -17,8 +17,8 @@ public class RoomView : ScrollListItemView<RoomInfo>
     {
         base.UpdateItem(value);
         m_Item = (RoomInfo)value;
-        onRoomNameUpdate.Invoke(m_Item.name);
-        onRoomStateUpdate.Invoke(string.Format(m_RoomStateFormat, m_Item.playerCount, m_Item.maxPlayers == 0 ? "无限" : m_Item.maxPlayers.ToString(), m_Item.open ? "开放" : "锁定"));
+        onRoomNameUpdate.Invoke(m_Item.open ? m_Item.name : "<color=#808080>" + m_Item.name + "</color>");
+        onRoomStateUpdate.Invoke(string.Format(m_Item.open ? m_RoomStateFormat : "<color=#808080>" + m_RoomStateFormat + "</color>", m_Item.playerCount, m_Item.maxPlayers == 0 ? "无限" : m_Item.maxPlayers.ToString(), m_Item.open ? "开放" : "锁定"));
         if (m_Item.open)
         {
             onRoomOpen.Invoke();
