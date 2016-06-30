@@ -1,12 +1,10 @@
 ﻿namespace LoupsGarous
 {
     using UnityEngine;
-    using UnityEngine.UI;
     using System;
-    using System.Collections;
+    using System.Collections.Specialized;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text.RegularExpressions;
 
     public class GameConfigView : MonoBehaviour
     {
@@ -20,7 +18,7 @@
 
         public UnityTypedEvent.StringListEvent onGameModeInit = new UnityTypedEvent.StringListEvent();
         public UnityTypedEvent.BoolEvent onGameModeValidate = new UnityTypedEvent.BoolEvent();
-        public UnityTypedEvent.HashtableEvent onCharacterListUpdate = new UnityTypedEvent.HashtableEvent();
+        public UnityTypedEvent.OrderedDictionaryEvent onCharacterListUpdate = new UnityTypedEvent.OrderedDictionaryEvent();
 
         private GameModeModel m_CurrentGameMode = null;
         public GameModeModel CurrentGameMode { get { return m_CurrentGameMode; } }
@@ -72,13 +70,13 @@
         public void UpdateCharacterList(GameModeModel gameMode)
         {
             if (!m_CharacterDatabase) { return; }
-            Hashtable hashtable = new Hashtable();
+            OrderedDictionary dictionary = new OrderedDictionary();
             CharacterModel[] enabledCharacters = m_CharacterDatabase.CharacterModels.Where(c => !gameMode.DisabledCharacters.Contains(c.Id)).ToArray();
             foreach (CharacterModel character in enabledCharacters)
             {
-                hashtable.Add(character.Id.ToString(), character);
+                dictionary.Add(character.Id.ToString(), character);
             }
-            onCharacterListUpdate.Invoke(hashtable);
+            onCharacterListUpdate.Invoke(dictionary);
         }
 
         public void ValidateGameMode(GameModeModel gameMode)

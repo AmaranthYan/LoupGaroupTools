@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using System;
 using System.Collections;
+using System.Collections.Specialized;
 
 public class NetPlayer : PunBehaviour
 {
@@ -19,8 +20,8 @@ public class NetPlayer : PunBehaviour
 
     [Header("Events")]
     public UnityTypedEvent.StringEvent onPhotonEvent = new UnityTypedEvent.StringEvent();
-    public UnityTypedEvent.HashtableEvent onRoomListUpdate = new UnityTypedEvent.HashtableEvent();
-    public UnityTypedEvent.HashtableEvent onPlayerListUpdate = new UnityTypedEvent.HashtableEvent();
+    public UnityTypedEvent.OrderedDictionaryEvent onRoomListUpdate = new UnityTypedEvent.OrderedDictionaryEvent();
+    public UnityTypedEvent.OrderedDictionaryEvent onPlayerListUpdate = new UnityTypedEvent.OrderedDictionaryEvent();
     public UnityEvent onJoinRoom = new UnityEvent();
     public UnityEvent onLeaveRoom = new UnityEvent();
 
@@ -176,12 +177,12 @@ public class NetPlayer : PunBehaviour
     public void FetchRoomList()
     {
         RoomInfo[] roomInfo = PhotonNetwork.GetRoomList();
-        Hashtable hashtable = new Hashtable();
+        OrderedDictionary dictionary = new OrderedDictionary();
         foreach (RoomInfo rI in roomInfo)
         {
-            hashtable.Add(rI.name, rI);
+            dictionary.Add(rI.name, rI);
         }
-        onRoomListUpdate.Invoke(hashtable);
+        onRoomListUpdate.Invoke(dictionary);
     }
 
     public void FetchPlayerList()
@@ -189,12 +190,12 @@ public class NetPlayer : PunBehaviour
         if (PhotonNetwork.room == null) { return; }
 
         PhotonPlayer[] photonPlayer = PhotonNetwork.playerList;
-        Hashtable hashtable = new Hashtable();
+        OrderedDictionary dictionary = new OrderedDictionary();
         foreach (PhotonPlayer pP in photonPlayer)
         {
-            hashtable.Add(pP.ID.ToString(), pP);
+            dictionary.Add(pP.ID.ToString(), pP);
         }
-        onPlayerListUpdate.Invoke(hashtable);
+        onPlayerListUpdate.Invoke(dictionary);
     }
 
     private bool ConnectToPUN()

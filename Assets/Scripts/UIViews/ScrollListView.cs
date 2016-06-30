@@ -4,6 +4,7 @@ using UnityEngine.Events;
 using System;
 using System.Linq;
 using System.Collections;
+using System.Collections.Specialized;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(ToggleGroup))]
@@ -25,26 +26,23 @@ public abstract class ScrollListView<T> : MonoBehaviour
 
     protected abstract void Awake();
 
-    public void UpdateList(Hashtable itemTable)
+    public void UpdateList(OrderedDictionary itemDictionary)
     {
         List<string> keys = m_CurrentScrollList.Keys.ToList();
         foreach (string itemId in keys)
         {
-            if (!itemTable.ContainsKey(itemId))
+            if (!itemDictionary.Contains(itemId))
             {
                 Destroy(m_CurrentScrollList[itemId].gameObject);
                 m_CurrentScrollList.Remove(itemId);
             }
         }
-
-        //Dictionary<string, ScrollListItemView<T>> newScrollList = new Dictionary<string, ScrollListItemView<T>>();
-        foreach (string itemId in itemTable.Keys)
+        
+        foreach (string itemId in itemDictionary.Keys)
         {
             if (m_CurrentScrollList.ContainsKey(itemId))
             {
-                //m_CurrentScrollList[itemId] = m_CurrentScrollList[itemId];
-                m_CurrentScrollList[itemId].UpdateItem(itemTable[itemId]);
-                //m_CurrentScrollList.Remove(itemId);
+                m_CurrentScrollList[itemId].UpdateItem(itemDictionary[itemId]);
             }
             else
             {
@@ -57,7 +55,7 @@ public abstract class ScrollListView<T> : MonoBehaviour
 
                 ToggleGroup toggleGroup = m_AllowMultiSelect ? null : m_DefaultToggleGroup;
                 m_CurrentScrollList[itemId].InitItemView(itemId, toggleGroup, this);
-                m_CurrentScrollList[itemId].UpdateItem(itemTable[itemId]);
+                m_CurrentScrollList[itemId].UpdateItem(itemDictionary[itemId]);
             }
         }
     }

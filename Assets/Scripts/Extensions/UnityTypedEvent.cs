@@ -2,6 +2,7 @@
 using UnityEngine.Events;
 using System;
 using System.Collections;
+using System.Collections.Specialized;
 using System.Collections.Generic;
 
 public class UnityTypedEvent
@@ -16,6 +17,8 @@ public class UnityTypedEvent
     public class StringListEvent : UnityEvent<List<string>> { }
     [Serializable]
     public class HashtableEvent : UnityEvent<Hashtable> { }
+    [Serializable]
+    public class OrderedDictionaryEvent : UnityEvent<OrderedDictionary> { }
     [Serializable]
     public class SpriteEvent : UnityEvent<Sprite> { }
 
