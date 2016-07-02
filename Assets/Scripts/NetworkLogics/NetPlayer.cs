@@ -24,6 +24,8 @@ public class NetPlayer : PunBehaviour
     public UnityTypedEvent.OrderedDictionaryEvent onPlayerListUpdate = new UnityTypedEvent.OrderedDictionaryEvent();
     public UnityEvent onJoinRoom = new UnityEvent();
     public UnityEvent onLeaveRoom = new UnityEvent();
+    public UnityEvent onBecomeMasterPlayer = new UnityEvent();
+    public UnityEvent onNotBecomeMasterPlayer = new UnityEvent();
 
     void Awake()
     {
@@ -108,8 +110,9 @@ public class NetPlayer : PunBehaviour
     public override void OnCreatedRoom()
     {
         base.OnCreatedRoom();
-        PhotonNetwork.SetMasterClient(PhotonNetwork.player);
         onPhotonEvent.Invoke(ImprintLocalTime() + "已创建房间\"" + PhotonNetwork.room.name + "\"。");
+        PhotonNetwork.SetMasterClient(PhotonNetwork.player);
+        onBecomeMasterPlayer.Invoke();
     }
 
     public override void OnPhotonCreateRoomFailed(object[] codeAndMsg)
@@ -124,12 +127,17 @@ public class NetPlayer : PunBehaviour
     {
         base.OnJoinedRoom();
         onJoinRoom.Invoke();
+        FetchPlayerList();
+        onPhotonEvent.Invoke(ImprintLocalTime() + "已加入房间\"" + PhotonNetwork.room.name + "\"，当前人数为" + PhotonNetwork.room.playerCount + "人。");
         if (PhotonNetwork.masterClient == null)
         {
             PhotonNetwork.SetMasterClient(PhotonNetwork.player);
+            onBecomeMasterPlayer.Invoke();
         }
-        FetchPlayerList();
-        onPhotonEvent.Invoke(ImprintLocalTime() + "已加入房间\"" + PhotonNetwork.room.name + "\"，当前人数为" + PhotonNetwork.room.playerCount + "人。");
+        else
+        {
+            onNotBecomeMasterPlayer.Invoke();
+        }
     }
 
     public override void OnMasterClientSwitched(PhotonPlayer newMasterClient)
@@ -137,10 +145,12 @@ public class NetPlayer : PunBehaviour
         base.OnMasterClientSwitched(newMasterClient);
         if (PhotonNetwork.player.Equals(newMasterClient))
         {
+            onBecomeMasterPlayer.Invoke();
             onPhotonEvent.Invoke(ImprintLocalTime() + "已获得房主权限。");
         }
         else
         {
+            onNotBecomeMasterPlayer.Invoke();
             onPhotonEvent.Invoke(ImprintLocalTime() + "玩家\"" + FetchPlayerName(newMasterClient) + "\"已成为房主。");
         }
             
