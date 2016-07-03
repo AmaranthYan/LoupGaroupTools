@@ -7,6 +7,11 @@
 
     public class GenericGameLogic : GameLogicBase
     {
+        void Awake()
+        {
+            gameObject.AddComponent<PhotonView>();
+        }
+
         void Start()
         {
             if (PhotonNetwork.isMasterClient)
@@ -53,11 +58,11 @@
             playerNumbers.Shuffle();
 
             //分配玩家编号
-            for (int i = 0; i < m_Players.Length;i++)
+            for (int i = 0, k = 0; i < m_Players.Length;i++)
             {
-                m_PlayerIdentities.Add(m_Players[i].isMasterClient ? 0 : playerNumbers[i], m_Players[i]);
-                Debug.Log((m_Players[i].isMasterClient ? 0 : playerNumbers[i]) + " : " + m_Players[i]);
+                m_PlayerIdentities.Add(m_Players[i].isMasterClient ? 0 : playerNumbers[k++], m_Players[i]);                
             }
+            Debug.Log(m_PlayerIdentities.ToStringFull());
 
             DistributePlayerIdentities();
         }
@@ -65,8 +70,8 @@
         public override void DistributePlayerIdentities()
         {
             if (!PhotonNetwork.isMasterClient) { return; }
-
-            photonView.RPC("ReceivePlayerIdentity", m_Players[0]);
+            Debug.Log(m_Players[0]);
+            photonView.RPC("ReceivePlayerIdentity", m_Players[0], 0);
         }
 
         public override void BroadcastPlayerIdentity(PhotonPlayer player)
