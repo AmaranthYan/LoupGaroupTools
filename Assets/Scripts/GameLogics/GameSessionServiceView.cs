@@ -3,10 +3,13 @@
     using Photon;
     using UnityEngine;
     using UnityEngine.Events;
+    using System.Collections.Generic;
 
     [RequireComponent(typeof(PhotonView))]
     public class GameSessionServiceView : PunBehaviour
     {
+        [SerializeField]
+        private GameModeDatabase m_GameModeDatabase = null;
         [SerializeField]
         private GameConfigView m_GameConfigView = null;
 
@@ -19,14 +22,33 @@
             if (PhotonNetwork.player.isMasterClient)
             {
                 PhotonNetwork.room.open = false;
-                photonView.RPC("StartRemoteGameSession", PhotonTargets.AllViaServer, PhotonNetwork.playerList, m_GameConfigView);
+                int gameModeId;
+                Dictionary<int, int> characterSet;
+                int maxPlayerNumber = GameSessionService.SerializeGameConfigParameters(m_GameConfigView, out gameModeId, out characterSet);
+                if (PhotonNetwork.playerList.Length <= maxPlayerNumber)
+                {
+                    photonView.RPC("StartRemoteGameSession", PhotonTargets.AllViaServer, PhotonNetwork.playerList, gameModeId, characterSet);
+                }
+                else
+                {
+                    Debug.LogError("角色数量不足，游戏未能成功创建！");
+                }
             }
         }
 
         [PunRPC]
-        private void StartRemoteGameSession(PhotonPlayer[] players, GameConfigView gameConfig)
+        private void StartRemoteGameSession(PhotonPlayer[] players, int gameModeId, Dictionary<int, int> characterSet)
         {
-            bool hasStarted = GameSessionService.StartGameSession(players, gameConfig);
+            GameModeModel gameMode = null;
+            foreach (GameModeModel gameModeModel in m_GameModeDatabase.GameModeModels)
+            {
+                if (gameModeModel.Id == gameModeId)
+                {
+                    gameMode = gameModeModel;
+                    break;
+                }
+            }
+            bool hasStarted = GameSessionService.StartGameSession(players, gameMode, characterSet);
             if (PhotonNetwork.player.isMasterClient)
             {
                 PhotonNetwork.room.open = !hasStarted;

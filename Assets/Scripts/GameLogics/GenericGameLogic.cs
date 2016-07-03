@@ -11,12 +11,19 @@
         {
             if (PhotonNetwork.isMasterClient)
             {
-                GameLogicCallback handler = null;
-                handler = () => {
+                if (isInitialized)
+                {
                     GeneratePlayerIdentities();
-                    m_InitGameLogic_Callback -= handler;
-                };
-                m_InitGameLogic_Callback += handler;
+                }
+                else
+                {
+                    GameLogicCallback handler = null;
+                    handler = () => {
+                        GeneratePlayerIdentities();
+                        m_InitGameLogic_Callback -= handler;
+                    };
+                    m_InitGameLogic_Callback += handler;
+                }
             }
         }
 
@@ -57,17 +64,14 @@
 
         public override void DistributePlayerIdentities()
         {
-            if (PhotonNetwork.isMasterClient)
-            {
-                photonView.RPC("ReceivePlayerCharacter", m_Players[0]);
-            }
+            if (!PhotonNetwork.isMasterClient) { return; }
+
+            photonView.RPC("ReceivePlayerIdentity", m_Players[0]);
         }
 
         public override void BroadcastPlayerIdentity(PhotonPlayer player)
         {
-            if (PhotonNetwork.isMasterClient)
-            {
-            }
+            if (!PhotonNetwork.isMasterClient) { return; }
         }
 
         [PunRPC]

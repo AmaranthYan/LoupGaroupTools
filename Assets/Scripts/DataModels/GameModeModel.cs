@@ -14,6 +14,7 @@
         [SerializeField]
         private int[] m_DisabledCharacters;
         [SerializeField]
+        [Multiline]
         private string m_Description;
         [SerializeField]
         private GameObject m_GameSessionPrefab;

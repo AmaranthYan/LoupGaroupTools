@@ -8,6 +8,7 @@
     public abstract class GameLogicBase : PunBehaviour
     {
         protected delegate void GameLogicCallback();
+        protected static void DefaultGameLogicCallback() { }
 
         [SerializeField]
         protected CharacterDatabase m_CharacterDatabase = null;
@@ -18,12 +19,16 @@
         protected Dictionary<int, PhotonPlayer> m_PlayerIdentities = new Dictionary<int, PhotonPlayer>();
         protected List<CharacterModel> m_UnusedCharacters = new List<CharacterModel>();
 
-        protected GameLogicCallback m_InitGameLogic_Callback = null;
+        protected bool isInitialized = false;
+
+        protected GameLogicCallback m_InitGameLogic_Callback = DefaultGameLogicCallback;
 
         public virtual void InitGameLogic(PhotonPlayer[] players, Dictionary<int, int> characterSet)
         {
             m_Players = players;
             m_CharacterSet = characterSet;
+
+            isInitialized = true;
 
             m_InitGameLogic_Callback();
         }

@@ -9,44 +9,39 @@
         private static GameObject m_GameSession = null;
         public static GameObject GameSession { get { return m_GameSession; } }
 
-        public static bool StartGameSession(PhotonPlayer[] players, GameConfigView gameConfig)
+        //返回GameConfig支持的最大玩家人数
+        public static int SerializeGameConfigParameters(GameConfigView gameConfigView, out int gameModeId, out Dictionary<int, int> characterSet)
         {
-            GameModeModel gameMode = gameConfig.CurrentGameMode;
-            List<DataPair<CharacterModel, CharacterSetting>> characters = gameConfig.CurrentCharacters;
-
-            int minPlayersNumber = 0;
-            foreach(DataPair<CharacterModel, CharacterSetting> character in characters)
+            gameModeId = gameConfigView.CurrentGameMode.Id;
+            List<DataPair<CharacterModel, CharacterSetting>> characters = gameConfigView.CurrentCharacters;
+            int maxPlayersNumber = 0;
+            characterSet = new Dictionary<int, int>();
+            foreach (DataPair<CharacterModel, CharacterSetting> character in characters)
             {
-                minPlayersNumber += 1 + character.Value1.CollateralCharacters;
+                characterSet[character.Value1.Id] = character.Value2.Amount;
+                maxPlayersNumber += (1 - character.Value1.CollateralCharacters) * character.Value2.Amount;
             }
-            if (players.Length <= minPlayersNumber)
-            {
-                if (m_GameSession)
-                {
-                    Debug.LogWarning("当前游戏进程不为空，请先结束当前进程。");
-                    return false;
-                }
-                m_GameSession = UnityEngine.Object.Instantiate(gameMode.GameSessionPrefab);
+            return maxPlayersNumber;
+        }
 
-                GameLogicBase gameLogic = m_GameSession.GetComponent<GameLogicBase>();
-                if (!gameLogic)
-                {
-                    Debug.LogError("无法生成有效的游戏逻辑，游戏未能成功创建！");
-                    EndGameSession();
-                    return false;
-                }
-                Dictionary<int, int> characterSet = new Dictionary<int, int>();
-                foreach (DataPair<CharacterModel, CharacterSetting> character in characters)
-                {
-                    characterSet[character.Value1.Id] = character.Value2.Amount;
-                }
-                gameLogic.InitGameLogic(players, characterSet);
-                return true;
-            } else
+        public static bool StartGameSession(PhotonPlayer[] players, GameModeModel gameMode, Dictionary<int, int> characterSet)
+        {
+            if (m_GameSession)
             {
-                Debug.LogError("玩家与角色数量不匹配！");
+                Debug.LogWarning("当前游戏进程不为空，请先结束当前进程。");
                 return false;
             }
+
+            m_GameSession = UnityEngine.Object.Instantiate(gameMode.GameSessionPrefab);
+            GameLogicBase gameLogic = m_GameSession.GetComponent<GameLogicBase>();
+            if (!gameLogic)
+            {
+                Debug.LogError("无法生成有效的游戏逻辑，游戏未能成功创建！");
+                EndGameSession();
+                return false;
+            }
+            gameLogic.InitGameLogic(players, characterSet);
+            return true;
         }
 
         public static void EndGameSession()
