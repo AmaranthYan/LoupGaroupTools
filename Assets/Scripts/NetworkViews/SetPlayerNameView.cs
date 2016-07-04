@@ -11,9 +11,10 @@ public class SetPlayerNameView : MonoBehaviour
 
     void Start()
     {
+        PhotonNetwork.playerName = PlayerPrefs.GetString(PLAYER_PERSISTENT_NAME_KEY);
         if (m_PlayerNameField)
         {
-            m_PlayerNameField.text = PlayerPrefs.GetString(PLAYER_PERSISTENT_NAME_KEY);
+            m_PlayerNameField.text = PhotonNetwork.playerName;
         }        
     }
 
