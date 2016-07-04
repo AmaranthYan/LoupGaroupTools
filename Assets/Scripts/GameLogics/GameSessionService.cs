@@ -24,7 +24,7 @@
             return maxPlayersNumber;
         }
 
-        public static bool StartGameSession(PhotonPlayer[] players, GameModeModel gameMode, Dictionary<int, int> characterSet)
+        public static bool StartGameSession(int photonViewId, PhotonPlayer[] players, GameModeModel gameMode, Dictionary<int, int> characterSet)
         {
             if (m_GameSession)
             {
@@ -33,6 +33,10 @@
             }
 
             m_GameSession = UnityEngine.Object.Instantiate(gameMode.GameSessionPrefab);
+
+            PhotonView photonView = m_GameSession.GetComponent<PhotonView>();
+            photonView.viewID = photonViewId;
+
             GameLogicBase gameLogic = m_GameSession.GetComponent<GameLogicBase>();
             if (!gameLogic)
             {

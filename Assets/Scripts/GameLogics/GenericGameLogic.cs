@@ -7,11 +7,6 @@
 
     public class GenericGameLogic : GameLogicBase
     {
-        void Awake()
-        {
-            gameObject.AddComponent<PhotonView>();
-        }
-
         void Start()
         {
             if (PhotonNetwork.isMasterClient)
@@ -33,14 +28,14 @@
         }
 
         #region PhotonCallbacks
-        //若上帝玩家(发生MasterPlayer切换)离开则强制结束游戏进程
-        public override void OnMasterClientSwitched(PhotonPlayer newMasterClient)
+        //若上帝玩家离开则强制结束游戏进程
+        public override void OnPhotonPlayerDisconnected(PhotonPlayer otherPlayer)
         {
-            base.OnMasterClientSwitched(newMasterClient);
+            base.OnPhotonPlayerDisconnected(otherPlayer);
 
-            if (PhotonNetwork.player.Equals(newMasterClient))
+            if (otherPlayer.isMasterClient)
             {
-                FindObjectOfType<GameSessionServiceView>().EndGameSession();
+                FindObjectOfType<GameSessionServiceView>().EndLocalGameSession();
             }
         }
         #endregion
@@ -70,8 +65,11 @@
         public override void DistributePlayerIdentities()
         {
             if (!PhotonNetwork.isMasterClient) { return; }
-            Debug.Log(m_Players[0]);
-            photonView.RPC("ReceivePlayerIdentity", m_Players[0], 0);
+
+            foreach (KeyValuePair<int, PhotonPlayer> playerIdentity in m_PlayerIdentities)
+            {
+                photonView.RPC("ReceivePlayerIdentity", playerIdentity.Value, playerIdentity.Value, playerIdentity.Key);
+            }
         }
 
         public override void BroadcastPlayerIdentity(PhotonPlayer player)
@@ -82,6 +80,7 @@
         [PunRPC]
         protected override void ReceivePlayerIdentity(PhotonPlayer player, int characterId)
         {
+            Debug.Log(player + " : " + characterId);
             if (player.Equals(PhotonNetwork.player))
             {
 

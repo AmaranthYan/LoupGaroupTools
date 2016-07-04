@@ -27,7 +27,8 @@
                 int maxPlayerNumber = GameSessionService.SerializeGameConfigParameters(m_GameConfigView, out gameModeId, out characterSet);
                 if (PhotonNetwork.playerList.Length <= maxPlayerNumber)
                 {
-                    photonView.RPC("StartRemoteGameSession", PhotonTargets.AllViaServer, PhotonNetwork.playerList, gameModeId, characterSet);
+                    int photonViewId = PhotonNetwork.AllocateViewID();
+                    photonView.RPC("StartRemoteGameSession", PhotonTargets.AllBufferedViaServer, photonViewId, PhotonNetwork.playerList, gameModeId, characterSet);
                 }
                 else
                 {
@@ -37,7 +38,7 @@
         }
 
         [PunRPC]
-        private void StartRemoteGameSession(PhotonPlayer[] players, int gameModeId, Dictionary<int, int> characterSet)
+        private void StartRemoteGameSession(int photonViewId, PhotonPlayer[] players, int gameModeId, Dictionary<int, int> characterSet)
         {
             GameModeModel gameMode = null;
             foreach (GameModeModel gameModeModel in m_GameModeDatabase.GameModeModels)
@@ -48,7 +49,7 @@
                     break;
                 }
             }
-            bool hasStarted = GameSessionService.StartGameSession(players, gameMode, characterSet);
+            bool hasStarted = GameSessionService.StartGameSession(photonViewId, players, gameMode, characterSet);
             if (PhotonNetwork.player.isMasterClient)
             {
                 PhotonNetwork.room.open = !hasStarted;
@@ -61,7 +62,7 @@
         {
             if (PhotonNetwork.player.isMasterClient)
             {
-                photonView.RPC("EndRemoteGameSession", PhotonTargets.AllViaServer);
+                photonView.RPC("EndRemoteGameSession", PhotonTargets.AllBufferedViaServer);
                 PhotonNetwork.room.open = true;
             }
         }
