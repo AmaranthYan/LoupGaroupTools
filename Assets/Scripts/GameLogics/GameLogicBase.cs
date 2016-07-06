@@ -30,7 +30,10 @@
         {
             for (int i = 0; i < m_RuntimePhotonViews.Length; i++)
             {
-                m_RuntimePhotonViews[i].viewID = allocatedPhotonViewIds[i];
+                if (m_RuntimePhotonViews[i])
+                {
+                    m_RuntimePhotonViews[i].viewID = allocatedPhotonViewIds[i];
+                }
             }
 
             m_Players = players;

@@ -79,10 +79,6 @@
                 UnityEngine.Object.DestroyImmediate(m_GameSession);
                 UnallocatePhotonViewIds();
             }
-            else
-            {
-                Debug.LogWarning("当前游戏进程为空。");
-            }
             m_GameSession = null;
         }
     }
