@@ -29,4 +29,6 @@ public class UnityTypedEvent
 
     [Serializable]
     public class PhotonRoomInfoArrayEvent : UnityEvent<RoomInfo[]> { }
+    [Serializable]
+    public class PhotonPhotonPlayerEvent : UnityEvent<PhotonPlayer> { }
 }
