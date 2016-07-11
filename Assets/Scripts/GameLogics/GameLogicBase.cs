@@ -12,8 +12,11 @@
 
         [SerializeField]
         protected CharacterDatabase m_CharacterDatabase = null;
+        [SerializeField]
+        protected PhotonView[] m_RuntimePhotonViews = new PhotonView[GameSessionService.ALLOCATED_PHOTON_VIEW_IDS_NUMBER - 1]; 
 
         protected PhotonPlayer[] m_Players = null;
+        protected GameModeModel m_GameMode = null;
         protected Dictionary<int, int> m_CharacterSet = null;
 
         protected Dictionary<int, PhotonPlayer> m_PlayerIdentities = new Dictionary<int, PhotonPlayer>();
@@ -23,9 +26,18 @@
 
         protected GameLogicCallback m_InitGameLogic_Callback = DefaultGameLogicCallback;
 
-        public virtual void InitGameLogic(PhotonPlayer[] players, Dictionary<int, int> characterSet)
+        public virtual void InitGameLogic(int[] allocatedPhotonViewIds, PhotonPlayer[] players, GameModeModel gameMode, Dictionary<int, int> characterSet)
         {
+            for (int i = 0; i < m_RuntimePhotonViews.Length; i++)
+            {
+                if (m_RuntimePhotonViews[i])
+                {
+                    m_RuntimePhotonViews[i].viewID = allocatedPhotonViewIds[i];
+                }
+            }
+
             m_Players = players;
+            m_GameMode = gameMode;
             m_CharacterSet = characterSet;
 
             isInitialized = true;

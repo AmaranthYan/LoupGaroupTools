@@ -4,6 +4,7 @@
     using UnityEngine;
     using UnityEngine.Events;
     using System.Collections.Generic;
+    using System.Linq;
 
     [RequireComponent(typeof(PhotonView))]
     public class GameSessionServiceView : PunBehaviour
@@ -12,7 +13,7 @@
         private GameModeDatabase m_GameModeDatabase = null;
         [SerializeField]
         private GameConfigView m_GameConfigView = null;
-
+        
         public UnityEvent onStartRemoteGameSession = new UnityEvent();
         public UnityEvent onEndRemoteGameSession = new UnityEvent();
         public UnityEvent onEndLocalGameSession = new UnityEvent();
@@ -27,8 +28,8 @@
                 int maxPlayerNumber = GameSessionService.SerializeGameConfigParameters(m_GameConfigView, out gameModeId, out characterSet);
                 if (PhotonNetwork.playerList.Length <= maxPlayerNumber)
                 {
-                    int photonViewId = PhotonNetwork.AllocateViewID();
-                    photonView.RPC("StartRemoteGameSession", PhotonTargets.AllBufferedViaServer, photonViewId, PhotonNetwork.playerList, gameModeId, characterSet);
+                    int[] allocatedPhotonViewIds = GameSessionService.AllocatePhotonViewIds();
+                    photonView.RPC("StartRemoteGameSession", PhotonTargets.AllBufferedViaServer, allocatedPhotonViewIds, PhotonNetwork.playerList, gameModeId, characterSet);
                 }
                 else
                 {
@@ -38,7 +39,7 @@
         }
 
         [PunRPC]
-        private void StartRemoteGameSession(int photonViewId, PhotonPlayer[] players, int gameModeId, Dictionary<int, int> characterSet)
+        private void StartRemoteGameSession(int[] allocatedPhotonViewIds, PhotonPlayer[] players, int gameModeId, Dictionary<int, int> characterSet)
         {
             GameModeModel gameMode = null;
             foreach (GameModeModel gameModeModel in m_GameModeDatabase.GameModeModels)
@@ -49,7 +50,8 @@
                     break;
                 }
             }
-            bool hasStarted = GameSessionService.StartGameSession(photonViewId, players, gameMode, characterSet);
+            int[] otherPhotonViewIds = allocatedPhotonViewIds.Skip(1).ToArray();
+            bool hasStarted = GameSessionService.StartGameSession(allocatedPhotonViewIds[0], otherPhotonViewIds, players, gameMode, characterSet);
             if (PhotonNetwork.player.isMasterClient)
             {
                 PhotonNetwork.room.open = !hasStarted;

@@ -26,6 +26,7 @@ public class NetPlayer : PunBehaviour
     public UnityEvent onLeaveRoom = new UnityEvent();
     public UnityEvent onBecomeMasterPlayer = new UnityEvent();
     public UnityEvent onNotBecomeMasterPlayer = new UnityEvent();
+    public UnityEvent onRejoinRoomFailed = new UnityEvent();
 
     void Awake()
     {
@@ -40,9 +41,12 @@ public class NetPlayer : PunBehaviour
         ConnectToPUN();
     }
 
-    void Update()
+    void OnDestroy()
     {
-
+        if (m_ReconnectToPUN_Coroutine != null)
+        {
+            StopCoroutine(m_ReconnectToPUN_Coroutine);
+        }
     }
 
     #region PhotonCallbacks
@@ -225,6 +229,10 @@ public class NetPlayer : PunBehaviour
             if (!isAttemptSuccessful)
             {
                 isAttemptSuccessful = PhotonNetwork.Reconnect();
+                if (isAttemptSuccessful)
+                {
+                    onRejoinRoomFailed.Invoke();
+                }
             }
             yield return new WaitForSeconds(SECONDS_BETWEEN_CONNECT_ATTEMPTS);
         }
