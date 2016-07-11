@@ -41,9 +41,12 @@ public class NetPlayer : PunBehaviour
         ConnectToPUN();
     }
 
-    void Update()
+    void OnDestroy()
     {
-
+        if (m_ReconnectToPUN_Coroutine != null)
+        {
+            StopCoroutine(m_ReconnectToPUN_Coroutine);
+        }
     }
 
     #region PhotonCallbacks

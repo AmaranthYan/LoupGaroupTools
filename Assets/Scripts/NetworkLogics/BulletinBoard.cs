@@ -9,6 +9,10 @@ public class BulletinBoard : PunBehaviour
     [SerializeField]
     private Toggle m_EditToggle = null;
     [SerializeField]
+    private Text m_OtherEditorInfoDisplay = null;
+    [SerializeField]
+    private string m_OtherEditorInfoFormat = string.Empty;
+    [SerializeField]
     private Text m_BulletinDisplay = null;
     [SerializeField]
     private InputField m_BulletinEditor = null;    
@@ -96,7 +100,9 @@ public class BulletinBoard : PunBehaviour
     {
         if (editor == null)
         {
-            //todo - enable toggle
+            m_EditToggle.isOn = false;
+            m_EditToggle.interactable = true;
+            m_OtherEditorInfoDisplay.gameObject.SetActive(false);
             onNoOneEdit.Invoke();
             return;
         }
@@ -105,11 +111,15 @@ public class BulletinBoard : PunBehaviour
         {
             m_BulletinEditor.text = m_BulletinDisplay.text;
             m_BulletinEditor.gameObject.SetActive(true);
+            m_OtherEditorInfoDisplay.gameObject.SetActive(false);
             onMeEdit.Invoke();
         }
         else
         {
-            //todo - disable toggle;display editor
+            m_EditToggle.interactable = false;
+            m_EditToggle.isOn = false;
+            m_OtherEditorInfoDisplay.text = string.Format(m_OtherEditorInfoFormat, NetPlayer.FetchPlayerName(editor));
+            m_OtherEditorInfoDisplay.gameObject.SetActive(true);
             onOtherEditorEdit.Invoke(editor);
         }
     }
