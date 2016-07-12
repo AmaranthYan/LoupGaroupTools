@@ -44,6 +44,11 @@ public class BulletinBoard : PunBehaviour
     }
     #endregion
 
+    public void InitBulletin(string initText)
+    {
+        m_BulletinDisplay.text = initText;
+    }
+
     public void SwitchToEidtMode(bool isInEditMode)
     {
         if (isInEditMode)
@@ -91,22 +96,13 @@ public class BulletinBoard : PunBehaviour
         if (m_CurrentEditor != null && m_CurrentEditor.Equals(editor))
         {
             m_CurrentEditor = null;
-            m_PhotonView.RPC("GrantEditorialAccess", PhotonTargets.AllViaServer, null);
+            m_PhotonView.RPC("WithdrawEditorialAccess", PhotonTargets.AllViaServer);
         }
     }
 
     [PunRPC]
     private void GrantEditorialAccess(PhotonPlayer editor)
     {
-        if (editor == null)
-        {
-            m_EditToggle.isOn = false;
-            m_EditToggle.interactable = true;
-            m_OtherEditorInfoDisplay.gameObject.SetActive(false);
-            onNoOneEdit.Invoke();
-            return;
-        }
-
         if (PhotonNetwork.player.Equals(editor))
         {
             m_BulletinEditor.text = m_BulletinDisplay.text;
@@ -122,5 +118,14 @@ public class BulletinBoard : PunBehaviour
             m_OtherEditorInfoDisplay.gameObject.SetActive(true);
             onOtherEditorEdit.Invoke(editor);
         }
+    }
+
+    [PunRPC]
+    private void WithdrawEditorialAccess()
+    {
+        m_EditToggle.isOn = false;
+        m_EditToggle.interactable = true;
+        m_OtherEditorInfoDisplay.gameObject.SetActive(false);
+        onNoOneEdit.Invoke();
     }
 }
