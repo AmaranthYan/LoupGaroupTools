@@ -13,7 +13,9 @@
         [SerializeField]
         protected CharacterDatabase m_CharacterDatabase = null;
         [SerializeField]
-        protected PhotonView[] m_RuntimePhotonViews = new PhotonView[GameSessionService.ALLOCATED_PHOTON_VIEW_IDS_NUMBER - 1]; 
+        protected PhotonView[] m_RuntimePhotonViews = new PhotonView[GameSessionService.ALLOCATED_PHOTON_VIEW_IDS_NUMBER - 1];
+
+        public UnityTypedEvent.StringEvent onGameModeDescriptionInit = new UnityTypedEvent.StringEvent();
 
         protected PhotonPlayer[] m_Players = null;
         protected GameModeModel m_GameMode = null;
@@ -38,6 +40,7 @@
 
             m_Players = players;
             m_GameMode = gameMode;
+            onGameModeDescriptionInit.Invoke(m_GameMode.Description);
             m_CharacterSet = characterSet;
 
             isInitialized = true;
