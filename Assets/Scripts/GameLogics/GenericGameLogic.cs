@@ -4,6 +4,7 @@
     using UnityEngine;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     public class GenericGameLogic : GameLogicBase
     {
@@ -50,25 +51,46 @@
             {
                 playerNumbers.Add(i);
             }
-            playerNumbers.Shuffle();
+            playerNumbers = playerNumbers.Shuffle().ToList();
 
             //分配玩家编号
-            for (int i = 0, k = 0; i < m_Players.Length;i++)
-            {
-                m_PlayerIdentities.Add(m_Players[i].isMasterClient ? 0 : playerNumbers[k++], m_Players[i]);                
-            }
-            Debug.Log(m_PlayerIdentities.ToStringFull());
+            photonView.RPC("ReceivePlayerNumbers", PhotonTargets.All, playerNumbers.ToArray());
 
-            DistributePlayerIdentities();
+            //生成所有角色
+
+
+
+
+            //分配玩家角色
+            //DistributePlayerCharacters();
+
+            //分配剩余角色
+            //DistributeUnusedIdentities();
         }
 
-        public override void DistributePlayerIdentities()
+        [PunRPC]
+        protected override void ReceivePlayerNumbers(int[] playerNumbers)
+        {
+            if (playerNumbers.Length != m_Players.Length - 1)
+            {
+                Debug.LogError("玩家编号数量与玩家人数不符！");
+            }
+
+            for (int i = 0, k = 0; i < m_Players.Length; i++)
+            {
+                m_PlayerIdentities[m_Players[i].isMasterClient ? 0 : playerNumbers[k++]].UpdatePlayer(m_Players[i]);           
+            }
+
+            UpdatePlayerIdentities();
+        }
+
+        public override void DistributePlayerCharacters()
         {
             if (!PhotonNetwork.isMasterClient) { return; }
 
-            foreach (KeyValuePair<int, PhotonPlayer> playerIdentity in m_PlayerIdentities)
+            foreach (KeyValuePair<int, PlayerIdentity> playerIdentity in m_PlayerIdentities)
             {
-                photonView.RPC("ReceivePlayerIdentity", playerIdentity.Value, playerIdentity.Value, playerIdentity.Key);
+                photonView.RPC("ReceivePlayerIdentity", playerIdentity.Value.Player, playerIdentity.Value.Player, playerIdentity.Value.CharacterId);
             }
         }
 

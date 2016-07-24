@@ -15,6 +15,7 @@ public class NetPlayer : PunBehaviour
     [SerializeField]
     private PhotonIdentifier m_PhotonIdentifier = null;
 
+    private static Guid m_PlayerGuid = Guid.NewGuid();
     private bool m_IsConnectionInitialized = false;
     private IEnumerator m_ReconnectToPUN_Coroutine = null;
 
@@ -37,7 +38,7 @@ public class NetPlayer : PunBehaviour
     }
         
     void Start()
-    {
+    {       
         ConnectToPUN();
     }
 
@@ -53,6 +54,7 @@ public class NetPlayer : PunBehaviour
     public override void OnConnectedToPhoton()
     {
         base.OnConnectedToPhoton();
+        PhotonNetwork.player.userId = m_PlayerGuid.ToString();
         m_IsConnectionInitialized = true;
         onPhotonEvent.Invoke(ImprintLocalTime() + "已连接至PUN。");
     }

@@ -2,8 +2,9 @@
 {
     using Photon;
     using UnityEngine;
-    using System;
     using System.Collections.Generic;
+    using System.Collections.Specialized;
+    using System.Linq;
 
     public abstract class GameLogicBase : PunBehaviour
     {
@@ -16,13 +17,15 @@
         protected PhotonView[] m_RuntimePhotonViews = new PhotonView[GameSessionService.ALLOCATED_PHOTON_VIEW_IDS_NUMBER - 1];
 
         public UnityTypedEvent.StringEvent onGameModeDescriptionInit = new UnityTypedEvent.StringEvent();
+        public UnityTypedEvent.OrderedDictionaryEvent onPlayerIdentitiesUpdate = new UnityTypedEvent.OrderedDictionaryEvent();
+        public UnityTypedEvent.OrderedDictionaryEvent onUnusedIdentitiesUpdate = new UnityTypedEvent.OrderedDictionaryEvent();
 
         protected PhotonPlayer[] m_Players = null;
         protected GameModeModel m_GameMode = null;
         protected Dictionary<int, int> m_CharacterSet = null;
 
-        protected Dictionary<int, PhotonPlayer> m_PlayerIdentities = new Dictionary<int, PhotonPlayer>();
-        protected List<CharacterModel> m_UnusedCharacters = new List<CharacterModel>();
+        protected Dictionary<int, PlayerIdentity> m_PlayerIdentities = new Dictionary<int, PlayerIdentity>();
+        protected List<CharacterModel> m_UnusedIdentity = new List<CharacterModel>();
 
         protected bool isInitialized = false;
 
@@ -43,13 +46,43 @@
             onGameModeDescriptionInit.Invoke(m_GameMode.Description);
             m_CharacterSet = characterSet;
 
+            GenerateEmptyIdenities();
+
             isInitialized = true;
 
             m_InitGameLogic_Callback();
         }
 
+        protected void GenerateEmptyIdenities()
+        {
+            m_PlayerIdentities.Clear();
+
+            for (int i = 0;i < m_Players.Length;i++)
+            {
+                PlayerIdentity playerIdentity = new PlayerIdentity();
+                playerIdentity.UpdateNumber(i);
+                m_PlayerIdentities.Add(i, playerIdentity);
+            }
+
+            UpdatePlayerIdentities();
+        }
+
+        protected void UpdatePlayerIdentities()
+        {
+            List<int> playerNumbers = m_PlayerIdentities.Keys.ToList();
+            playerNumbers.Sort();
+
+            OrderedDictionary dictionary = new OrderedDictionary();
+            for (int i = 1; i < playerNumbers.Count(); i++)
+            {
+                dictionary.Add(i.ToString(), m_PlayerIdentities[i]);
+            }
+            onPlayerIdentitiesUpdate.Invoke(dictionary);
+        }
+
         public abstract void GeneratePlayerIdentities();
-        public abstract void DistributePlayerIdentities();
+        protected abstract void ReceivePlayerNumbers(int[] playerNumbers);
+        public abstract void DistributePlayerCharacters();
         public abstract void BroadcastPlayerIdentity(PhotonPlayer player);
         protected abstract void ReceivePlayerIdentity(PhotonPlayer player, int characterId);
     }
