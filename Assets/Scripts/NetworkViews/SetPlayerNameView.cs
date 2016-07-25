@@ -11,7 +11,8 @@ public class SetPlayerNameView : MonoBehaviour
 
     void Start()
     {
-        PhotonNetwork.playerName = PlayerPrefs.GetString(PLAYER_PERSISTENT_NAME_KEY);
+        PhotonNetwork.player.userId = PhotonNetwork.player.userId ?? NetPlayer.PlayerGuid.ToString();
+        PhotonNetwork.playerName = PlayerPrefs.GetString(PLAYER_PERSISTENT_NAME_KEY);       
         if (m_PlayerNameField)
         {
             m_PlayerNameField.text = PhotonNetwork.playerName;
@@ -20,6 +21,7 @@ public class SetPlayerNameView : MonoBehaviour
 
     public void SetPlayerName(string playerName)
     {
+        PhotonNetwork.player.userId = PhotonNetwork.player.userId ?? NetPlayer.PlayerGuid.ToString();
         PhotonNetwork.playerName = playerName;
         PlayerPrefs.SetString(PLAYER_PERSISTENT_NAME_KEY, PhotonNetwork.playerName);
     }

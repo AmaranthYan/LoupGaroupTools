@@ -16,6 +16,7 @@ public class NetPlayer : PunBehaviour
     private PhotonIdentifier m_PhotonIdentifier = null;
 
     private static Guid m_PlayerGuid = Guid.NewGuid();
+    public static Guid PlayerGuid { get { return m_PlayerGuid; } }
     private bool m_IsConnectionInitialized = false;
     private IEnumerator m_ReconnectToPUN_Coroutine = null;
 
@@ -54,7 +55,7 @@ public class NetPlayer : PunBehaviour
     public override void OnConnectedToPhoton()
     {
         base.OnConnectedToPhoton();
-        PhotonNetwork.player.userId = m_PlayerGuid.ToString();
+        AssignGuidToPlayer();
         m_IsConnectionInitialized = true;
         onPhotonEvent.Invoke(ImprintLocalTime() + "已连接至PUN。");
     }
@@ -181,8 +182,13 @@ public class NetPlayer : PunBehaviour
         base.OnLeftRoom();
         onLeaveRoom.Invoke();
         onPhotonEvent.Invoke(ImprintLocalTime() + "已离开房间。");
-    }        
+    }
     #endregion
+
+    public static void AssignGuidToPlayer()
+    {
+        PhotonNetwork.player.userId = m_PlayerGuid.ToString();
+    }
 
     public static string FetchPlayerName(PhotonPlayer photonPlayer)
     {
