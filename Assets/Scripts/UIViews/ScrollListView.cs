@@ -26,7 +26,7 @@ public abstract class ScrollListView<T> : MonoBehaviour
 
     protected abstract void Awake();
 
-    public void UpdateList(OrderedDictionary itemDictionary)
+    public virtual void UpdateList(OrderedDictionary itemDictionary)
     {
         List<string> keys = m_CurrentScrollList.Keys.ToList();
         foreach (string itemId in keys)
@@ -42,25 +42,35 @@ public abstract class ScrollListView<T> : MonoBehaviour
         {
             if (m_CurrentScrollList.ContainsKey(itemId))
             {
-                m_CurrentScrollList[itemId].UpdateItem(itemDictionary[itemId]);
+                UpdateItemView(m_CurrentScrollList[itemId], itemDictionary[itemId]);
             }
             else
             {
-                ScrollListItemView<T> itemInstance = Instantiate(m_ScrollListItemPrefab).GetComponent<ScrollListItemView<T>>();
-                itemInstance.transform.SetParent(transform);
-                itemInstance.transform.localPosition = Vector3.zero;
-                itemInstance.transform.localScale = Vector3.one;
-
-                m_CurrentScrollList[itemId] = itemInstance;
+                m_CurrentScrollList[itemId] = InstantiateItemView();
 
                 ToggleGroup toggleGroup = m_AllowMultiSelect ? null : m_DefaultToggleGroup;
                 m_CurrentScrollList[itemId].InitItemView(itemId, toggleGroup, this);
-                m_CurrentScrollList[itemId].UpdateItem(itemDictionary[itemId]);
+
+                UpdateItemView(m_CurrentScrollList[itemId], itemDictionary[itemId]);                
             }
         }
     }
 
-	public void SelectItemInList(string idInList, bool isSelected)
+    protected virtual ScrollListItemView<T> InstantiateItemView()
+    {
+        ScrollListItemView<T> viewInstance = Instantiate(m_ScrollListItemPrefab).GetComponent<ScrollListItemView<T>>();
+        viewInstance.transform.SetParent(transform);
+        viewInstance.transform.localPosition = Vector3.zero;
+        viewInstance.transform.localScale = Vector3.one;
+        return viewInstance;
+    }
+
+    protected virtual void UpdateItemView(ScrollListItemView<T> itemView, object value)
+    {
+        itemView.UpdateItem(value);
+    }
+
+    public void SelectItemInList(string idInList, bool isSelected)
     {
         bool isChanged = false;
 
