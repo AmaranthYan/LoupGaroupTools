@@ -43,6 +43,11 @@
             if (PhotonNetwork.player.Equals(playerIdentity.Player))
             {
                 itemView.transform.SetParent(m_MePlaceholder);
+                RectTransform rectTransform = (RectTransform)itemView.transform;
+                rectTransform.anchorMin = Vector2.zero;
+                rectTransform.anchorMax = Vector2.one;
+                rectTransform.anchoredPosition = Vector2.zero;
+                rectTransform.sizeDelta = Vector2.zero;
                 m_HasMe = true;
             }
         }
