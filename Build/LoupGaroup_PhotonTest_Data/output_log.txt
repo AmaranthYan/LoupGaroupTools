@@ -16,26 +16,22 @@ Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_
 Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
 Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\Photon3Unity3D.dll (this message is harmless)
 Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\Photon3Unity3D.dll into Unity Child Domain
-- Completed reload, in  0.050 seconds
+- Completed reload, in  0.044 seconds
 Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\System.dll (this message is harmless)
 <RI> Initializing input.
 <RI> Input initialized.
 desktop: 1920x1080 60Hz; virtual: 3840x1080 at 0,0
 <RI> Initialized touch support.
-UnloadTime: 0.596149 ms
+UnloadTime: 0.656020 ms
 Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\System.Xml.dll (this message is harmless)
-设置读取失败！
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
-
 Best region found in PlayerPrefs. Connecting to: eu
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
 
 Setting up 2 worker threads for Enlighten.
-  Thread -> id: 2f3c -> priority: 1 
-  Thread -> id: 668 -> priority: 1 
+  Thread -> id: 40b0 -> priority: 1 
+  Thread -> id: 4190 -> priority: 1 
 Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/PhotonCryptoPlugin
 Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/.\PhotonCryptoPlugin
 Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/PhotonCryptoPlugin
@@ -48,27 +44,6 @@ Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/L
 Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/libPhotonCryptoPlugin
 Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/.\libPhotonCryptoPlugin
 Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/libPhotonCryptoPlugin
-CreateRoom failed. Client is not on Master Server or not yet ready to call operations. Wait for callback: OnJoinedLobby or OnConnectedToMaster.
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
-
-HandleEventLeave for player ID: 2 isInactive: True. Stopping handling if inactive.
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
-
-NullReferenceException: Object reference not set to an instance of an object
-  at BulletinBoard.OnPhotonPlayerDisconnected (.PhotonPlayer otherPlayer) [0x00000] in <filename unknown>:0 
-UnityEngine.GameObject:SendMessage(String, Object, SendMessageOptions)
-NetworkingPeer:SendMonoMessage(PhotonNetworkingMessage, Object[])
-NetworkingPeer:HandleEventLeave(Int32, EventData)
-NetworkingPeer:OnEvent(EventData)
-ExitGames.Client.Photon.PeerBase:DeserializeMessageAndCallback(Byte[])
-ExitGames.Client.Photon.EnetPeer:DispatchIncomingCommands()
-ExitGames.Client.Photon.PhotonPeer:DispatchIncomingCommands()
-PhotonHandler:Update()
- 
-(Filename:  Line: -1)
-
 Ignoring Connect() because app gets closed. If this is an error, check PhotonHandler.AppQuits.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)

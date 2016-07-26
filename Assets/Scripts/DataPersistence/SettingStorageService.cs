@@ -4,6 +4,7 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Text;
     using System.Xml.Serialization;
 
     [XmlRoot("LocalSettings")]
@@ -38,8 +39,10 @@
             try
             {
                 using (FileStream stream = new FileStream(Path.Combine(Application.persistentDataPath, STORAGE_FILE_NAME), FileMode.OpenOrCreate))
-                {                
-                    return serializer.Deserialize(stream) as SettingStorageService;                
+                {
+                    using (StreamReader reader = new StreamReader(stream, Encoding.UTF8)) {
+                        return serializer.Deserialize(reader) as SettingStorageService;
+                    }             
                 }
             }
             catch (Exception e)
@@ -55,7 +58,10 @@
             try { 
                 using (FileStream stream = new FileStream(Path.Combine(Application.persistentDataPath, STORAGE_FILE_NAME), FileMode.Create))
                 {
-                    serializer.Serialize(stream, this);
+                    using (StreamWriter writer = new StreamWriter(stream, Encoding.UTF8))
+                    {
+                        serializer.Serialize(writer, this);
+                    }
                 }
             }
             catch (Exception e)
