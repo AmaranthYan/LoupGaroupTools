@@ -12,6 +12,12 @@
         [Header("Events")]
         public UnityTypedEvent.StringEvent onPlayerNameUpdate = new UnityTypedEvent.StringEvent();
         public UnityTypedEvent.StringEvent onPlayerNumberUpdate = new UnityTypedEvent.StringEvent();
+        public UnityEvent onIdentityReveal = new UnityEvent();
+
+        void Start()
+        {
+
+        }
 
         public override void UpdateItem(object value)
         {
@@ -19,6 +25,10 @@
             m_Item = (PlayerIdentity)value;
             onPlayerNameUpdate.Invoke(m_Item.Player != null ? NetPlayer.FetchPlayerName(m_Item.Player) : m_UnknownPlayerName);
             onPlayerNumberUpdate.Invoke(m_Item.Number > 0 ? m_Item.Number.ToString() : string.Empty);
+            if (m_Item.IsRevealed)
+            {
+                onIdentityReveal.Invoke();
+            }
         }
     }
 }
