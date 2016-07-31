@@ -25,7 +25,7 @@
         protected Dictionary<int, int> m_CharacterSet = null;
 
         protected Dictionary<int, PlayerIdentity> m_PlayerIdentities = new Dictionary<int, PlayerIdentity>();
-        protected List<CharacterModel> m_UnusedIdentity = new List<CharacterModel>();
+        protected List<PlayerIdentity> m_UnusedIdentity = new List<PlayerIdentity>();
 
         protected bool isInitialized = false;
 
@@ -56,15 +56,25 @@
         protected void GenerateEmptyIdenities()
         {
             m_PlayerIdentities.Clear();
-
             for (int i = 0;i < m_Players.Length;i++)
             {
                 PlayerIdentity playerIdentity = new PlayerIdentity();
                 playerIdentity.UpdateNumber(i);
                 m_PlayerIdentities.Add(i, playerIdentity);
             }
-
             UpdatePlayerIdentities();
+
+            m_UnusedIdentity.Clear();
+            int identitiesCount = 0;
+            foreach (int number in m_CharacterSet.Values)
+            {
+                identitiesCount += number;
+            }
+            for (int i = 0; i < identitiesCount - m_Players.Length + 1; i++)
+            {
+                m_UnusedIdentity.Add(new PlayerIdentity());
+            }
+            UpdateUnusedIdentities();
         }
 
         protected void UpdatePlayerIdentities()
@@ -73,11 +83,24 @@
             playerNumbers.Sort();
 
             OrderedDictionary dictionary = new OrderedDictionary();
-            for (int i = 1; i < playerNumbers.Count(); i++)
+            for (int i = 0; i < playerNumbers.Count(); i++)
             {
-                dictionary.Add(i.ToString(), m_PlayerIdentities[i]);
+                if (playerNumbers[i] != 0)
+                {
+                    dictionary.Add(playerNumbers[i], m_PlayerIdentities[i]);
+                }
             }
             onPlayerIdentitiesUpdate.Invoke(dictionary);
+        }
+
+        protected void UpdateUnusedIdentities()
+        {
+            OrderedDictionary dictionary = new OrderedDictionary();
+            for (int i = 0; i < m_UnusedIdentity.Count(); i++)
+            {
+                dictionary.Add(i + 1, m_UnusedIdentity[i]);
+            }
+            onUnusedIdentitiesUpdate.Invoke(dictionary);
         }
 
         public abstract void GeneratePlayerIdentities();

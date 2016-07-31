@@ -57,9 +57,27 @@
             photonView.RPC("ReceivePlayerNumbers", PhotonTargets.All, playerNumbers.ToArray());
 
             //生成所有角色
+            List<int> characterIds = new List<int>();
+            foreach (int id in m_CharacterSet.Keys)
+            {
+                characterIds.AddRange(Enumerable.Repeat(id, m_CharacterSet[id]));
+            }
+            characterIds = characterIds.Shuffle().ToList();
 
+            int k = 0;
+            foreach (int index in m_PlayerIdentities.Keys)
+            {
+                m_PlayerIdentities[index].UpdateIdentity(characterIds[k++]);
+                //m_PlayerIdentities[m_Players[i].isMasterClient ? 0 : playerNumbers[k++]].UpdatePlayer(m_Players[i]);
+            }
+            UpdatePlayerIdentities();
 
-
+            for (int i = k; i < characterIds.Count(); i++)
+            {
+                //m_UnusedIdentity.Add
+            }
+            UpdateUnusedIdentities();
+            
 
             //分配玩家角色
             //DistributePlayerCharacters();
