@@ -70,6 +70,16 @@ public abstract class ScrollListView<T> : MonoBehaviour
         itemView.UpdateItem(value);
     }
 
+    public virtual bool UpdateItemInList(string idInList, T value)
+    {
+        if (!m_CurrentScrollList.ContainsKey(idInList))
+        {
+            return false;
+        }
+        UpdateItemView(m_CurrentScrollList[idInList], value);
+        return true;
+    }
+
     public void SelectItemInList(string idInList, bool isSelected)
     {
         bool isChanged = false;
