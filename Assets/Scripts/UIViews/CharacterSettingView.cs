@@ -20,7 +20,7 @@
         {
             base.UpdateItem(value);
             m_Item = new DataPair<CharacterModel, CharacterSetting>((CharacterModel)value, null);
-            onCharacterSettingIconUpdate.Invoke(m_Item.Value1.Icon);
+            onCharacterSettingIconUpdate.Invoke(m_Item.Value1.Image);
             onCharacterSettingNameUpdate.Invoke(m_Item.Value1.DisplayName);
 
             RetrieveLocalCharacterSetting();
