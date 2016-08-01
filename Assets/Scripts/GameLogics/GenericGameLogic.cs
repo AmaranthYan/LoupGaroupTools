@@ -68,22 +68,17 @@
             foreach (int index in m_PlayerIdentities.Keys)
             {
                 m_PlayerIdentities[index].UpdateIdentity(characterIds[k++]);
-                //m_PlayerIdentities[m_Players[i].isMasterClient ? 0 : playerNumbers[k++]].UpdatePlayer(m_Players[i]);
             }
             UpdatePlayerIdentities();
 
-            for (int i = k; i < characterIds.Count(); i++)
+            for (int i = 0; i < characterIds.Count() - k; i++)
             {
-                //m_UnusedIdentity.Add
+                m_UnusedIdentity[i].UpdateIdentity(characterIds[k + i]);
             }
-            UpdateUnusedIdentities();
-            
+            UpdateUnusedIdentities();            
 
             //分配玩家角色
-            //DistributePlayerCharacters();
-
-            //分配剩余角色
-            //DistributeUnusedIdentities();
+            DistributePlayerIdentities();
         }
 
         [PunRPC]
@@ -102,33 +97,31 @@
             UpdatePlayerIdentities();
         }
 
-        public override void DistributePlayerCharacters()
+        public override void DistributePlayerIdentities()
         {
             if (!PhotonNetwork.isMasterClient) { return; }
 
             foreach (KeyValuePair<int, PlayerIdentity> playerIdentity in m_PlayerIdentities)
             {
-                photonView.RPC("ReceivePlayerIdentity", playerIdentity.Value.Player, playerIdentity.Value.Player, playerIdentity.Value.CharacterId);
+                if (playerIdentity.Key != 0)
+                {
+                    photonView.RPC("ReceivePlayerIdentity", playerIdentity.Value.Player, playerIdentity.Value.Number, playerIdentity.Value.CharacterId);
+                }                
             }
         }
 
-        public override void BroadcastPlayerIdentity(PhotonPlayer player)
+        public override void BroadcastPlayerIdentity(int number)
         {
             if (!PhotonNetwork.isMasterClient) { return; }
+
+            photonView.RPC("ReceivePlayerIdentity", PhotonTargets.Others , number, m_PlayerIdentities[number].CharacterId);
         }
 
         [PunRPC]
-        protected override void ReceivePlayerIdentity(PhotonPlayer player, int characterId)
+        protected override void ReceivePlayerIdentity(int number, int characterId)
         {
-            Debug.Log(player + " : " + characterId);
-            if (player.Equals(PhotonNetwork.player))
-            {
-
-            }
-            else
-            {
-
-            }
+            m_PlayerIdentities[number].UpdateIdentity(characterId);
+            UpdatePlayerIdentities();
         }        
     }
 }

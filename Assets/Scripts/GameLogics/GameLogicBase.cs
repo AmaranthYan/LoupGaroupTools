@@ -23,6 +23,7 @@
         protected PhotonPlayer[] m_Players = null;
         protected GameModeModel m_GameMode = null;
         protected Dictionary<int, int> m_CharacterSet = null;
+        public int[] CharacterIds { get { return m_CharacterSet.Keys.ToArray(); } }
 
         protected Dictionary<int, PlayerIdentity> m_PlayerIdentities = new Dictionary<int, PlayerIdentity>();
         protected List<PlayerIdentity> m_UnusedIdentity = new List<PlayerIdentity>();
@@ -105,8 +106,8 @@
 
         public abstract void GeneratePlayerIdentities();
         protected abstract void ReceivePlayerNumbers(int[] playerNumbers);
-        public abstract void DistributePlayerCharacters();
-        public abstract void BroadcastPlayerIdentity(PhotonPlayer player);
-        protected abstract void ReceivePlayerIdentity(PhotonPlayer player, int characterId);
+        public abstract void DistributePlayerIdentities();
+        public abstract void BroadcastPlayerIdentity(int number);
+        protected abstract void ReceivePlayerIdentity(int number, int characterId);
     }
 }
