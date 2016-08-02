@@ -19,6 +19,8 @@
         public UnityTypedEvent.StringEvent onGameModeDescriptionInit = new UnityTypedEvent.StringEvent();
         public UnityTypedEvent.OrderedDictionaryEvent onPlayerIdentitiesUpdate = new UnityTypedEvent.OrderedDictionaryEvent();
         public UnityTypedEvent.OrderedDictionaryEvent onUnusedIdentitiesUpdate = new UnityTypedEvent.OrderedDictionaryEvent();
+        public UnityTypedEvent.StringAndPlayerIdentityEvent onSinglePlayerIdentityUpdate = new UnityTypedEvent.StringAndPlayerIdentityEvent();
+        public UnityTypedEvent.StringAndPlayerIdentityEvent onSingleUnusedIdentityUpdate = new UnityTypedEvent.StringAndPlayerIdentityEvent();
 
         protected PhotonPlayer[] m_Players = null;
         protected GameModeModel m_GameMode = null;
@@ -29,6 +31,7 @@
         protected List<PlayerIdentity> m_UnusedIdentity = new List<PlayerIdentity>();
 
         protected bool isInitialized = false;
+        protected int captainNumber = -1;
 
         protected GameLogicCallback m_InitGameLogic_Callback = DefaultGameLogicCallback;
 
@@ -73,7 +76,9 @@
             }
             for (int i = 0; i < identitiesCount - m_Players.Length + 1; i++)
             {
-                m_UnusedIdentity.Add(new PlayerIdentity());
+                PlayerIdentity unusedIdentity = new PlayerIdentity();
+                unusedIdentity.UpdateNumber(i);
+                m_UnusedIdentity.Add(unusedIdentity);
             }
             UpdateUnusedIdentities();
         }
@@ -99,7 +104,7 @@
             OrderedDictionary dictionary = new OrderedDictionary();
             for (int i = 0; i < m_UnusedIdentity.Count(); i++)
             {
-                dictionary.Add(i + 1, m_UnusedIdentity[i]);
+                dictionary.Add(i, m_UnusedIdentity[i]);
             }
             onUnusedIdentitiesUpdate.Invoke(dictionary);
         }
@@ -107,7 +112,13 @@
         public abstract void GeneratePlayerIdentities();
         protected abstract void ReceivePlayerNumbers(int[] playerNumbers);
         public abstract void DistributePlayerIdentities();
+        public abstract void ReversePlayerSurvivalStatus(int number);
+        protected abstract void MarkPlayerAsDead(int number, bool isDead);
+        public abstract void PromotePlayerToCaptain(int number);
+        protected abstract void MarkPlayerAsCaptain(int number);
         public abstract void BroadcastPlayerIdentity(int number);
+        public abstract void BroadcastUnusedIdentity(int index);
         protected abstract void ReceivePlayerIdentity(int number, int characterId);
+        protected abstract void ReceiveUnusedIdentity(int index, int characterId);
     }
 }

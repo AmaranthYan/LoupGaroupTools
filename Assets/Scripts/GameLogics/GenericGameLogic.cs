@@ -67,13 +67,17 @@
             int k = 0;
             foreach (int index in m_PlayerIdentities.Keys)
             {
-                m_PlayerIdentities[index].UpdateIdentity(characterIds[k++]);
+                PlayerIdentity playerIdentity = m_PlayerIdentities[index];
+                playerIdentity.UpdateIdentity(characterIds[k++]);
+                playerIdentity.MarkAsRevealed(true);
             }
             UpdatePlayerIdentities();
 
             for (int i = 0; i < characterIds.Count() - k; i++)
             {
-                m_UnusedIdentity[i].UpdateIdentity(characterIds[k + i]);
+                PlayerIdentity unusedIdentity = m_UnusedIdentity[i];
+                unusedIdentity.UpdateIdentity(characterIds[k + i]);
+                unusedIdentity.MarkAsRevealed(true);
             }
             UpdateUnusedIdentities();            
 
@@ -110,6 +114,58 @@
             }
         }
 
+        public override void ReversePlayerSurvivalStatus(int number)
+        {
+            if (!PhotonNetwork.isMasterClient) { return; }
+
+            m_PlayerIdentities[number].MarkAsDead(!m_PlayerIdentities[number].IsDead);
+            onSinglePlayerIdentityUpdate.Invoke(number.ToString(), m_PlayerIdentities[number]);
+
+            photonView.RPC("MarkPlayerAsDead", PhotonTargets.Others, number, m_PlayerIdentities[number].IsDead);
+        }
+
+        [PunRPC]
+        protected override void MarkPlayerAsDead(int number, bool isDead)
+        {
+            m_PlayerIdentities[number].MarkAsDead(isDead);
+            onSinglePlayerIdentityUpdate.Invoke(number.ToString(), m_PlayerIdentities[number]);
+        }
+
+        public override void PromotePlayerToCaptain(int number)
+        {
+            if (!PhotonNetwork.isMasterClient) { return; }
+
+            if (m_PlayerIdentities.ContainsKey(captainNumber))
+            {
+                m_PlayerIdentities[captainNumber].MarkAsCaptain(false);
+                onSinglePlayerIdentityUpdate.Invoke(captainNumber.ToString(), m_PlayerIdentities[captainNumber]);
+            }
+            captainNumber = number != captainNumber ? number : -1;
+            if (m_PlayerIdentities.ContainsKey(captainNumber))
+            {
+                m_PlayerIdentities[captainNumber].MarkAsCaptain(true);
+                onSinglePlayerIdentityUpdate.Invoke(captainNumber.ToString(), m_PlayerIdentities[captainNumber]);
+            }
+
+            photonView.RPC("MarkPlayerAsCaptain", PhotonTargets.Others, captainNumber);
+        }
+
+        [PunRPC]
+        protected override void MarkPlayerAsCaptain(int number)
+        {
+            if (m_PlayerIdentities.ContainsKey(captainNumber))
+            {
+                m_PlayerIdentities[captainNumber].MarkAsCaptain(false);
+                onSinglePlayerIdentityUpdate.Invoke(captainNumber.ToString(), m_PlayerIdentities[captainNumber]);
+            }
+
+            if (m_PlayerIdentities.ContainsKey(number))
+            {
+                m_PlayerIdentities[number].MarkAsCaptain(true);
+                onSinglePlayerIdentityUpdate.Invoke(number.ToString(), m_PlayerIdentities[number]);
+            }
+        }
+
         public override void BroadcastPlayerIdentity(int number)
         {
             if (!PhotonNetwork.isMasterClient) { return; }
@@ -117,11 +173,29 @@
             photonView.RPC("ReceivePlayerIdentity", PhotonTargets.Others , number, m_PlayerIdentities[number].CharacterId);
         }
 
+        public override void BroadcastUnusedIdentity(int index)
+        {     
+            if (!PhotonNetwork.isMasterClient) { return; }
+
+            photonView.RPC("ReceiveUnusedIdentity", PhotonTargets.Others , index, m_UnusedIdentity[index].CharacterId);
+        }
+
         [PunRPC]
         protected override void ReceivePlayerIdentity(int number, int characterId)
         {
-            m_PlayerIdentities[number].UpdateIdentity(characterId);
-            UpdatePlayerIdentities();
-        }        
+            PlayerIdentity playerIdentity = m_PlayerIdentities[number];
+            playerIdentity.UpdateIdentity(characterId);
+            playerIdentity.MarkAsRevealed(true);
+            onSinglePlayerIdentityUpdate.Invoke(number.ToString(), playerIdentity);
+        }
+
+        [PunRPC]
+        protected override void ReceiveUnusedIdentity(int index, int characterId)
+        {
+            PlayerIdentity unusedIdentity = m_UnusedIdentity[index];
+            unusedIdentity.UpdateIdentity(characterId);
+            unusedIdentity.MarkAsRevealed(true);
+            onSingleUnusedIdentityUpdate.Invoke(index.ToString(), unusedIdentity);
+        }
     }
 }

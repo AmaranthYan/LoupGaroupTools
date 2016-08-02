@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Collections.Generic;
+using LoupsGarous;
 
 public class UnityTypedEvent
 {
@@ -21,6 +22,9 @@ public class UnityTypedEvent
     public class OrderedDictionaryEvent : UnityEvent<OrderedDictionary> { }
     [Serializable]
     public class SpriteEvent : UnityEvent<Sprite> { }
+
+    [Serializable]
+    public class StringAndPlayerIdentityEvent : UnityEvent<string, PlayerIdentity> { }
 
     //[Serializable]
     //public class ScrollListItemViewEvent : UnityEvent<ScrollListItemView> { }
