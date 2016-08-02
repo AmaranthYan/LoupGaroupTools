@@ -28,6 +28,7 @@
         public int[] CharacterIds { get { return m_CharacterSet.Keys.ToArray(); } }
 
         protected Dictionary<int, PlayerIdentity> m_PlayerIdentities = new Dictionary<int, PlayerIdentity>();
+        public Dictionary<int, PlayerIdentity> PlayerIdentities { get { return m_PlayerIdentities; } }
         protected List<PlayerIdentity> m_UnusedIdentity = new List<PlayerIdentity>();
 
         protected bool isInitialized = false;
