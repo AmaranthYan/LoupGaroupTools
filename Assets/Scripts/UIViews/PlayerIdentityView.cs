@@ -18,6 +18,8 @@
         public UnityTypedEvent.SpriteEvent onIdentityImageUpdate = new UnityTypedEvent.SpriteEvent();
         public UnityTypedEvent.BoolEvent onIsMaster = new UnityTypedEvent.BoolEvent();
         public UnityTypedEvent.BoolEvent onIsMe = new UnityTypedEvent.BoolEvent();
+        public UnityTypedEvent.BoolEvent onIsDead = new UnityTypedEvent.BoolEvent();
+        public UnityTypedEvent.BoolEvent onIsCaptain = new UnityTypedEvent.BoolEvent();
         public UnityTypedEvent.BoolEvent onIdentityHide = new UnityTypedEvent.BoolEvent();
 
         void Start()
@@ -33,6 +35,8 @@
             onPlayerNumberUpdate.Invoke(m_Item.Number > 0 ? m_Item.Number.ToString() : string.Empty);
             onIdentityImageUpdate.Invoke(m_Item.CharacterId != -1 ? m_CharacterDatabase.CharacterModels.First(c => c.Id == m_Item.CharacterId).Image : null);
             onIsMe.Invoke(PhotonNetwork.player.Equals(m_Item.Player));
+            onIsDead.Invoke(m_Item.IsDead);
+            onIsCaptain.Invoke(m_Item.IsCaptain);
             onIdentityHide.Invoke(!m_Item.IsRevealed);
         }
     }

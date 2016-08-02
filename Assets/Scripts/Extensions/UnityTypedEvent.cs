@@ -24,6 +24,9 @@ public class UnityTypedEvent
     public class SpriteEvent : UnityEvent<Sprite> { }
 
     [Serializable]
+    public class RectTransformEvent : UnityEvent<RectTransform> { }
+
+    [Serializable]
     public class StringAndPlayerIdentityEvent : UnityEvent<string, PlayerIdentity> { }
 
     //[Serializable]

@@ -12,14 +12,12 @@
         public class SingleItemEvent : UnityEvent<PlayerIdentity> { }
         [Serializable]
         public class MultiItemEvent : UnityEvent<List<PlayerIdentity>> { }
-
-        [SerializeField]
-        private RectTransform m_MePlaceholder = null;
-
+        
         public new SingleItemEvent onSelectedItemChange = new SingleItemEvent();
         public new MultiItemEvent onMultiSelectedItemsChange = new MultiItemEvent();
 
         public UnityTypedEvent.BoolEvent onMePresent = new UnityTypedEvent.BoolEvent();
+        public UnityTypedEvent.RectTransformEvent onMyIdentityTransformUpdate = new UnityTypedEvent.RectTransformEvent();
 
         private bool m_HasMe = false;
 
@@ -42,12 +40,8 @@
             PlayerIdentity playerIdentity = (PlayerIdentity)value;
             if (PhotonNetwork.player.Equals(playerIdentity.Player))
             {
-                itemView.transform.SetParent(m_MePlaceholder);
                 RectTransform rectTransform = (RectTransform)itemView.transform;
-                rectTransform.anchorMin = Vector2.zero;
-                rectTransform.anchorMax = Vector2.one;
-                rectTransform.anchoredPosition = Vector2.zero;
-                rectTransform.sizeDelta = Vector2.zero;
+                onMyIdentityTransformUpdate.Invoke(rectTransform);
                 m_HasMe = true;
             }
         }
