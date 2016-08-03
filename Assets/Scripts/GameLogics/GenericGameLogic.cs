@@ -2,12 +2,16 @@
 {
     using Photon;
     using UnityEngine;
+    using UnityEngine.Events;
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
     public class GenericGameLogic : GameLogicBase
     {
+        public UnityEvent onIsMaster = new UnityEvent();
+        public UnityEvent onIsNotMaster = new UnityEvent();
+
         void Start()
         {
             if (PhotonNetwork.isMasterClient)
@@ -25,6 +29,12 @@
                     };
                     m_InitGameLogic_Callback += handler;
                 }
+
+                onIsMaster.Invoke();
+            }
+            else
+            {
+                onIsNotMaster.Invoke();
             }
         }
 
@@ -36,10 +46,29 @@
 
             if (otherPlayer.isMasterClient)
             {
-                FindObjectOfType<GameSessionServiceView>().EndLocalGameSession();
+                EndLocalGame();
             }
         }
         #endregion
+        
+        public override void RestartGame()
+        {
+            if (!PhotonNetwork.isMasterClient) { return; }
+
+            GeneratePlayerIdentities();
+        }
+
+        public override void EndGame()
+        {
+            if (!PhotonNetwork.isMasterClient) { return; }
+
+            FindObjectOfType<GameSessionServiceView>().EndGameSession();
+        }
+
+        public override void EndLocalGame()
+        {
+            FindObjectOfType<GameSessionServiceView>().EndLocalGameSession();
+        }
 
         public override void GeneratePlayerIdentities()
         {

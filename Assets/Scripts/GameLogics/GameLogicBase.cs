@@ -110,6 +110,9 @@
             onUnusedIdentitiesUpdate.Invoke(dictionary);
         }
 
+        public abstract void RestartGame();
+        public abstract void EndGame();
+        public abstract void EndLocalGame();
         public abstract void GeneratePlayerIdentities();
         protected abstract void ReceivePlayerNumbers(int[] playerNumbers);
         public abstract void DistributePlayerIdentities();
