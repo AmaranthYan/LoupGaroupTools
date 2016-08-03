@@ -93,7 +93,7 @@
             {
                 if (playerNumbers[i] != 0)
                 {
-                    dictionary.Add(playerNumbers[i], m_PlayerIdentities[i]);
+                    dictionary.Add(playerNumbers[i].ToString(), m_PlayerIdentities[i]);
                 }
             }
             onPlayerIdentitiesUpdate.Invoke(dictionary);
@@ -104,7 +104,7 @@
             OrderedDictionary dictionary = new OrderedDictionary();
             for (int i = 0; i < m_UnusedIdentity.Count(); i++)
             {
-                dictionary.Add(i, m_UnusedIdentity[i]);
+                dictionary.Add(i.ToString(), m_UnusedIdentity[i]);
             }
             onUnusedIdentitiesUpdate.Invoke(dictionary);
         }

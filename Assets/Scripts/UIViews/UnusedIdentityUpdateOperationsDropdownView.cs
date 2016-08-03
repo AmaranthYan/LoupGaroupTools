@@ -8,7 +8,7 @@
 
     public class UnusedIdentityUpdateOperationsDropdownView : IdentityUpdateOperationsDropdownView
     {
-        protected enum Operation { RevealIdentity = 0 };
+        protected enum Operation { RevealIdentity = 1 };
 
         protected override void InitOperationsDropdown()
         {
@@ -23,9 +23,10 @@
                         break;
                 }
                 optionList.Add(option);
-
-                m_OperationsDropdown.options = optionList;
             }
+
+            m_OperationsDropdown.AddOptions(optionList);
+            ResetDropdownValue();
         }
 
         public override void ExecuteOperation(int opId)
@@ -39,6 +40,8 @@
                     m_GameLogic.BroadcastUnusedIdentity(m_Identity.Number);
                     break;
             }
+
+            ResetDropdownValue();
         }
     }
 }

@@ -13,6 +13,7 @@
         private string m_UnknownPlayerName = string.Empty;
 
         [Header("Events")]
+        public UnityTypedEvent.PlayerIdentityEvent onPlayerIdentityUpdate = new UnityTypedEvent.PlayerIdentityEvent();
         public UnityTypedEvent.StringEvent onPlayerNameUpdate = new UnityTypedEvent.StringEvent();
         public UnityTypedEvent.StringEvent onPlayerNumberUpdate = new UnityTypedEvent.StringEvent();
         public UnityTypedEvent.SpriteEvent onIdentityImageUpdate = new UnityTypedEvent.SpriteEvent();
@@ -31,6 +32,7 @@
         {
             base.UpdateItem(value);
             m_Item = (PlayerIdentity)value;
+            onPlayerIdentityUpdate.Invoke(m_Item);
             onPlayerNameUpdate.Invoke(m_Item.Player != null ? NetPlayer.FetchPlayerName(m_Item.Player) : m_UnknownPlayerName);
             onPlayerNumberUpdate.Invoke(m_Item.Number > 0 ? m_Item.Number.ToString() : string.Empty);
             onIdentityImageUpdate.Invoke(m_Item.CharacterId != -1 ? m_CharacterDatabase.CharacterModels.First(c => c.Id == m_Item.CharacterId).Image : null);

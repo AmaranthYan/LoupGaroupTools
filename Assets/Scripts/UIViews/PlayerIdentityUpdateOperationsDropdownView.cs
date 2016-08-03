@@ -8,10 +8,12 @@
 
     public class PlayerIdentityUpdateOperationsDropdownView : IdentityUpdateOperationsDropdownView
     {
-        protected enum Operation { MarkAsDead = 0, MarkAsCaptain, RevealIdentity };
+        protected enum Operation { MarkAsDead = 1, MarkAsCaptain, RevealIdentity };
 
         protected override void InitOperationsDropdown()
         {
+            base.InitOperationsDropdown();
+
             List<Dropdown.OptionData> optionList = new List<Dropdown.OptionData>();
             foreach (Operation op in Enum.GetValues(typeof(Operation)).Cast<Operation>())
             {
@@ -29,9 +31,10 @@
                         break;
                 }
                 optionList.Add(option);
-
-                m_OperationsDropdown.options = optionList;
             }
+            
+            m_OperationsDropdown.AddOptions(optionList);
+            ResetDropdownValue();
         }
 
         public override void ExecuteOperation(int opId)
@@ -51,6 +54,8 @@
                     m_GameLogic.BroadcastPlayerIdentity(m_Identity.Number);
                     break;
             }
+
+            ResetDropdownValue();
         }
     }
 }

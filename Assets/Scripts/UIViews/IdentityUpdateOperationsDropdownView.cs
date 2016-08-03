@@ -2,6 +2,7 @@
 {
     using UnityEngine;
     using UnityEngine.UI;
+    using System.Collections.Generic;
 
     public abstract class IdentityUpdateOperationsDropdownView : MonoBehaviour
     {
@@ -25,7 +26,18 @@
             m_Identity = identity;
         }
 
-        protected abstract void InitOperationsDropdown();
+        protected void ResetDropdownValue()
+        {
+            m_OperationsDropdown.value = 0;
+        }
+
+        protected virtual void InitOperationsDropdown()
+        {
+            List<Dropdown.OptionData> optionList = new List<Dropdown.OptionData>();
+            optionList.Add(new Dropdown.OptionData("放弃操作"));
+            m_OperationsDropdown.options = optionList;
+        }
+
         public abstract void ExecuteOperation(int opId);
     }
 }

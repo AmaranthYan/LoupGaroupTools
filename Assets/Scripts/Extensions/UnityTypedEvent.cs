@@ -22,9 +22,11 @@ public class UnityTypedEvent
     public class OrderedDictionaryEvent : UnityEvent<OrderedDictionary> { }
     [Serializable]
     public class SpriteEvent : UnityEvent<Sprite> { }
-
     [Serializable]
     public class RectTransformEvent : UnityEvent<RectTransform> { }
+    
+    [Serializable]
+    public class PlayerIdentityEvent : UnityEvent<PlayerIdentity> { }
 
     [Serializable]
     public class StringAndPlayerIdentityEvent : UnityEvent<string, PlayerIdentity> { }
@@ -33,7 +35,7 @@ public class UnityTypedEvent
     //public class ScrollListItemViewEvent : UnityEvent<ScrollListItemView> { }
     //[Serializable]
     //public class ScrollListItemViewListEvent : UnityEvent<List<ScrollListItemView>> { }
-
+    
     [Serializable]
     public class PhotonRoomInfoArrayEvent : UnityEvent<RoomInfo[]> { }
     [Serializable]
