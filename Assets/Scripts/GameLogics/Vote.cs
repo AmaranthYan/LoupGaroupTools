@@ -1,5 +1,6 @@
 ﻿namespace LoupsGarous
 {
+    using Photon;
     using UnityEngine;
     using System;
     using System.Collections.Generic;
@@ -31,7 +32,7 @@
             if (!PhotonNetwork.isMasterClient) { return; }
 
             Dictionary<int, PlayerIdentity> playerIdentities = FindObjectOfType<GameLogicBase>().PlayerIdentities;
-            m_EligiblePlayers = playerIdentities.Where(pi => (pi.Key != 0) && !pi.Value.IsDead);
+            m_EligiblePlayers = playerIdentities.Where(pi => (pi.Key != 0) && !pi.Value.IsDead) as Dictionary<int, PlayerIdentity>;
 
             OrderedDictionary dictionary = new OrderedDictionary();
             foreach (KeyValuePair<int, PlayerIdentity> playerIdentity in m_EligiblePlayers)
@@ -54,7 +55,7 @@
         public void TakeVote()
         {
             if (!PhotonNetwork.isMasterClient) { return; }
-            if (!m_CandidateList || !m_VoterList) { return; }
+            if ((m_CandidateList == null) || (m_VoterList == null)) { return; }
 
             //提取候选玩家编号
             int[] candidateNumbers = new int[m_CandidateList.Count];
