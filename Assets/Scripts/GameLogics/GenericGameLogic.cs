@@ -74,7 +74,7 @@
         {
             if (!PhotonNetwork.isMasterClient) { return; }
 
-            //随机生成玩家编号，0号预留给上帝玩家(MasterPlayer)
+            //随机生成玩家编号，0号预留给上帝玩家
             List<int> playerNumbers = new List<int>();
             for (int i = 1; i < m_Players.Length; i++)
             {
@@ -82,10 +82,10 @@
             }
             playerNumbers = playerNumbers.Shuffle().ToList();
 
-            //分配玩家编号
+            //向其他玩家分配编号列表
             photonView.RPC("ReceivePlayerNumbers", PhotonTargets.All, playerNumbers.ToArray());
 
-            //生成所有角色
+            //生成所有游戏身份
             List<int> characterIds = new List<int>();
             foreach (int id in m_CharacterSet.Keys)
             {
@@ -93,15 +93,20 @@
             }
             characterIds = characterIds.Shuffle().ToList();
 
+            //对应编号分配游戏身份，上帝(0号玩家)本身不获得游戏身份
             int k = 0;
             foreach (int index in m_PlayerIdentities.Keys)
             {
-                PlayerIdentity playerIdentity = m_PlayerIdentities[index];
-                playerIdentity.UpdateIdentity(characterIds[k++]);
-                playerIdentity.MarkAsRevealed(true);
+                if (index != 0)
+                {
+                    PlayerIdentity playerIdentity = m_PlayerIdentities[index];
+                    playerIdentity.UpdateIdentity(characterIds[k++]);
+                    playerIdentity.MarkAsRevealed(true);
+                }
             }
             UpdatePlayerIdentities();
 
+            //收集多余游戏身份
             for (int i = 0; i < characterIds.Count() - k; i++)
             {
                 PlayerIdentity unusedIdentity = m_UnusedIdentity[i];
@@ -110,7 +115,7 @@
             }
             UpdateUnusedIdentities();            
 
-            //分配玩家角色
+            //向其他玩家分配各自身份
             DistributePlayerIdentities();
         }
 
