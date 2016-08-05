@@ -44,6 +44,10 @@
                 onMyIdentityTransformUpdate.Invoke(rectTransform);
                 m_HasMe = true;
             }
+            else
+            {
+                itemView.transform.SetParent(transform);
+            }
         }
     }
 }
