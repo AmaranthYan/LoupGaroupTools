@@ -12,7 +12,7 @@ public static class IEnumerableShuffle
     public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> collection)
     {
         T[] array = collection.ToArray();
-        for (int i = 0; i < array.Length - 2; i++)
+        for (int i = 0; i < array.Length - 1; i++)
         {
             byte[] bytes = new byte[sizeof(int)];
             rngCsp.GetBytes(bytes);

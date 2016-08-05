@@ -2,7 +2,9 @@
 {
     using Photon;
     using UnityEngine;
+    using UnityEngine.Events;
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.Linq;
@@ -16,7 +18,7 @@
         private float m_VoteTimeLimit = DEFAULT_VOTE_TIME_LIMIT;
         [SerializeField]
         private Animator m_CountdownAnimator = null;
-        [SerializeFiemd]
+        [SerializeField]
         private string m_CountdownParam = string.Empty;
 
         public UnityTypedEvent.OrderedDictionaryEvent onEligiblePlayersRetrieve = new UnityTypedEvent.OrderedDictionaryEvent();

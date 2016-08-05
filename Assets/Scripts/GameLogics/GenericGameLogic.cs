@@ -16,7 +16,7 @@
         {
             if (PhotonNetwork.isMasterClient)
             {
-                if (isInitialized)
+                if (m_IsInitialized)
                 {
                     GeneratePlayerIdentities();
                 }
@@ -55,6 +55,8 @@
         {
             if (!PhotonNetwork.isMasterClient) { return; }
 
+            photonView.RPC("GenerateEmptyIdenities", PhotonTargets.Others);
+            GenerateEmptyIdenities();
             GeneratePlayerIdentities();
         }
 
@@ -169,34 +171,34 @@
         {
             if (!PhotonNetwork.isMasterClient) { return; }
 
-            if (m_PlayerIdentities.ContainsKey(captainNumber))
+            if (m_PlayerIdentities.ContainsKey(m_CaptainNumber))
             {
-                m_PlayerIdentities[captainNumber].MarkAsCaptain(false);
-                onSinglePlayerIdentityUpdate.Invoke(captainNumber.ToString(), m_PlayerIdentities[captainNumber]);
+                m_PlayerIdentities[m_CaptainNumber].MarkAsCaptain(false);
+                onSinglePlayerIdentityUpdate.Invoke(m_CaptainNumber.ToString(), m_PlayerIdentities[m_CaptainNumber]);
             }
-            captainNumber = number != captainNumber ? number : -1;
-            if (m_PlayerIdentities.ContainsKey(captainNumber))
+            m_CaptainNumber = number != m_CaptainNumber ? number : -1;
+            if (m_PlayerIdentities.ContainsKey(m_CaptainNumber))
             {
-                m_PlayerIdentities[captainNumber].MarkAsCaptain(true);
-                onSinglePlayerIdentityUpdate.Invoke(captainNumber.ToString(), m_PlayerIdentities[captainNumber]);
+                m_PlayerIdentities[m_CaptainNumber].MarkAsCaptain(true);
+                onSinglePlayerIdentityUpdate.Invoke(m_CaptainNumber.ToString(), m_PlayerIdentities[m_CaptainNumber]);
             }
 
-            photonView.RPC("MarkPlayerAsCaptain", PhotonTargets.Others, captainNumber);
+            photonView.RPC("MarkPlayerAsCaptain", PhotonTargets.Others, m_CaptainNumber);
         }
 
         [PunRPC]
         protected override void MarkPlayerAsCaptain(int number)
         {
-            if (m_PlayerIdentities.ContainsKey(captainNumber))
+            if (m_PlayerIdentities.ContainsKey(m_CaptainNumber))
             {
-                m_PlayerIdentities[captainNumber].MarkAsCaptain(false);
-                onSinglePlayerIdentityUpdate.Invoke(captainNumber.ToString(), m_PlayerIdentities[captainNumber]);
+                m_PlayerIdentities[m_CaptainNumber].MarkAsCaptain(false);
+                onSinglePlayerIdentityUpdate.Invoke(m_CaptainNumber.ToString(), m_PlayerIdentities[m_CaptainNumber]);
             }
-
-            if (m_PlayerIdentities.ContainsKey(number))
+            m_CaptainNumber = number;
+            if (m_PlayerIdentities.ContainsKey(m_CaptainNumber))
             {
-                m_PlayerIdentities[number].MarkAsCaptain(true);
-                onSinglePlayerIdentityUpdate.Invoke(number.ToString(), m_PlayerIdentities[number]);
+                m_PlayerIdentities[m_CaptainNumber].MarkAsCaptain(true);
+                onSinglePlayerIdentityUpdate.Invoke(m_CaptainNumber.ToString(), m_PlayerIdentities[m_CaptainNumber]);
             }
         }
 

@@ -12,6 +12,8 @@
 
         protected override void InitOperationsDropdown()
         {
+            base.InitOperationsDropdown();
+
             List<Dropdown.OptionData> optionList = new List<Dropdown.OptionData>();
             foreach (Operation op in Enum.GetValues(typeof(Operation)).Cast<Operation>())
             {

@@ -31,8 +31,8 @@
         public Dictionary<int, PlayerIdentity> PlayerIdentities { get { return m_PlayerIdentities; } }
         protected List<PlayerIdentity> m_UnusedIdentity = new List<PlayerIdentity>();
 
-        protected bool isInitialized = false;
-        protected int captainNumber = -1;
+        protected bool m_IsInitialized = false;
+        protected int m_CaptainNumber = -1;
 
         protected GameLogicCallback m_InitGameLogic_Callback = DefaultGameLogicCallback;
 
@@ -53,11 +53,12 @@
 
             GenerateEmptyIdenities();
 
-            isInitialized = true;
+            m_IsInitialized = true;
 
             m_InitGameLogic_Callback();
         }
 
+        [PunRPC]
         protected void GenerateEmptyIdenities()
         {
             m_PlayerIdentities.Clear();
