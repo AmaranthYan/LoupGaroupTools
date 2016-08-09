@@ -127,4 +127,14 @@ public abstract class ScrollListView<T> : MonoBehaviour
             }            
         }
     }
+
+    public void SelectAll(bool isSelected)
+    {
+        if (!m_AllowMultiSelect) { return; }
+
+        foreach (string itemId in m_CurrentScrollList.Keys)
+        {
+            SelectItemInList(itemId, isSelected);
+        }
+    }
 }

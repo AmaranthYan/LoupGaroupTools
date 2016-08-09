@@ -58,12 +58,14 @@
         private void RetrieveEligiblePlayers()
         {
             Dictionary<int, PlayerIdentity> playerIdentities = FindObjectOfType<GameLogicBase>().PlayerIdentities;
-            m_EligiblePlayers = playerIdentities.Where(pi => (pi.Key != 0) && !pi.Value.IsDead) as Dictionary<int, PlayerIdentity>;
+            m_EligiblePlayers = playerIdentities.Where(pi => (pi.Key != 0) && !pi.Value.IsDead).ToDictionary(pi => pi.Key, pi => pi.Value);
 
             OrderedDictionary dictionary = new OrderedDictionary();
-            foreach (KeyValuePair<int, PlayerIdentity> playerIdentity in m_EligiblePlayers)
-            {
-                dictionary.Add(playerIdentity.Key.ToString(), playerIdentity.Value);
+            if (m_EligiblePlayers != null) {
+                foreach (KeyValuePair<int, PlayerIdentity> playerIdentity in m_EligiblePlayers)
+                {
+                    dictionary.Add(playerIdentity.Key.ToString(), playerIdentity.Value);
+                }
             }
             onEligiblePlayersRetrieve.Invoke(dictionary);
         }
