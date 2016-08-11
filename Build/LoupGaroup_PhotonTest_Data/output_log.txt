@@ -16,22 +16,22 @@ Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_
 Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
 Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\Photon3Unity3D.dll (this message is harmless)
 Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\Photon3Unity3D.dll into Unity Child Domain
-- Completed reload, in  0.099 seconds
+- Completed reload, in  0.095 seconds
 Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\System.dll (this message is harmless)
 <RI> Initializing input.
 <RI> Input initialized.
-desktop: 1920x1080 60Hz; virtual: 3840x1080 at 0,0
+desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
 <RI> Initialized touch support.
-UnloadTime: 0.945114 ms
+UnloadTime: 0.521309 ms
 Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\System.Xml.dll (this message is harmless)
 Best region found in PlayerPrefs. Connecting to: eu
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
 
 Setting up 2 worker threads for Enlighten.
-  Thread -> id: 49f8 -> priority: 1 
-  Thread -> id: 4374 -> priority: 1 
+  Thread -> id: 26e4 -> priority: 1 
+  Thread -> id: 3888 -> priority: 1 
 Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/PhotonCryptoPlugin
 Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/.\PhotonCryptoPlugin
 Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/PhotonCryptoPlugin
@@ -62,22 +62,22 @@ Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_
 Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
 Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\Photon3Unity3D.dll (this message is harmless)
 Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\Photon3Unity3D.dll into Unity Child Domain
-- Completed reload, in  0.044 seconds
+- Completed reload, in  0.043 seconds
 Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\System.dll (this message is harmless)
 <RI> Initializing input.
 <RI> Input initialized.
-desktop: 1920x1080 60Hz; virtual: 3840x1080 at 0,0
+desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
 <RI> Initialized touch support.
-UnloadTime: 0.591444 ms
+UnloadTime: 0.653454 ms
 Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\System.Xml.dll (this message is harmless)
 Best region found in PlayerPrefs. Connecting to: eu
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
 
 Setting up 2 worker threads for Enlighten.
-  Thread -> id: 1328 -> priority: 1 
-  Thread -> id: 4ef4 -> priority: 1 
+  Thread -> id: 4e4c -> priority: 1 
+  Thread -> id: 3f8c -> priority: 1 
 Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/PhotonCryptoPlugin
 Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/.\PhotonCryptoPlugin
 Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/PhotonCryptoPlugin
@@ -90,7 +90,7 @@ Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/L
 Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/libPhotonCryptoPlugin
 Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/.\libPhotonCryptoPlugin
 Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/libPhotonCryptoPlugin
-Operation failed: OperationResponse 226: ReturnCode: 32746 (Join failed: UserId '88' already joined the specified game (JoinMode=0).). Parameters: {} Server: GameServer
+Operation failed: OperationResponse 226: ReturnCode: 32746 (Join failed: UserId '789' already joined the specified game (JoinMode=0).). Parameters: {} Server: GameServer
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
 
@@ -120,22 +120,22 @@ Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_
 Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
 Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\Photon3Unity3D.dll (this message is harmless)
 Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\Photon3Unity3D.dll into Unity Child Domain
-- Completed reload, in  0.045 seconds
+- Completed reload, in  0.047 seconds
 Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\System.dll (this message is harmless)
 <RI> Initializing input.
 <RI> Input initialized.
-desktop: 1920x1080 60Hz; virtual: 3840x1080 at 0,0
+desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
 <RI> Initialized touch support.
-UnloadTime: 0.727866 ms
+UnloadTime: 0.645756 ms
 Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroup_PhotonTest_Data\Managed\System.Xml.dll (this message is harmless)
 Best region found in PlayerPrefs. Connecting to: eu
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
 
 Setting up 2 worker threads for Enlighten.
-  Thread -> id: 3618 -> priority: 1 
-  Thread -> id: 4f30 -> priority: 1 
+  Thread -> id: 50f0 -> priority: 1 
+  Thread -> id: 22b4 -> priority: 1 
 Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/PhotonCryptoPlugin
 Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/.\PhotonCryptoPlugin
 Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/PhotonCryptoPlugin
@@ -148,12 +148,28 @@ Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/L
 Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/libPhotonCryptoPlugin
 Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/.\libPhotonCryptoPlugin
 Fallback handler could not load library D:/Unity Project/LoupsGarous Net/Build/LoupGaroup_PhotonTest_Data/Mono/libPhotonCryptoPlugin
-HandleEventLeave for player ID: 3 isInactive: True. HtoppangdleEdvinng eavef fnactilae.
-r 
-ID: 3 isInaC:/buicdsive:ave True. Suilop/arintihandling ira ited/ive.
- n(FilenaemUe: yCngibuildslaBvedings./ennicpp Line: 37t)
+HandleEveHtLeave for player ID: 3 isIer ID: v3 isIna.cStivp: ing handling if inactive.
+ in
+active.
+ 
+(F:/iuilname: /unity/lbuild/arnitt/iufldc/artifacts/generated/common/runtime/UnityEnginedinegugBgenn.cpp Line: 37)
 
-cts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+e: 37)
+
+HanandleEventLeavn foLea pve fo ID:r1 player sInD:c 1 isInactivetopTpui. g hatndling ifndling  f nantiveive..
+
+ 
+
+(Fileame: Cam/buile: C:/bunldslave/un/artifact/bueneraart/cfoctmo/n/runtime/UnityEngineDebuUgBindinineDgenugBindinge: 37)
+p Line: 37)
+
+HHndndlEvevteentL earve for playe1r ID: 1 isInactive: True. Stoppinigg if inacti ifvieacti
+ e.
+
+ 
+(Filename: C:/buildslave/unity/build/artifacts/ergted/commoenrurated/commoyn/gineimbu/UnitdiEngs.geDebugB ndine: 37)n.
+c
+pp Line: 37)
 
 Ignoring Connect() because app gets closed. If this is an error, check PhotonHandler.AppQuits.
  

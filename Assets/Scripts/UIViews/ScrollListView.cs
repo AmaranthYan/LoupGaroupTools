@@ -135,6 +135,7 @@ public abstract class ScrollListView<T> : MonoBehaviour
         foreach (string itemId in m_CurrentScrollList.Keys)
         {
             SelectItemInList(itemId, isSelected);
+            m_CurrentScrollList[itemId].Toggle.isOn = isSelected;
         }
     }
 }

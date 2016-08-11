@@ -7,6 +7,7 @@ public class ScrollListItemView<T> : MonoBehaviour
 {
     [SerializeField]
     protected Toggle m_Toggle = null;
+    public Toggle Toggle { get { return m_Toggle; } }
 
     protected string m_IdInList = null;
     public string IdInList { get { return m_IdInList; } set { m_IdInList = value; } }
