@@ -104,6 +104,12 @@
         {
             //todo
         }
+
+        [PunRPC]
+        private void Poll(PhotonPlayer voter)
+        {
+            //todo
+        }
         #endregion
 
         #region OtherPlayers
@@ -152,13 +158,15 @@
             onCountdownEnd.Invoke();
         }
 
-        public void SetVoterList(PlayerIdentity vote)
+        public void SetVoteList(PlayerIdentity vote)
         {
             m_Vote = vote;
         }
 
         public void CastVote()
         {
+            if (m_Vote == null) { return; }
+
             if (m_VoteCountdown_Coroutine != null)
             {
                 StopCoroutine(m_VoteCountdown_Coroutine);
@@ -166,6 +174,17 @@
             }
 
             photonView.RPC("Poll", PhotonTargets.MasterClient, PhotonNetwork.player, m_Vote.Number);
+        }
+
+        public void Abstain()
+        {
+            if (m_VoteCountdown_Coroutine != null)
+            {
+                StopCoroutine(m_VoteCountdown_Coroutine);
+                m_VoteCountdown_Coroutine = null;
+            }
+
+            photonView.RPC("Poll", PhotonTargets.MasterClient, PhotonNetwork.player);
         }
         #endregion
     }
