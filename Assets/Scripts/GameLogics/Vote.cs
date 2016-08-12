@@ -29,11 +29,15 @@
         public UnityEvent onVoteCast = new UnityEvent();
         public UnityTypedEvent.StringEvent onCountdownUpdate = new UnityTypedEvent.StringEvent();
         public UnityEvent onCountdownEnd = new UnityEvent();
+        public UnityEvent onPollRetrieve = new UnityEvent();
+        public UnityTypedEvent.OrderedDictionaryEvent onPollUpdate = new UnityTypedEvent.OrderedDictionaryEvent();
 
         private Dictionary<int, PlayerIdentity> m_EligiblePlayers = new Dictionary<int, PlayerIdentity>();
         private Dictionary<int, PlayerIdentity> m_Candidates = new Dictionary<int, PlayerIdentity>();
         private List<PlayerIdentity> m_CandidateList = new List<PlayerIdentity>();
         private List<PlayerIdentity> m_VoterList = new List<PlayerIdentity>();
+        private Dictionary<PlayerIdentity, bool> m_VoteChecklist = new Dictionary<PlayerIdentity, bool>();
+        private Dictionary<int, int[]> m_Poll = new Dictionary<int, int[]>();
         private PlayerIdentity m_Vote = null;
 
         private IEnumerator m_VoteCountdown_Coroutine = null;
@@ -91,31 +95,53 @@
             }
 
             //向投票玩家发送候选玩家编号
+            m_VoteChecklist.Clear();
             foreach (PlayerIdentity voter in m_VoterList)
             {
                 photonView.RPC("TakeVote", voter.Player, m_VoteTimeLimit, candidateNumbers);
+                m_VoteChecklist[voter] = false;
             }
 
+            m_Poll.Clear();
             onVoteStart.Invoke();
         }
 
         [PunRPC]
-        private void Poll(PhotonPlayer voter, int vote)
+        private void Poll(PhotonPlayer player, int vote)
         {
             //todo
+            PlayerIdentity voter = m_VoteChecklist.Keys.FirstOrDefault(pi => pi.Player.Equals(player));
+            if (voter.Equals(default(PlayerIdentity)) || m_VoteChecklist[voter]) { return; }
+
+            m_VoteChecklist[voter] = true;
+            List<int> voterList = m_Poll[vote] != null ? m_Poll[vote].ToList() : new List<int>();
+            voterList.Add(vote);
+            m_Poll[vote] = voterList.ToArray();
+
+            UpdatePoll();
         }
 
-        [PunRPC]
-        private void Poll(PhotonPlayer voter)
+        public void BroadcastPoll()
         {
-            //todo
+            photonView.RPC("RetrievePoll", PhotonTargets.Others, m_Poll);
         }
         #endregion
+
+        private void UpdatePoll()
+        {
+            OrderedDictionary dictionary = new OrderedDictionary();
+            //todo : m_Poll
+            onPollUpdate.Invoke(dictionary);
+        }
 
         #region OtherPlayers
         [PunRPC]
         private void TakeVote(float timeLimit, int[] candidateNumbers)
         {
+            //清空之前的投票结果
+            m_Poll.Clear();
+            UpdatePoll();
+
             RetrieveCandidates(candidateNumbers);
             if (m_VoteCountdown_Coroutine != null)
             {
@@ -163,9 +189,9 @@
             m_Vote = vote;
         }
 
-        public void CastVote()
+        public void CastVote(bool abstain)
         {
-            if (m_Vote == null) { return; }
+            if (!abstain && m_Vote == null) { return; }
 
             if (m_VoteCountdown_Coroutine != null)
             {
@@ -173,18 +199,16 @@
                 m_VoteCountdown_Coroutine = null;
             }
 
-            photonView.RPC("Poll", PhotonTargets.MasterClient, PhotonNetwork.player, m_Vote.Number);
+            photonView.RPC("Poll", PhotonTargets.MasterClient, PhotonNetwork.player, abstain ? -1 : m_Vote.Number);
+            onVoteCast.Invoke();
         }
 
-        public void Abstain()
+        [PunRPC]
+        private void RetrievePoll(Dictionary<int, int[]> poll)
         {
-            if (m_VoteCountdown_Coroutine != null)
-            {
-                StopCoroutine(m_VoteCountdown_Coroutine);
-                m_VoteCountdown_Coroutine = null;
-            }
-
-            photonView.RPC("Poll", PhotonTargets.MasterClient, PhotonNetwork.player);
+            m_Poll = poll;
+            onPollRetrieve.Invoke();
+            UpdatePoll();
         }
         #endregion
     }
