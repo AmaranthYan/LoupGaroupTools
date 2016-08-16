@@ -32,6 +32,8 @@
         public UnityEvent onPollRetrieve = new UnityEvent();
         public UnityTypedEvent.OrderedDictionaryEvent onPollUpdate = new UnityTypedEvent.OrderedDictionaryEvent();
 
+        private GameLogicBase m_GameLogic = null;
+
         private Dictionary<int, PlayerIdentity> m_EligiblePlayers = new Dictionary<int, PlayerIdentity>();
         private Dictionary<int, PlayerIdentity> m_Candidates = new Dictionary<int, PlayerIdentity>();
         private List<PlayerIdentity> m_CandidateList = new List<PlayerIdentity>();
@@ -41,6 +43,11 @@
         private PlayerIdentity m_Vote = null;
 
         private IEnumerator m_VoteCountdown_Coroutine = null;
+
+        void Awake()
+        {
+            m_GameLogic = FindObjectOfType<GameLogicBase>();
+        }
 
         #region Master
         public void ParseVoteTimeLimit(string timeString)
@@ -61,7 +68,7 @@
 
         private void RetrieveEligiblePlayers()
         {
-            Dictionary<int, PlayerIdentity> playerIdentities = FindObjectOfType<GameLogicBase>().PlayerIdentities;
+            Dictionary<int, PlayerIdentity> playerIdentities = m_GameLogic.PlayerIdentities;
             m_EligiblePlayers = playerIdentities.Where(pi => (pi.Key != 0) && !pi.Value.IsDead).ToDictionary(pi => pi.Key, pi => pi.Value);
 
             OrderedDictionary dictionary = new OrderedDictionary();
@@ -103,6 +110,8 @@
             }
 
             m_Poll.Clear();
+            UpdatePoll();
+
             onVoteStart.Invoke();
         }
 
@@ -127,12 +136,27 @@
         }
         #endregion
 
+        #region All
         private void UpdatePoll()
         {
+            Dictionary<int, PlayerIdentity> playerIdentities = m_GameLogic.PlayerIdentities;
             OrderedDictionary dictionary = new OrderedDictionary();
             //todo : m_Poll
+            foreach (KeyValuePair<int, int[]> poll in m_Poll)
+            {
+                PlayerIdentity candidate = poll.Key != -1 ? playerIdentities[poll.Key] : null;
+                List<PlayerIdentity> voters = new List<PlayerIdentity>();
+                foreach (int voterNumber in poll.Value)
+                {
+                    voters.Add(playerIdentities[voterNumber]);
+                }
+                //将投票者按编号排序
+                voters = voters.OrderBy(pi => pi.Number).ToList();
+                dictionary.Add(poll.Key.ToString(), new DataPair<PlayerIdentity, List<PlayerIdentity>>(candidate, voters));
+            }
             onPollUpdate.Invoke(dictionary);
         }
+        #endregion
 
         #region OtherPlayers
         [PunRPC]
@@ -156,7 +180,7 @@
 
         private void RetrieveCandidates(int[] candidateNumbers)
         {
-            Dictionary<int, PlayerIdentity> playerIdentities = FindObjectOfType<GameLogicBase>().PlayerIdentities;
+            Dictionary<int, PlayerIdentity> playerIdentities = m_GameLogic.PlayerIdentities;
             m_Candidates = new Dictionary<int, PlayerIdentity>();
             foreach (int number in candidateNumbers)
             {
