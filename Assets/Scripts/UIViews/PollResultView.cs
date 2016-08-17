@@ -2,7 +2,8 @@
 {
     using UnityEngine;
     using UnityEngine.Events;
-    using System.Collections;
+    using System.Collections.Generic;
+    using System.Collections.Specialized;
     using System.Linq;
 
     public class PollResultView : ScrollListItemView<DataPair<PlayerIdentity, List<PlayerIdentity>>>
