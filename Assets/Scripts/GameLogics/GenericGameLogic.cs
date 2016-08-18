@@ -11,6 +11,7 @@
     {
         public UnityEvent onIsMaster = new UnityEvent();
         public UnityEvent onIsNotMaster = new UnityEvent();
+        public UnityEvent onGameRestart = new UnityEvent();
 
         void Start()
         {
@@ -25,9 +26,9 @@
                     GameLogicCallback handler = null;
                     handler = () => {
                         GeneratePlayerIdentities();
-                        m_InitGameLogic_Callback -= handler;
+                        InitGameLogic_Callback -= handler;
                     };
-                    m_InitGameLogic_Callback += handler;
+                    InitGameLogic_Callback += handler;
                 }
 
                 onIsMaster.Invoke();
@@ -58,6 +59,8 @@
             photonView.RPC("GenerateEmptyIdenities", PhotonTargets.Others);
             GenerateEmptyIdenities();
             GeneratePlayerIdentities();
+
+            onGameRestart.Invoke();
         }
 
         public override void EndGame()

@@ -8,7 +8,7 @@
 
     public abstract class GameLogicBase : PunBehaviour
     {
-        protected delegate void GameLogicCallback();
+        public delegate void GameLogicCallback();
         protected static void DefaultGameLogicCallback() { }
 
         [SerializeField]
@@ -23,6 +23,7 @@
         public UnityTypedEvent.StringAndPlayerIdentityEvent onSingleUnusedIdentityUpdate = new UnityTypedEvent.StringAndPlayerIdentityEvent();
 
         protected PhotonPlayer[] m_Players = null;
+        public int PlayerCount { get { return m_Players != null ? m_Players.Length : -1; } }
         protected GameModeModel m_GameMode = null;
         protected Dictionary<int, int> m_CharacterSet = null;
         public int[] CharacterIds { get { return m_CharacterSet.Keys.ToArray(); } }
@@ -32,9 +33,10 @@
         protected List<PlayerIdentity> m_UnusedIdentity = new List<PlayerIdentity>();
 
         protected bool m_IsInitialized = false;
+        public bool IsInitialized { get { return m_IsInitialized; } }
         protected int m_CaptainNumber = -1;
 
-        protected GameLogicCallback m_InitGameLogic_Callback = DefaultGameLogicCallback;
+        public GameLogicCallback InitGameLogic_Callback = DefaultGameLogicCallback;
 
         public virtual void InitGameLogic(int[] allocatedPhotonViewIds, PhotonPlayer[] players, GameModeModel gameMode, Dictionary<int, int> characterSet)
         {
@@ -55,7 +57,7 @@
 
             m_IsInitialized = true;
 
-            m_InitGameLogic_Callback();
+            InitGameLogic_Callback();
         }
 
         [PunRPC]
