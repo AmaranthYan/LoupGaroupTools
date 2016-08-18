@@ -2,6 +2,7 @@
 {
     using Photon;
     using UnityEngine;
+    using UnityEngine.UI;
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.Linq;
@@ -27,13 +28,22 @@
         }
 
         public const int MAX_CHANNEL_COUNT = 10;
-        public const string ALL_CHANNEL_NAME = "ALL";
+        public const string ALL_CHANNEL_NAME = "全体玩家";
+        public const string CHANNEL_DISPLAY_FORMAT = "{0}";
+        public const string PLAYER_NUMBER_DISPLAY_FORMAT = "[0]";
 
+        [Header("Channel Configuration")]
         [SerializeField]
-        [Range(1,10)]
+        [Range(1, 10)]
         private int m_DefaultChannelCount = 1;
 
         public UnityTypedEvent.OrderedDictionaryEvent onChannelsUpdate = new UnityTypedEvent.OrderedDictionaryEvent();
+
+        [Header("Messager Configuration")]
+        [SerializeField]
+        private Dropdown m_ChannelDropdown = null;
+
+        public UnityEvent onCurrentChannelIndexReset = new UnityEvent();
 
         private GameLogicBase m_GameLogic = null;
 
@@ -42,10 +52,10 @@
         //private Dictionary<int, List<int>> m_PlayerAvailableChannelList = new Dictionary<int, List<string>>();
 
         private List<ChannelModel> m_AvailableChannels = new List<ChannelModel>();
-        private string m_CurrentChannelName = string.Empty;
+        private List<int> m_AvailablePlayerNumbers = new List<int>();
+        private int m_CurrentChannelIndex = -1;
         private string m_Message = string.Empty;
 
-        #region Master
         void Awake()
         {
             m_GameLogic = FindObjectOfType<GameLogicBase>();
@@ -55,40 +65,63 @@
         {
             if (PhotonNetwork.isMasterClient)
             {
-                InitChannels();
+                InitMaster();
+            }
+            else
+            {
+                InitOtherPlayer();
             }
         }
 
-        private void InitChannels()
+        #region Master
+        private void InitMaster()
         {
             m_ActiveChannels = new Dictionary<int, ChannelModel>();
+            m_AvailableChannels = new List<ChannelModel>();
             for (int i = 0; i < MAX_CHANNEL_COUNT; i++)
             {
                 if (i < m_DefaultChannelCount)
                 {
-                    m_ActiveChannels.Add(i, new ChannelModel(i));
+                    ChannelModel channel = new ChannelModel(i);
+                    m_ActiveChannels.Add(i, channel);
+                    m_AvailableChannels.Add(channel);
                 }
                 else
                 {
                     m_EmptyChannelIds.Add(i);
                 }
             }
+
             //默认0号频道为全部玩家频道
             m_ActiveChannels[0].ChannelName = ALL_CHANNEL_NAME;
+
+            if (m_GameLogic.IsInitialized)
+            {
+                m_AvailablePlayerNumbers = Enumerable.Range(1, m_GameLogic.PlayerCount - 1).ToList();
+            }
+            else
+            {
+                GameLogicBase.GameLogicCallback handler = null;
+                handler = () => {
+                    m_AvailablePlayerNumbers = Enumerable.Range(1, m_GameLogic.PlayerCount - 1).ToList();
+                    m_GameLogic.InitGameLogic_Callback -= handler;
+                };
+                m_GameLogic.InitGameLogic_Callback += handler;
+            }
+
+            UpdateChannelDropdown();
         }
 
         public void ResetChannels()
         {
             if (!PhotonNetwork.isMasterClient) { return; }
-            //todo
+            
             foreach (int id in m_ActiveChannels.Keys)
             {
                 m_ActiveChannels[id].PlayerNumbers = new HashSet<int>();
-            }
-
-            //m_PlayerAvailableChannelList.Clear();
-            ReleasePlayersFromChannels();
-
+            }            
+            ReleaseAllPlayersFromChannels();
+            
             UpdateChannels();
         }
 
@@ -100,23 +133,66 @@
                 dictionary.Add(channel.Key.ToString(), channel.Value);
             }
             onChannelsUpdate.Invoke(dictionary);
+
+            UpdateChannelDropdown();
         }
 
-        private void ReleasePlayersFromChannels()
+        private void ReleaseAllPlayersFromChannels()
         {
             photonView.RPC("UnsubscribeFromChannels", PhotonTargets.Others);
         }
 
         private void ReleasePlayersFromChannel(int channelId)
         {
+            Dictionary<int, PlayerIdentity> playerIdentities = m_GameLogic.PlayerIdentities;
+
             foreach (int playerNumber in m_ActiveChannels[channelId].PlayerNumbers)
             {
-                photonView.RPC("UnsubscribeFromChannel", PhotonTargets.Others);
+                photonView.RPC("UnsubscribeFromChannel", playerIdentities[playerNumber].Player, channelId);
             }
+        }
+
+        public void UpdateChannel(int channelId, string newName)
+        {
+            if (!PhotonNetwork.isMasterClient) { return; }
+
+            Dictionary<int, PlayerIdentity> playerIdentities = m_GameLogic.PlayerIdentities;
+            m_ActiveChannels[channelId].ChannelName = newName;
+            foreach (int playerNumber in m_ActiveChannels[channelId].PlayerNumbers)
+            {
+                photonView.RPC("SubscribeToOrUpdateChannel", playerIdentities[playerNumber].Player, channelId, m_ActiveChannels[channelId].ChannelName, m_ActiveChannels[channelId].PlayerNumbers);
+            }
+
+            UpdateChannels();
+        }
+
+        public void UpdateChannel(int channelId, int[] newNumbers)
+        {
+            if (!PhotonNetwork.isMasterClient) { return; }
+
+            Dictionary<int, PlayerIdentity> playerIdentities = m_GameLogic.PlayerIdentities;
+            
+            //清理已从频道中移除的玩家
+            HashSet<int> removedPlayers = new HashSet<int>(m_ActiveChannels[channelId].PlayerNumbers).ExceptWith(newNumbers);
+            foreach (int removedNumber in removedPlayers)
+            {
+                photonView.RPC("UnsubscribeFromChannel", playerIdentities[removedNumber].Player, channelId);
+            }
+
+            //添加新加入的玩家至频道并通知频道中已存在的玩家，更新ActiveChannels
+            HashSet<int> addedPlayers = new HashSet<int>(newNumbers);
+            m_ActiveChannels[channelId].PlayerNumbers = addedPlayers;
+            foreach (int addedNumber in addedPlayers)
+            {
+                photonView.RPC("SubscribeToOrUpdateChannel", playerIdentities[addedNumber].Player, channelId, m_ActiveChannels[channelId].ChannelName, m_ActiveChannels[channelId].PlayerNumbers);
+            }
+
+            UpdateChannels();
         }
 
         public void AddChannel()
         {
+            if (!PhotonNetwork.isMasterClient) { return; }
             if (m_EmptyChannelIds.Count == 0) { return; }
 
             int id = m_EmptyChannelIds.First();
@@ -124,6 +200,7 @@
             {
                 ChannelModel channel = new ChannelModel(id);
                 m_ActiveChannels.Add(id, channel);
+                m_AvailableChannels.Add(channel);
 
                 UpdateChannels();
             }
@@ -131,31 +208,58 @@
 
         public void DeleteChannel(int channelId)
         {
-            //unsubscribe players
+            if (!PhotonNetwork.isMasterClient) { return; }
 
             //清除频道并回收ID
             ReleasePlayersFromChannel(channelId);
             m_ActiveChannels.Remove(channelId);
+            m_AvailableChannels.RemoveAll(c => c.ChannelId == channelId);
             m_EmptyChannelIds.Add(channelId);
 
             UpdateChannels();
         }
-        #endregion
 
-        #region OtherPlayers
         [PunRPC]
-        private void UnsubscribeFromChannels()
+        private void BroadcastMessageInChannel(PhotonPlayer player, int channelId)
         {
-            m_AvailableChannels.Clear();
-
-            ChannelModel channel = new ChannelModel(0);
-            channel.ChannelName = ALL_CHANNEL_NAME;
-            m_AvailableChannels.Add(channel);
+            //todo
         }
 
-        public void SetCurrentChannelName(string channelName)
+        [PunRPC]
+        private void SendMessageToPlayer(PhotonPlayer player, int playerNumber)
         {
-            m_CurrentChannelName = channelName;
+            //todo
+        }
+        #endregion
+
+        #region All
+        private void UpdateChannelDropdown()
+        {
+            List<Dropdown.OptionData> availableOptions = new List<Dropdown.OptionData>();
+            availableOptions.Add(new Dropdown.OptionData("空"));
+            foreach (ChannelModel channel in m_AvailableChannels)
+            {
+                availableOptions.Add(new Dropdown.OptionData(string.Format(CHANNEL_DISPLAY_FORMAT, channel.ChannelName)));
+            }
+            foreach (int playerNumber in m_AvailablePlayerNumbers)
+            {
+                availableOptions.Add(new Dropdown.OptionData(string.Format(PLAYER_NUMBER_DISPLAY_FORMAT, playerNumber)));
+            }
+            m_ChannelDropdown.options = availableOptions;
+            m_ChannelDropdown.value = 0;
+
+            m_CurrentChannelIndex = -1;
+            onCurrentChannelIndexReset.Invoke();
+        }
+
+        public void SetCurrentChannelIndex(int optionIndex)
+        {
+            //选项0为空
+            m_CurrentChannelIndex = optionIndex - 1;
+            if (m_CurrentChannelIndex < 0)
+            {
+                onCurrentChannelIndexReset.Invoke();
+            }
         }
 
         public void SetMessage(string msg)
@@ -163,12 +267,63 @@
             m_Message = msg;
         }
 
-        public void BroadcastMessageInCurrentChannel()
+        public void SendMessage()
         {
-            if (!m_AvailableChannels.Any(c => c.ChannelName == m_CurrentChannelName)) { return; }
-
-            //todo
+            if (m_CurrentChannelIndex < 0 || m_CurrentChannelIndex >= m_AvailableChannels.Count + m_AvailablePlayerNumbers.Count) { return; }
+            
+            if (m_CurrentChannelIndex < m_AvailableChannels.Count)
+            {
+                photonView.RPC("BroadcastMessageInChannel", PhotonTargets.Master, PhotonNetwork.player, m_AvailableChannels[m_CurrentChannelIndex].ChannelId);
+            }
+            else
+            {
+                photonView.RPC("SendMessageToPlayer", PhotonTargets.Master, PhotonNetwork.player, m_AvailablePlayerNumbers[m_CurrentChannelIndex - m_AvailableChannels.Count]);
+            }
         }
+        #endregion
+
+        #region OtherPlayers
+        private void InitOtherPlayer()
+        {
+            m_AvailableChannels = new List<ChannelModel>();
+
+            //默认0号频道为全部玩家频道
+            ChannelModel channel = new ChannelModel(0);
+            channel.ChannelName = ALL_CHANNEL_NAME;
+            m_AvailableChannels.Insert(0, channel);
+
+            m_AvailablePlayerNumbers = new List<int>{0};
+
+            UpdateChannelDropdown();
+        }
+
+        [PunRPC]
+        private void UnsubscribeFromChannels()
+        {
+            m_AvailableChannels.RemoveAll(c => c.ChannelId != 0);
+            UpdateChannelDropdown();
+        }
+
+        [PunRPC]
+        private void UnsubscribeFromChannel(int channelId)
+        {
+            m_AvailableChannels.Remove(m_AvailableChannels.Find(c => c.ChannelId == channelId));
+            UpdateChannelDropdown();
+        }
+
+        [PunRPC]
+        private void SubscribeToOrUpdateChannel(int channelId, string channelName, int[] playerNumbers)
+        {
+            ChannelModel channel = m_AvailableChannels.Find(c => c.ChannelId == channelId);
+            if (channel.Equals(default(ChannelModel)))
+            {
+                channel = new ChannelModel(channelId);
+            }
+            channel.ChannelName = channelName;
+            channel.PlayerNumbers = new HashSet<int>(playerNumbers);
+            m_AvailableChannels.Add(channel);
+            UpdateChannelDropdown();
+        }        
         #endregion
     }
 }
