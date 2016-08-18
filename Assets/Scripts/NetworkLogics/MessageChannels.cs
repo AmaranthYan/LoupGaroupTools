@@ -2,6 +2,7 @@
 {
     using Photon;
     using UnityEngine;
+    using UnityEngine.Events;
     using UnityEngine.UI;
     using System.Collections.Generic;
     using System.Collections.Specialized;
@@ -171,9 +172,10 @@
             if (!PhotonNetwork.isMasterClient) { return; }
 
             Dictionary<int, PlayerIdentity> playerIdentities = m_GameLogic.PlayerIdentities;
-            
+
             //清理已从频道中移除的玩家
-            HashSet<int> removedPlayers = new HashSet<int>(m_ActiveChannels[channelId].PlayerNumbers).ExceptWith(newNumbers);
+            HashSet<int> removedPlayers = new HashSet<int>(m_ActiveChannels[channelId].PlayerNumbers);
+            removedPlayers.ExceptWith(newNumbers);
             foreach (int removedNumber in removedPlayers)
             {
                 photonView.RPC("UnsubscribeFromChannel", playerIdentities[removedNumber].Player, channelId);
@@ -273,11 +275,11 @@
             
             if (m_CurrentChannelIndex < m_AvailableChannels.Count)
             {
-                photonView.RPC("BroadcastMessageInChannel", PhotonTargets.Master, PhotonNetwork.player, m_AvailableChannels[m_CurrentChannelIndex].ChannelId);
+                photonView.RPC("BroadcastMessageInChannel", PhotonTargets.MasterClient, PhotonNetwork.player, m_AvailableChannels[m_CurrentChannelIndex].ChannelId);
             }
             else
             {
-                photonView.RPC("SendMessageToPlayer", PhotonTargets.Master, PhotonNetwork.player, m_AvailablePlayerNumbers[m_CurrentChannelIndex - m_AvailableChannels.Count]);
+                photonView.RPC("SendMessageToPlayer", PhotonTargets.MasterClient, PhotonNetwork.player, m_AvailablePlayerNumbers[m_CurrentChannelIndex - m_AvailableChannels.Count]);
             }
         }
         #endregion
