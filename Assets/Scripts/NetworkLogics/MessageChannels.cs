@@ -30,8 +30,8 @@
 
         public const int MAX_CHANNEL_COUNT = 10;
         public const string ALL_CHANNEL_NAME = "全体玩家";
-        public const string CHANNEL_DISPLAY_FORMAT = "{0}";
-        public const string PLAYER_NUMBER_DISPLAY_FORMAT = "[0]";
+        public const string CHANNEL_DISPLAY_FORMAT = "{{0}}";
+        public const string PLAYER_NUMBER_DISPLAY_FORMAT = "[{0}]";
 
         [Header("Channel Configuration")]
         [SerializeField]
@@ -42,6 +42,8 @@
 
         [Header("Messager Configuration")]
         [SerializeField]
+        private NetLogger m_NetLogger = null;
+        [SerializeField]
         private Dropdown m_ChannelDropdown = null;
 
         public UnityEvent onCurrentChannelIndexReset = new UnityEvent();
@@ -50,7 +52,7 @@
 
         private Dictionary<int, ChannelModel> m_ActiveChannels = new Dictionary<int, ChannelModel>();
         private HashSet<int> m_EmptyChannelIds = new HashSet<int>();
-        //private Dictionary<int, List<int>> m_PlayerAvailableChannelList = new Dictionary<int, List<string>>();
+        //private Dictionary<int, List<int>> m_ActivePlayerNumbers = new Dictionary<int, List<int>>();
 
         private List<ChannelModel> m_AvailableChannels = new List<ChannelModel>();
         private List<int> m_AvailablePlayerNumbers = new List<int>();
@@ -161,7 +163,7 @@
             m_ActiveChannels[channelId].ChannelName = newName;
             foreach (int playerNumber in m_ActiveChannels[channelId].PlayerNumbers)
             {
-                photonView.RPC("SubscribeToOrUpdateChannel", playerIdentities[playerNumber].Player, channelId, m_ActiveChannels[channelId].ChannelName, m_ActiveChannels[channelId].PlayerNumbers);
+                photonView.RPC("SubscribeToOrUpdateChannel", playerIdentities[playerNumber].Player, channelId, m_ActiveChannels[channelId].ChannelName, m_ActiveChannels[channelId].PlayerNumbers.ToArray());
             }
 
             UpdateChannels();
@@ -186,7 +188,7 @@
             m_ActiveChannels[channelId].PlayerNumbers = addedPlayers;
             foreach (int addedNumber in addedPlayers)
             {
-                photonView.RPC("SubscribeToOrUpdateChannel", playerIdentities[addedNumber].Player, channelId, m_ActiveChannels[channelId].ChannelName, m_ActiveChannels[channelId].PlayerNumbers);
+                photonView.RPC("SubscribeToOrUpdateChannel", playerIdentities[addedNumber].Player, channelId, m_ActiveChannels[channelId].ChannelName, m_ActiveChannels[channelId].PlayerNumbers.ToArray());
             }
 
             UpdateChannels();
@@ -222,15 +224,67 @@
         }
 
         [PunRPC]
-        private void BroadcastMessageInChannel(PhotonPlayer player, int channelId)
+        private void RequestToBroadcastMessageInChannel(PhotonPlayer sender, string message, int channelId)
         {
-            //todo
+            Dictionary<int, PlayerIdentity> playerIdentities = m_GameLogic.PlayerIdentities;
+
+            int senderNumber = playerIdentities.FirstOrDefault(pi => pi.Value.Player.Equals(sender)).Value.Number;
+            if (senderNumber < 0) { return; }
+
+            if (!m_ActiveChannels.ContainsKey(channelId)) { return; }
+            ChannelModel channel = m_ActiveChannels[channelId];
+
+            if (!sender.isMasterClient)
+            {
+                //检查玩家广播目标频道的合法性
+                if (!channel.PlayerNumbers.Contains(senderNumber)) {
+                    photonView.RPC("ReceiveRequestRejection", sender, "不在频道中");
+                    return;
+                }
+            }
+
+            foreach (int receiverNumber in channel.PlayerNumbers)
+            {
+                if (!playerIdentities.ContainsKey(receiverNumber)) { continue; }
+                PhotonPlayer receiver = playerIdentities[receiverNumber].Player;
+                if (receiver == null) { continue; }
+
+                if (receiverNumber != senderNumber)
+                {
+                    photonView.RPC("ReceiveMessageFromChannel", receiver, channelId, senderNumber, message);
+                }
+            }
+
+            //Master显示消息
+            ShowMessage("{0}中的{1}:{2}", channel.ChannelName, sender, message);
         }
 
         [PunRPC]
-        private void SendMessageToPlayer(PhotonPlayer player, int playerNumber)
+        private void RequestToSendMessageToPlayer(PhotonPlayer sender, string message, int receiverNumber)
         {
-            //todo
+            Dictionary<int, PlayerIdentity> playerIdentities = m_GameLogic.PlayerIdentities;
+
+            int senderNumber = playerIdentities.FirstOrDefault(pi => pi.Value.Player.Equals(sender)).Value.Number;
+            if (senderNumber < 0) { return; }
+
+            if (!playerIdentities.ContainsKey(receiverNumber)) { return; }
+            PhotonPlayer receiver = playerIdentities[receiverNumber].Player;
+            if (receiver == null) { return; }
+
+            if (!sender.isMasterClient)
+            {
+                //检查玩家通信目标玩家的合法性
+                //todo 
+                if (receiverNumber != 0) {
+                    photonView.RPC("ReceiveRequestRejection", sender, "无效的接受者");
+                    return;
+                }
+            }
+
+            photonView.RPC("ReceiveMessageFromPlayer", receiver, senderNumber, message);
+
+            //Master显示消息
+            ShowMessage("{0}对{1}:{2}", senderNumber, receiverNumber, message);            
         }
         #endregion
 
@@ -275,12 +329,35 @@
             
             if (m_CurrentChannelIndex < m_AvailableChannels.Count)
             {
-                photonView.RPC("BroadcastMessageInChannel", PhotonTargets.MasterClient, PhotonNetwork.player, m_AvailableChannels[m_CurrentChannelIndex].ChannelId);
+                photonView.RPC("RequestToBroadcastMessageInChannel", PhotonTargets.MasterClient, PhotonNetwork.player, m_AvailableChannels[m_CurrentChannelIndex].ChannelId, m_Message);
             }
             else
             {
-                photonView.RPC("SendMessageToPlayer", PhotonTargets.MasterClient, PhotonNetwork.player, m_AvailablePlayerNumbers[m_CurrentChannelIndex - m_AvailableChannels.Count]);
+                photonView.RPC("RequestToSendMessageToPlayer", PhotonTargets.MasterClient, PhotonNetwork.player, m_AvailablePlayerNumbers[m_CurrentChannelIndex - m_AvailableChannels.Count], m_Message);
             }
+        }
+
+        [PunRPC]
+        private void ReceiveMessageFromChannel(int channelId, int senderNumber, string message)
+        {
+            //todo
+        }
+
+        [PunRPC]
+        private void ReceiveMessageFromPlayer(int senderNumber, string message)
+        {
+            //todo
+        }
+
+        [PunRPC]
+        private void ReceiveRequestRejection(string err)
+        {
+            ShowMessage("消息发送请求失败:{0}", err);
+        }
+
+        private void ShowMessage(string format, params object[] args)
+        {
+            m_NetLogger.AddMessage(string.Format(format, args));
         }
         #endregion
 
