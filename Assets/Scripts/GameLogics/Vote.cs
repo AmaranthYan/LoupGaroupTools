@@ -123,8 +123,8 @@
             if (voter.Equals(default(PlayerIdentity)) || m_VoteChecklist[voter]) { return; }
 
             m_VoteChecklist[voter] = true;
-            List<int> voterList = m_Poll[vote] != null ? m_Poll[vote].ToList() : new List<int>();
-            voterList.Add(vote);
+            List<int> voterList = m_Poll.ContainsKey(vote) ? m_Poll[vote].ToList() : new List<int>();
+            voterList.Add(voter.Number);
             m_Poll[vote] = voterList.ToArray();
 
             UpdatePoll();
@@ -213,9 +213,9 @@
             m_Vote = vote;
         }
 
-        public void CastVote(bool abstain)
+        public void CastVote(bool isValid)
         {
-            if (!abstain && m_Vote == null) { return; }
+            if (isValid && m_Vote == null) { return; }
 
             if (m_VoteCountdown_Coroutine != null)
             {
@@ -223,7 +223,7 @@
                 m_VoteCountdown_Coroutine = null;
             }
 
-            photonView.RPC("Poll", PhotonTargets.MasterClient, PhotonNetwork.player, abstain ? -1 : m_Vote.Number);
+            photonView.RPC("Poll", PhotonTargets.MasterClient, PhotonNetwork.player, isValid ? m_Vote.Number : -1);
             onVoteCast.Invoke();
         }
 
