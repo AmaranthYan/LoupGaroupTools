@@ -36,7 +36,7 @@ public class BulletinBoard : PunBehaviour
 
         if (PhotonNetwork.isMasterClient)
         {
-            if (m_CurrentEditor.Equals(otherPlayer))
+            if (otherPlayer.Equals(m_CurrentEditor))
             {
                 ReleaseEditorialAccess(otherPlayer);
             }

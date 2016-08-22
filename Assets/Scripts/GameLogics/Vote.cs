@@ -29,7 +29,7 @@
         public UnityEvent onVoteCast = new UnityEvent();
         public UnityTypedEvent.StringEvent onCountdownUpdate = new UnityTypedEvent.StringEvent();
         public UnityEvent onCountdownEnd = new UnityEvent();
-        public UnityEvent onPollRetrieve = new UnityEvent();
+        public UnityEvent onPollDisplay = new UnityEvent();
         public UnityTypedEvent.OrderedDictionaryEvent onPollUpdate = new UnityTypedEvent.OrderedDictionaryEvent();
 
         private GameLogicBase m_GameLogic = null;
@@ -132,7 +132,18 @@
 
         public void BroadcastPoll()
         {
-            photonView.RPC("RetrievePoll", PhotonTargets.Others, m_Poll);
+            if (!PhotonNetwork.isMasterClient) { return; }
+
+            photonView.RPC("DisplayPoll", PhotonTargets.Others);
+            BroadcastPollResults();                
+        }
+
+        private void BroadcastPollResults()
+        {
+            foreach (KeyValuePair<int, int[]> result in m_Poll)
+            {
+                photonView.RPC("RetrievePollResult", PhotonTargets.Others, result.Key, result.Value);
+            }
         }
         #endregion
 
@@ -228,10 +239,15 @@
         }
 
         [PunRPC]
-        private void RetrievePoll(Dictionary<int, int[]> poll)
+        public void DisplayPoll()
         {
-            m_Poll = poll;
-            onPollRetrieve.Invoke();
+            onPollDisplay.Invoke();
+        }
+
+        [PunRPC]
+        private void RetrievePollResult(int candidate, int[] voters)
+        {
+            m_Poll[candidate] = voters;
             UpdatePoll();
         }
         #endregion
