@@ -144,10 +144,13 @@
             {
                 photonView.RPC("RetrievePollResult", PhotonTargets.Others, result.Key, result.Value);
             }
+
+            photonView.RPC("UpdatePoll", PhotonTargets.Others);
         }
         #endregion
 
         #region All
+        [PunRPC]
         private void UpdatePoll()
         {
             Dictionary<int, PlayerIdentity> playerIdentities = m_GameLogic.PlayerIdentities;
@@ -248,7 +251,6 @@
         private void RetrievePollResult(int candidate, int[] voters)
         {
             m_Poll[candidate] = voters;
-            UpdatePoll();
         }
         #endregion
     }

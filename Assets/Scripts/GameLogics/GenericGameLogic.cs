@@ -56,6 +56,8 @@
         {
             if (!PhotonNetwork.isMasterClient) { return; }
 
+            FindObjectOfType<GameHistoryServiceView>().BroadcastGameHistory();
+
             photonView.RPC("GenerateEmptyIdenities", PhotonTargets.Others);
             GenerateEmptyIdenities();
             GeneratePlayerIdentities();
@@ -67,6 +69,7 @@
         {
             if (!PhotonNetwork.isMasterClient) { return; }
 
+            FindObjectOfType<GameHistoryServiceView>().BroadcastGameHistory();
             FindObjectOfType<GameSessionServiceView>().EndGameSession();
         }
 
@@ -114,11 +117,13 @@
             //收集多余游戏身份
             for (int i = 0; i < characterIds.Count() - k; i++)
             {
-                PlayerIdentity unusedIdentity = m_UnusedIdentity[i];
+                PlayerIdentity unusedIdentity = m_UnusedIdentities[i];
                 unusedIdentity.UpdateIdentity(characterIds[k + i]);
                 unusedIdentity.MarkAsRevealed(true);
             }
-            UpdateUnusedIdentities();            
+            UpdateUnusedIdentities();
+
+            FindObjectOfType<GameHistoryServiceView>().RecordIdentitiesHistory(m_PlayerIdentities, m_UnusedIdentities);
 
             //向其他玩家分配各自身份
             DistributePlayerIdentities();
@@ -216,7 +221,7 @@
         {     
             if (!PhotonNetwork.isMasterClient) { return; }
 
-            photonView.RPC("ReceiveUnusedIdentity", PhotonTargets.Others , index, m_UnusedIdentity[index].CharacterId);
+            photonView.RPC("ReceiveUnusedIdentity", PhotonTargets.Others , index, m_UnusedIdentities[index].CharacterId);
         }
 
         [PunRPC]
@@ -231,7 +236,7 @@
         [PunRPC]
         protected override void ReceiveUnusedIdentity(int index, int characterId)
         {
-            PlayerIdentity unusedIdentity = m_UnusedIdentity[index];
+            PlayerIdentity unusedIdentity = m_UnusedIdentities[index];
             unusedIdentity.UpdateIdentity(characterId);
             unusedIdentity.MarkAsRevealed(true);
             onSingleUnusedIdentityUpdate.Invoke(index.ToString(), unusedIdentity);

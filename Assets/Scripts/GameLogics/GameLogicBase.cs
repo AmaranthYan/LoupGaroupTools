@@ -30,7 +30,7 @@
 
         protected Dictionary<int, PlayerIdentity> m_PlayerIdentities = new Dictionary<int, PlayerIdentity>();
         public Dictionary<int, PlayerIdentity> PlayerIdentities { get { return m_PlayerIdentities; } }
-        protected List<PlayerIdentity> m_UnusedIdentity = new List<PlayerIdentity>();
+        protected List<PlayerIdentity> m_UnusedIdentities = new List<PlayerIdentity>();
 
         protected bool m_IsInitialized = false;
         public bool IsInitialized { get { return m_IsInitialized; } }
@@ -72,7 +72,7 @@
             }
             UpdatePlayerIdentities();
 
-            m_UnusedIdentity.Clear();
+            m_UnusedIdentities.Clear();
             int identitiesCount = 0;
             foreach (int number in m_CharacterSet.Values)
             {
@@ -82,7 +82,7 @@
             {
                 PlayerIdentity unusedIdentity = new PlayerIdentity();
                 unusedIdentity.UpdateNumber(i);
-                m_UnusedIdentity.Add(unusedIdentity);
+                m_UnusedIdentities.Add(unusedIdentity);
             }
             UpdateUnusedIdentities();
         }
@@ -106,9 +106,9 @@
         protected void UpdateUnusedIdentities()
         {
             OrderedDictionary dictionary = new OrderedDictionary();
-            for (int i = 0; i < m_UnusedIdentity.Count(); i++)
+            for (int i = 0; i < m_UnusedIdentities.Count(); i++)
             {
-                dictionary.Add(i.ToString(), m_UnusedIdentity[i]);
+                dictionary.Add(i.ToString(), m_UnusedIdentities[i]);
             }
             onUnusedIdentitiesUpdate.Invoke(dictionary);
         }
