@@ -1,6 +1,8 @@
-﻿using UnityEngine.Events;
+﻿using UnityEngine;
+using UnityEngine.Events;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using LoupsGarous;
 
 public class MessageChannelListView : ScrollListView<MessageChannelModel>

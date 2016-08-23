@@ -1,9 +1,11 @@
 ﻿namespace LoupsGarous
 {
-    using UnityEngine;
+    using Photon;
     using UnityEngine.Events;
     using System;
     using System.Collections.Generic;
+    using System.Collections.Specialized;
+    using System.Linq;
 
     public class GameHistoryServiceView : PunBehaviour
     {
@@ -32,7 +34,7 @@
             if (!PhotonNetwork.isMasterClient) { return; }
 
             photonView.RPC("AlertGameHistory", PhotonTargets.Others);
-            BroadcastIdentities();
+            BroadcastIdentitiesHistory();
         }
 
         private void BroadcastIdentitiesHistory()
@@ -59,7 +61,7 @@
             m_PlayerIdentitiesHistory[m_GameHistoryIndex] = new Dictionary<int, PlayerIdentity>();
             m_UnusedIdentitiesHistory[m_GameHistoryIndex] = new List<PlayerIdentity>();
 
-            onGameHistoryAlert.Invoke(historyIndex);
+            onGameHistoryAlert.Invoke();
         }
 
         [PunRPC]
@@ -96,7 +98,7 @@
             playerNumbers.Sort();
 
             OrderedDictionary dictionary = new OrderedDictionary();
-            for (int i = 0; i < playerNumbers.Count(); i++)
+            for (int i = 0; i < playerNumbers.Count; i++)
             {
                 if (playerNumbers[i] != 0)
                 {
@@ -110,7 +112,7 @@
         private void UpdateUnusedIdentitiesHistory()
         {
             OrderedDictionary dictionary = new OrderedDictionary();
-            for (int i = 0; i < m_UnusedIdentitiesHistory[m_GameHistoryIndex].Count(); i++)
+            for (int i = 0; i < m_UnusedIdentitiesHistory[m_GameHistoryIndex].Count; i++)
             {
                 dictionary.Add(i.ToString(), m_UnusedIdentitiesHistory[m_GameHistoryIndex][i]);
             }
