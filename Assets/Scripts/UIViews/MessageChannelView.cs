@@ -17,12 +17,7 @@
         public UnityTypedEvent.StringEvent onPlayerNumbersUpdate = new UnityTypedEvent.StringEvent();
         public UnityTypedEvent.BoolEvent onIsMessageChannelAsync = new UnityTypedEvent.BoolEvent();
 
-        MessageChannelModel m_AsyncItem = new MessageChannelModel();
-
-        void Start()
-        {
-            onIsMaster.Invoke(PhotonNetwork.isMasterClient);
-        }
+        MessageChannelModel m_AsyncItem = null;
 
         public override void UpdateItem(object value)
         {
@@ -89,7 +84,7 @@
             Regex regex = new Regex(PLAYER_NUMBERS_REGEX);
             Match match = regex.Match(numbersText);
             HashSet<int> playerNumbers = new HashSet<int>();
-            Messager messager = (MessageChannelListView)m_ScrollListView.Messager;
+            Messager messager = ((MessageChannelListView)m_ScrollListView).Messager;
             while (match.Success)
             {
                 int number;
@@ -110,7 +105,7 @@
 
         public void SyncMessageChannel()
         {
-            Messager messager = (MessageChannelListView)m_ScrollListView.Messager;
+            Messager messager = ((MessageChannelListView)m_ScrollListView).Messager;
             if (!messager) { return; }
             
             if (IsPlayerNumbersAsync())
