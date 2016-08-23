@@ -151,6 +151,13 @@
             UpdateChannels();
         }
 
+        public bool ValidatePlayerNumber(int playerNumber)
+        {
+            Dictionary<int, PlayerIdentity> playerIdentities = m_GameLogic.PlayerIdentities;
+
+            return playerIdentities.ContainsKey(playerNumber) && playerIdentities[playerNumber].Player != null;
+        }
+
         public void UpdateChannel(int channelId, int[] newNumbers)
         {
             if (!PhotonNetwork.isMasterClient) { return; }
@@ -212,7 +219,7 @@
 
             int senderNumber = playerIdentities.FirstOrDefault(pi => pi.Value.Player.Equals(sender)).Value.Number;
             if (senderNumber < 0) {
-                photonView.RPC("ReceiveRequestRejection", sender, "无效的发送者编号");
+                photonView.RPC("ReceiveRequestRejection", sender, "无效的发送者");
                 return;
             }
 
@@ -233,9 +240,8 @@
 
             foreach (int receiverNumber in channel.PlayerNumbers)
             {
-                if (!playerIdentities.ContainsKey(receiverNumber)) { continue; }
+                if (!ValidatePlayerNumber(receiverNumber)) { continue; }
                 PhotonPlayer receiver = playerIdentities[receiverNumber].Player;
-                if (receiver == null) { continue; }
 
                 if (receiverNumber != senderNumber)
                 {
@@ -254,26 +260,22 @@
 
             int senderNumber = playerIdentities.FirstOrDefault(pi => pi.Value.Player.Equals(sender)).Value.Number;
             if (senderNumber < 0) {
-                photonView.RPC("ReceiveRequestRejection", sender, "无效的发送者编号");
+                photonView.RPC("ReceiveRequestRejection", sender, "无效的发送者");
                 return;
             }
 
-            if (!playerIdentities.ContainsKey(receiverNumber)) {
-                photonView.RPC("ReceiveRequestRejection", sender, "无效的接受者编号");
+            if (!ValidatePlayerNumber(receiverNumber)) {
+                photonView.RPC("ReceiveRequestRejection", sender, "无效的接受者");
                 return;
             }
             PhotonPlayer receiver = playerIdentities[receiverNumber].Player;
-            if (receiver == null) {
-                photonView.RPC("ReceiveRequestRejection", sender, "接受者为空");
-                return;
-            }
 
             if (!sender.isMasterClient)
             {
                 //检查玩家通信目标玩家的合法性
                 //todo 
                 if (receiverNumber != 0) {
-                    photonView.RPC("ReceiveRequestRejection", sender, "无效的接受者编号");
+                    photonView.RPC("ReceiveRequestRejection", sender, "无效的接受者");
                     return;
                 }
             }
