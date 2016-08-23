@@ -10,24 +10,6 @@
 
     public class MessageChannels : PunBehaviour
     {
-        private class ChannelModel
-        {
-            private int m_ChannelId;
-            private string m_ChannelName;
-            private HashSet<int> m_PlayerNumbers;
-
-            public int ChannelId { get { return m_ChannelId; } }
-            public string ChannelName { get { return m_ChannelName; } set { m_ChannelName = value; } }
-            public HashSet<int> PlayerNumbers { get { return m_PlayerNumbers; } set { m_PlayerNumbers = value; } }
-
-            public ChannelModel(int id)
-            {
-                m_ChannelId = id;
-                m_ChannelName = string.Empty;
-                m_PlayerNumbers = new HashSet<int>();
-            }
-        }
-
         public const int MAX_CHANNEL_COUNT = 10;
         public const string ALL_CHANNEL_NAME = "全体玩家";
         public const string CHANNEL_DISPLAY_FORMAT = "{{0}}";
@@ -50,11 +32,11 @@
 
         private GameLogicBase m_GameLogic = null;
 
-        private Dictionary<int, ChannelModel> m_ActiveChannels = new Dictionary<int, ChannelModel>();
+        private Dictionary<int, MessageChannelModel> m_ActiveChannels = new Dictionary<int, MessageChannelModel>();
         private HashSet<int> m_EmptyChannelIds = new HashSet<int>();
         //private Dictionary<int, List<int>> m_ActivePlayerNumbers = new Dictionary<int, List<int>>();
 
-        private List<ChannelModel> m_AvailableChannels = new List<ChannelModel>();
+        private List<MessageChannelModel> m_AvailableChannels = new List<MessageChannelModel>();
         private List<int> m_AvailablePlayerNumbers = new List<int>();
         private int m_CurrentChannelIndex = -1;
         private string m_Message = string.Empty;
@@ -79,13 +61,13 @@
         #region Master
         private void InitMaster()
         {
-            m_ActiveChannels = new Dictionary<int, ChannelModel>();
-            m_AvailableChannels = new List<ChannelModel>();
+            m_ActiveChannels = new Dictionary<int, MessageChannelModel>();
+            m_AvailableChannels = new List<MessageChannelModel>();
             for (int i = 0; i < MAX_CHANNEL_COUNT; i++)
             {
                 if (i < m_DefaultChannelCount)
                 {
-                    ChannelModel channel = new ChannelModel(i);
+                    MessageChannelModel channel = new MessageChannelModel(i);
                     m_ActiveChannels.Add(i, channel);
                     m_AvailableChannels.Add(channel);
                 }
@@ -131,7 +113,7 @@
         private void UpdateChannels()
         {            
             OrderedDictionary dictionary = new OrderedDictionary();
-            foreach (KeyValuePair<int, ChannelModel> channel in m_ActiveChannels)
+            foreach (KeyValuePair<int, MessageChannelModel> channel in m_ActiveChannels)
             {
                 dictionary.Add(channel.Key.ToString(), channel.Value);
             }
@@ -202,7 +184,7 @@
             int id = m_EmptyChannelIds.First();
             if (m_EmptyChannelIds.Remove(id))
             {
-                ChannelModel channel = new ChannelModel(id);
+                MessageChannelModel channel = new MessageChannelModel(id);
                 m_ActiveChannels.Add(id, channel);
                 m_AvailableChannels.Add(channel);
 
@@ -217,7 +199,7 @@
             //清除频道并回收ID
             ReleasePlayersFromChannel(channelId);
             m_ActiveChannels.Remove(channelId);
-            m_AvailableChannels.RemoveAll(c => c.ChannelId == channelId);
+            m_AvailableChannels.RemoveAll(mc => mc.ChannelId == channelId);
             m_EmptyChannelIds.Add(channelId);
 
             UpdateChannels();
@@ -229,16 +211,22 @@
             Dictionary<int, PlayerIdentity> playerIdentities = m_GameLogic.PlayerIdentities;
 
             int senderNumber = playerIdentities.FirstOrDefault(pi => pi.Value.Player.Equals(sender)).Value.Number;
-            if (senderNumber < 0) { return; }
+            if (senderNumber < 0) {
+                photonView.RPC("ReceiveRequestRejection", sender, "无效的发送者编号");
+                return;
+            }
 
-            if (!m_ActiveChannels.ContainsKey(channelId)) { return; }
-            ChannelModel channel = m_ActiveChannels[channelId];
+            if (!m_ActiveChannels.ContainsKey(channelId)) {
+                photonView.RPC("ReceiveRequestRejection", sender, "无效的频道ID");
+                return;
+            }
+            MessageChannelModel channel = m_ActiveChannels[channelId];
 
             if (!sender.isMasterClient)
             {
                 //检查玩家广播目标频道的合法性
                 if (!channel.PlayerNumbers.Contains(senderNumber)) {
-                    photonView.RPC("ReceiveRequestRejection", sender, "不在频道中");
+                    photonView.RPC("ReceiveRequestRejection", sender, "发送者不在频道中");
                     return;
                 }
             }
@@ -256,7 +244,7 @@
             }
 
             //Master显示消息
-            ShowMessage("{0}中的{1}:{2}", channel.ChannelName, sender, message);
+            ShowMessage("{{0}}中的[{1}]:{2}", channel.ChannelName, sender, message);
         }
 
         [PunRPC]
@@ -265,18 +253,27 @@
             Dictionary<int, PlayerIdentity> playerIdentities = m_GameLogic.PlayerIdentities;
 
             int senderNumber = playerIdentities.FirstOrDefault(pi => pi.Value.Player.Equals(sender)).Value.Number;
-            if (senderNumber < 0) { return; }
+            if (senderNumber < 0) {
+                photonView.RPC("ReceiveRequestRejection", sender, "无效的发送者编号");
+                return;
+            }
 
-            if (!playerIdentities.ContainsKey(receiverNumber)) { return; }
+            if (!playerIdentities.ContainsKey(receiverNumber)) {
+                photonView.RPC("ReceiveRequestRejection", sender, "无效的接受者编号");
+                return;
+            }
             PhotonPlayer receiver = playerIdentities[receiverNumber].Player;
-            if (receiver == null) { return; }
+            if (receiver == null) {
+                photonView.RPC("ReceiveRequestRejection", sender, "接受者为空");
+                return;
+            }
 
             if (!sender.isMasterClient)
             {
                 //检查玩家通信目标玩家的合法性
                 //todo 
                 if (receiverNumber != 0) {
-                    photonView.RPC("ReceiveRequestRejection", sender, "无效的接受者");
+                    photonView.RPC("ReceiveRequestRejection", sender, "无效的接受者编号");
                     return;
                 }
             }
@@ -284,7 +281,7 @@
             photonView.RPC("ReceiveMessageFromPlayer", receiver, senderNumber, message);
 
             //Master显示消息
-            ShowMessage("{0}对{1}:{2}", senderNumber, receiverNumber, message);            
+            ShowMessage("[{0}]对[{1}]:{2}", senderNumber, receiverNumber, message);            
         }
         #endregion
 
@@ -293,7 +290,7 @@
         {
             List<Dropdown.OptionData> availableOptions = new List<Dropdown.OptionData>();
             availableOptions.Add(new Dropdown.OptionData("空"));
-            foreach (ChannelModel channel in m_AvailableChannels)
+            foreach (MessageChannelModel channel in m_AvailableChannels)
             {
                 availableOptions.Add(new Dropdown.OptionData(string.Format(CHANNEL_DISPLAY_FORMAT, channel.ChannelName)));
             }
@@ -340,19 +337,19 @@
         [PunRPC]
         private void ReceiveMessageFromChannel(int channelId, int senderNumber, string message)
         {
-            //todo
+            ShowMessage("{{0}}中的[{1}]:{2}", m_AvailableChannels.FirstOrDefault(mc => mc.ChannelId == channelId).ChannelName, senderNumber, message);
         }
 
         [PunRPC]
         private void ReceiveMessageFromPlayer(int senderNumber, string message)
         {
-            //todo
+            ShowMessage("[{0}]对你:{1}", senderNumber, message);
         }
 
         [PunRPC]
         private void ReceiveRequestRejection(string err)
         {
-            ShowMessage("消息发送请求失败:{0}", err);
+            ShowMessage("<color=#800000ff>消息发送请求失败:{0}</color>", err);
         }
 
         private void ShowMessage(string format, params object[] args)
@@ -364,10 +361,10 @@
         #region OtherPlayers
         private void InitOtherPlayer()
         {
-            m_AvailableChannels = new List<ChannelModel>();
+            m_AvailableChannels = new List<MessageChannelModel>();
 
             //默认0号频道为全部玩家频道
-            ChannelModel channel = new ChannelModel(0);
+            MessageChannelModel channel = new MessageChannelModel(0);
             channel.ChannelName = ALL_CHANNEL_NAME;
             m_AvailableChannels.Insert(0, channel);
 
@@ -379,24 +376,24 @@
         [PunRPC]
         private void UnsubscribeFromChannels()
         {
-            m_AvailableChannels.RemoveAll(c => c.ChannelId != 0);
+            m_AvailableChannels.RemoveAll(mc => mc.ChannelId != 0);
             UpdateChannelDropdown();
         }
 
         [PunRPC]
         private void UnsubscribeFromChannel(int channelId)
         {
-            m_AvailableChannels.Remove(m_AvailableChannels.Find(c => c.ChannelId == channelId));
+            m_AvailableChannels.Remove(m_AvailableChannels.Find(mc => mc.ChannelId == channelId));
             UpdateChannelDropdown();
         }
 
         [PunRPC]
         private void SubscribeToOrUpdateChannel(int channelId, string channelName, int[] playerNumbers)
         {
-            ChannelModel channel = m_AvailableChannels.Find(c => c.ChannelId == channelId);
-            if (channel.Equals(default(ChannelModel)))
+            MessageChannelModel channel = m_AvailableChannels.Find(mc => mc.ChannelId == channelId);
+            if (channel.Equals(default(MessageChannelModel)))
             {
-                channel = new ChannelModel(channelId);
+                channel = new MessageChannelModel(channelId);
             }
             channel.ChannelName = channelName;
             channel.PlayerNumbers = new HashSet<int>(playerNumbers);
