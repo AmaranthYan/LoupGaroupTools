@@ -8,7 +8,7 @@
     using System.Collections.Specialized;
     using System.Linq;
 
-    public class MessageChannels : PunBehaviour
+    public class Messager : PunBehaviour
     {
         public const int MAX_CHANNEL_COUNT = 10;
         public const string ALL_CHANNEL_NAME = "全体玩家";
