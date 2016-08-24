@@ -35,6 +35,10 @@
 
             photonView.RPC("AlertGameHistory", PhotonTargets.Others);
             BroadcastIdentitiesHistory();
+
+            //更新本地历史
+            onGameHistoryAlert.Invoke();
+            UpdateIdentitiesHistory();
         }
 
         private void BroadcastIdentitiesHistory()
