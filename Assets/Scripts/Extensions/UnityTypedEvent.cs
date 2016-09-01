@@ -24,6 +24,8 @@ public class UnityTypedEvent
     public class SpriteEvent : UnityEvent<Sprite> { }
     [Serializable]
     public class RectTransformEvent : UnityEvent<RectTransform> { }
+    [Serializable]
+    public class KeyCodeEvent : UnityTypedEvent<KeyCode> { }
     
     [Serializable]
     public class PlayerIdentityEvent : UnityEvent<PlayerIdentity> { }
