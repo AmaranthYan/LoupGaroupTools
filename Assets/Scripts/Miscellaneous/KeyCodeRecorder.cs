@@ -2,7 +2,7 @@
 using UnityEngine.Events;
 using System;
 
-public class KeyCodeRecorder : Monobehavoir
+public class KeyCodeRecorder : MonoBehaviour
 {
     public UnityTypedEvent.KeyCodeEvent onKeyRecord = new UnityTypedEvent.KeyCodeEvent();
     public UnityEvent onRecordingStart = new UnityEvent();

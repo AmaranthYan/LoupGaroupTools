@@ -1,5 +1,5 @@
 ﻿using Photon;
-using UnityEngine.UI;
+using UnityEngine;
 using System;
 
 public class Voice : PunBehaviour
@@ -26,7 +26,7 @@ public class Voice : PunBehaviour
 
     void Update()
     {
-        switch ((RecordingMode)index)
+        switch (m_Mode)
         {
             case RecordingMode.PushToTalk :
                 //todo
@@ -47,7 +47,7 @@ public class Voice : PunBehaviour
                 m_Mode = RecordingMode.FreeMic;
                 break;
             default :
-                Debug.LogErr("无效的语音模式！");
+                Debug.LogError("无效的语音模式！");
                 return;
         }
         PlayerPrefs.SetInt(VOICE_MODE_KEY, (int)m_Mode);
