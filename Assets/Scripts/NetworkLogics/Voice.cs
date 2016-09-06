@@ -9,7 +9,7 @@ public class Voice : PunBehaviour
     private const string VOICE_MODE_KEY = "voice_mode";
     private const string PTT_KEYCODE_KEY = "ptt_keycode";
 
-    public UnityTypedEvent.IntEvent onModeUpdate = new UnityTypedEvent.IntEvent();
+    public UnityTypedEvent.IntEvent onModeInit = new UnityTypedEvent.IntEvent();
     public UnityTypedEvent.StringEvent onPTTKeyUpdate = new UnityTypedEvent.StringEvent();
 
     private RecordingMode m_Mode = RecordingMode.PushToTalk;
@@ -18,7 +18,7 @@ public class Voice : PunBehaviour
     void Start()
     {
         m_Mode = (RecordingMode)(PlayerPrefs.GetInt(VOICE_MODE_KEY, (int)m_Mode));
-        onModeUpdate.Invoke((int)m_Mode);
+        onModeInit.Invoke((int)m_Mode);
 
         m_PTTKey = (KeyCode)(PlayerPrefs.GetInt(PTT_KEYCODE_KEY, (int)m_PTTKey));
         onPTTKeyUpdate.Invoke(m_PTTKey.ToString());

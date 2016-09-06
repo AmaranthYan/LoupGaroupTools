@@ -25,11 +25,17 @@ public class ToggleGroupIndexer : MonoBehaviour
     {
         for (int i = 0; i < m_Toggles.Length; i++)
         {
-            m_Toggles[i].onValueChanged.AddListener((bool b) => { if (b) { onToggleOn.Invoke(i); } });
+            int idx = i;
+            m_Toggles[i].onValueChanged.AddListener((bool b) => 
+            {
+                if (b) {
+                    onToggleOn.Invoke(idx);
+                }
+            });
         }
     }
 
-    void SetToggleOnByIndex(int index)
+    public void SetToggleOn(int index)
     {
         if (index < 0 || index >= m_Toggles.Length) { return; }
 
