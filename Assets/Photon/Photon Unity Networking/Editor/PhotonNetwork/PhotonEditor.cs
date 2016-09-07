@@ -8,7 +8,7 @@
 // <author>developer@exitgames.com</author>
 // ----------------------------------------------------------------------------
 
-//#define PHOTON_VOICE
+#define PHOTON_VOICE
 
 using System;
 using System.Collections.Generic;
@@ -601,7 +601,7 @@ public class PhotonEditor : EditorWindow
 
     protected internal static bool CheckPunPlus()
     {
-		androidLibExists = 	File.Exists("Assets/Plugins/Android/armeabi-v7a/libPhotonSocketPlugin.so") && 
+		androidLibExists = 	File.Exists("Assets/Plugins/Android/armeabi-v7a/libPhotonSocketPlugin.so") &&
 							File.Exists("Assets/Plugins/Android/x86/libPhotonSocketPlugin.so");
 
 

@@ -3,6 +3,8 @@
 /// <summary>ScriptableObject defining a server setup. An instance is created as <b>PhotonServerSettings</b>.</summary>
 #pragma warning restore 1587
 
+#define PHOTON_VOICE
+
 using System;
 using System.Collections.Generic;
 using ExitGames.Client.Photon;

@@ -2,13 +2,18 @@
 using UnityEngine;
 using System;
 
-public class Voice : PunBehaviour
+public class NetVoice : PunBehaviour
 {
 	public enum RecordingMode { PushToTalk = 0, FreeMic }
 
     private const string VOICE_MODE_KEY = "voice_mode";
     private const string PTT_KEYCODE_KEY = "ptt_keycode";
 
+    [Header("Injections")]
+    [SerializeField]
+    private GameObject m_VoiceInstancePrefab = null;
+
+    [Header("Events")]
     public UnityTypedEvent.IntEvent onModeInit = new UnityTypedEvent.IntEvent();
     public UnityTypedEvent.StringEvent onPTTKeyUpdate = new UnityTypedEvent.StringEvent();
 
@@ -35,6 +40,16 @@ public class Voice : PunBehaviour
                 break;
         }
     }
+
+    #region PhotonCallbacks
+    public override void OnJoinedRoom()
+    {
+        GameObject voiceInstance = PhotonNetwork.Instantiate("VoiceInstance", Vector3.zero, Quaternion.identity, 0);
+        voiceInstance.transform.SetParent(transform);
+        Debug.Log(Microphone.devices.Length);
+        Debug.Log(voiceInstance.GetComponent<PhotonVoiceRecorder>().MicrophoneDevice);        
+    }
+    #endregion
 
     public void SetCurrentMode(int index)
     {        
