@@ -18,11 +18,11 @@ public class CreateNewRoomView : MonoBehaviour
 
         string name = !string.IsNullOrEmpty(m_RoomName.text) ? m_RoomName.text : null;
         RoomOptions options = new RoomOptions();
-        if (!byte.TryParse(m_MaxPlayers.text, out options.maxPlayers)) { options.maxPlayers = 0; };
+        if (!byte.TryParse(m_MaxPlayers.text, out options.MaxPlayers)) { options.MaxPlayers = 0; };
         options.PlayerTtl = MAX_PLAYER_TTL_MILLISECONDS;
-        options.cleanupCacheOnLeave = true;
-        options.isOpen = true;
-        options.isVisible = true;
+        options.CleanupCacheOnLeave = true;
+        options.IsOpen = true;
+        options.IsVisible = true;
         PhotonNetwork.CreateRoom(name, options, TypedLobby.Default);
     }
 }
