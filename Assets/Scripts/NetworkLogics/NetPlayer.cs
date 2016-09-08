@@ -57,20 +57,20 @@ public class NetPlayer : PunBehaviour
         base.OnConnectedToPhoton();
         AssignGuidToPlayer();
         m_IsConnectionInitialized = true;
-        onPhotonEvent.Invoke(ImprintLocalTime() + "已连接至PUN。");
+        onPhotonEvent.Invoke(Timestamp.ImprintLocalTime() + "已连接至PUN。");
     }
 
     public override void OnFailedToConnectToPhoton(DisconnectCause cause)
     {
         base.OnFailedToConnectToPhoton(cause);
         Debug.LogError("连接PUN失败，原因[" + cause + "]");
-        onPhotonEvent.Invoke("<color=#800000ff>" + ImprintLocalTime() + "连接PUN失败！</color>");
+        onPhotonEvent.Invoke("<color=#800000ff>" + Timestamp.ImprintLocalTime() + "连接PUN失败！</color>");
     }
 
     public override void OnDisconnectedFromPhoton()
     {
         base.OnDisconnectedFromPhoton();
-        onPhotonEvent.Invoke(ImprintLocalTime() + "已从PUN断开。");
+        onPhotonEvent.Invoke(Timestamp.ImprintLocalTime() + "已从PUN断开。");
 
         if (!m_IsConnectionInitialized) { return; }
 
@@ -85,39 +85,39 @@ public class NetPlayer : PunBehaviour
     public override void OnConnectionFail(DisconnectCause cause)
     {
         base.OnConnectionFail(cause);
-        onPhotonEvent.Invoke("<color=#800000ff>" + ImprintLocalTime() + "PUN连接中断！</color>");
+        onPhotonEvent.Invoke("<color=#800000ff>" + Timestamp.ImprintLocalTime() + "PUN连接中断！</color>");
     }
 
     public override void OnPhotonMaxCccuReached()
     {
         base.OnPhotonMaxCccuReached();
-        onPhotonEvent.Invoke("<color=#800000ff>" + ImprintLocalTime() + "当前服务器连接已达到上限！</color>");
+        onPhotonEvent.Invoke("<color=#800000ff>" + Timestamp.ImprintLocalTime() + "当前服务器连接已达到上限！</color>");
     }
 
     //因为使用DefaultLobby所以OnConnectedToMaster()不会被调用
     public override void OnJoinedLobby()
     {
         base.OnJoinedLobby();
-        onPhotonEvent.Invoke(ImprintLocalTime() + "已接入大厅。");
+        onPhotonEvent.Invoke(Timestamp.ImprintLocalTime() + "已接入大厅。");
     }
 
     public override void OnLeftLobby()
     {
         base.OnLeftLobby();
-        onPhotonEvent.Invoke(ImprintLocalTime() + "已离开大厅。");
+        onPhotonEvent.Invoke(Timestamp.ImprintLocalTime() + "已离开大厅。");
     }
 
     public override void OnReceivedRoomListUpdate()
     {
         base.OnReceivedRoomListUpdate();
         FetchRoomList();
-        onPhotonEvent.Invoke(ImprintLocalTime() + "房间列表已更新。");
+        onPhotonEvent.Invoke(Timestamp.ImprintLocalTime() + "房间列表已更新。");
     }
 
     public override void OnCreatedRoom()
     {
         base.OnCreatedRoom();
-        onPhotonEvent.Invoke(ImprintLocalTime() + "已创建房间\"" + PhotonNetwork.room.name + "\"。");
+        onPhotonEvent.Invoke(Timestamp.ImprintLocalTime() + "已创建房间\"" + PhotonNetwork.room.name + "\"。");
         PhotonNetwork.SetMasterClient(PhotonNetwork.player);
         onBecomeMasterPlayer.Invoke();
     }
@@ -127,7 +127,7 @@ public class NetPlayer : PunBehaviour
         base.OnPhotonCreateRoomFailed(codeAndMsg);
         //short code = (short)codeAndMsg[0];
         //string msg = (string)codeAndMsg[1];
-        onPhotonEvent.Invoke("<color=#800000ff>" + ImprintLocalTime() + "创建房间失败！</color>");
+        onPhotonEvent.Invoke("<color=#800000ff>" + Timestamp.ImprintLocalTime() + "创建房间失败！</color>");
     }
 
     public override void OnJoinedRoom()
@@ -135,7 +135,7 @@ public class NetPlayer : PunBehaviour
         base.OnJoinedRoom();
         onJoinRoom.Invoke();
         FetchPlayerList();
-        onPhotonEvent.Invoke(ImprintLocalTime() + "已加入房间\"" + PhotonNetwork.room.name + "\"，当前人数为" + PhotonNetwork.room.playerCount + "人。");
+        onPhotonEvent.Invoke(Timestamp.ImprintLocalTime() + "已加入房间\"" + PhotonNetwork.room.name + "\"，当前人数为" + PhotonNetwork.room.playerCount + "人。");
         if (PhotonNetwork.masterClient == null)
         {
             PhotonNetwork.SetMasterClient(PhotonNetwork.player);
@@ -153,12 +153,12 @@ public class NetPlayer : PunBehaviour
         if (PhotonNetwork.player.Equals(newMasterClient))
         {
             onBecomeMasterPlayer.Invoke();
-            onPhotonEvent.Invoke(ImprintLocalTime() + "已获得房主权限。");
+            onPhotonEvent.Invoke(Timestamp.ImprintLocalTime() + "已获得房主权限。");
         }
         else
         {
             onNotBecomeMasterPlayer.Invoke();
-            onPhotonEvent.Invoke(ImprintLocalTime() + "玩家\"" + FetchPlayerName(newMasterClient) + "\"已成为房主。");
+            onPhotonEvent.Invoke(Timestamp.ImprintLocalTime() + "玩家\"" + FetchPlayerName(newMasterClient) + "\"已成为房主。");
         }
             
     }
@@ -167,21 +167,21 @@ public class NetPlayer : PunBehaviour
     {
         base.OnPhotonPlayerConnected(newPlayer);
         FetchPlayerList();
-        onPhotonEvent.Invoke(ImprintLocalTime() + "玩家\"" + FetchPlayerName(newPlayer) + "\"已加入房间，当前人数为" + PhotonNetwork.room.playerCount + "人。");
+        onPhotonEvent.Invoke(Timestamp.ImprintLocalTime() + "玩家\"" + FetchPlayerName(newPlayer) + "\"已加入房间，当前人数为" + PhotonNetwork.room.playerCount + "人。");
     }
 
     public override void OnPhotonPlayerDisconnected(PhotonPlayer otherPlayer)
     {
         base.OnPhotonPlayerDisconnected(otherPlayer);
         FetchPlayerList();
-        onPhotonEvent.Invoke(ImprintLocalTime() + "玩家\"" + FetchPlayerName(otherPlayer) + "\"已离开房间，当前人数为" + PhotonNetwork.room.playerCount + "人。");
+        onPhotonEvent.Invoke(Timestamp.ImprintLocalTime() + "玩家\"" + FetchPlayerName(otherPlayer) + "\"已离开房间，当前人数为" + PhotonNetwork.room.playerCount + "人。");
     }
 
     public override void OnLeftRoom()
     {
         base.OnLeftRoom();
         onLeaveRoom.Invoke();
-        onPhotonEvent.Invoke(ImprintLocalTime() + "已离开房间。");
+        onPhotonEvent.Invoke(Timestamp.ImprintLocalTime() + "已离开房间。");
     }
     #endregion
 
@@ -222,7 +222,7 @@ public class NetPlayer : PunBehaviour
 
     private bool ConnectToPUN()
     {
-        onPhotonEvent.Invoke(ImprintLocalTime() + "正在连接PUN...");
+        onPhotonEvent.Invoke(Timestamp.ImprintLocalTime() + "正在连接PUN...");
         return PhotonNetwork.ConnectUsingSettings(m_PhotonIdentifier.GameIdentifier + '_' + m_PhotonIdentifier.GameVersion);
     }
 
@@ -232,7 +232,7 @@ public class NetPlayer : PunBehaviour
         bool isAttemptSuccessful = false;
         while (!isAttemptSuccessful)
         {
-            onPhotonEvent.Invoke(ImprintLocalTime() + "正在重新连接PUN，尝试次数" + ++counter + "...");
+            onPhotonEvent.Invoke(Timestamp.ImprintLocalTime() + "正在重新连接PUN，尝试次数" + ++counter + "...");
             isAttemptSuccessful = PhotonNetwork.ReconnectAndRejoin();
             if (!isAttemptSuccessful)
             {
@@ -244,10 +244,5 @@ public class NetPlayer : PunBehaviour
             }
             yield return new WaitForSeconds(SECONDS_BETWEEN_CONNECT_ATTEMPTS);
         }
-    }
-
-    private string ImprintLocalTime()
-    {
-        return string.Format("[{0:HH:mm:ss}]", DateTime.Now);
-    }
+    }    
 }
