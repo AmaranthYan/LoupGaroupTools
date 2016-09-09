@@ -64,9 +64,9 @@ public abstract class ScrollListView<T> : MonoBehaviour
         itemView.UpdateItem(value);
     }
 
-    public virtual void AddItemToList(string idInList, object value)
+    public virtual bool AddItemToList(string idInList, object value)
     {
-        if (m_CurrentScrollList.ContainsKey(idInList)) { return; }
+        if (m_CurrentScrollList.ContainsKey(idInList)) { return false; }
 
         m_CurrentScrollList[idInList] = InstantiateItemView();
 
@@ -74,21 +74,24 @@ public abstract class ScrollListView<T> : MonoBehaviour
         m_CurrentScrollList[idInList].InitItemView(idInList, toggleGroup, this);
 
         UpdateItemView(m_CurrentScrollList[idInList], value);
+        return true;
     }
 
-    public virtual void UpdateItemInList(string idInList, T value)
+    public virtual bool UpdateItemInList(string idInList, T value)
     {
-        if (!m_CurrentScrollList.ContainsKey(idInList)) { return; }
+        if (!m_CurrentScrollList.ContainsKey(idInList)) { return false; }
 
         UpdateItemView(m_CurrentScrollList[idInList], value);
+        return true;
     }
 
     public virtual void DeleteItemFromList(string idInList)
     {
-        if (!m_CurrentScrollList.ContainsKey(idInList)) { return; }
+        if (!m_CurrentScrollList.ContainsKey(idInList)) { return false; }
 
         Destroy(m_CurrentScrollList[idInList].gameObject);
         m_CurrentScrollList.Remove(idInList);
+        return true;
     }
 
     public void SelectItemInList(string idInList, bool isSelected)
