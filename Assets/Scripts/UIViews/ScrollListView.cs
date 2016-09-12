@@ -85,7 +85,7 @@ public abstract class ScrollListView<T> : MonoBehaviour
         return true;
     }
 
-    public virtual void DeleteItemFromList(string idInList)
+    public virtual bool DeleteItemFromList(string idInList)
     {
         if (!m_CurrentScrollList.ContainsKey(idInList)) { return false; }
 
