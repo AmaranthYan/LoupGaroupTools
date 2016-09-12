@@ -1,49 +1,84 @@
 ﻿using Photon;
 using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using LoupsGarous;
 
-public class VoiceInstance : MonoBehaviour
+public class VoiceInstance : PunBehaviour
 {
-    [Header("Events")]
-    public UnityTypedEvent.StringEvent onLogUpdate = new UnityTypedEvent.StringEvent();
-
     private NetVoice m_NetVocie = null;
     private PhotonView m_PhotonView = null;
     private PhotonVoiceRecorder m_VoiceRecorder = null;
     private PhotonVoiceSpeaker m_VoiceSpeaker = null;
 
+    VoiceInstanceModel m_VoiceInstance = new VoiceInstanceModel();
     private bool isLocal = false;
 
     void Awake()
     {
         m_NetVocie = FindObjectOfType<NetVoice>();
-        m_PhotonView = this.GetComponent<PhotonView>();
-        m_VoiceRecorder = this.GetComponent<PhotonVoiceRecorder>();
-        m_VoiceSpeaker = this.GetComponent<PhotonVoiceSpeaker>();
+        m_PhotonView = GetComponent<PhotonView>();
+        m_VoiceRecorder = GetComponent<PhotonVoiceRecorder>();
+        m_VoiceSpeaker = GetComponent<PhotonVoiceSpeaker>();
     }
 
     void Start()
     {
-        this.transform.SetParent(m_NetVocie.transform);
-        isLocal = m_PhotonView.owner.isLocal;
+        transform.SetParent(m_NetVocie.transform);
+        m_VoiceInstance.Player = m_PhotonView.owner;
+        m_VoiceInstance.IsLocal = m_VoiceInstance.Player.isLocal;
     }
 
     void OnDestroy()
-    {
-        // remove instance UI
+    {        
+        m_NetVocie.VoiceInstanceListView.DeleteItemFromList(m_VoiceInstance.Player.userId);
     }
 
     void Update()
     {
-        if (isLocal)
+        FetchInGameStatus();
+        UpdateVoiceInstanceDisplay();
+    }
+
+    private void FetchInGameStatus()
+    {
+        m_VoiceInstance.IsInGame = GameSessionService.IsInGame;
+        if (GameSessionService.IsInGame)
         {
-            // add/update/remove instance UI
-            // use Recoder.isTransmitting
+            PlayerIdentity identity = GameSessionService.GameSession.GetComponent<GameLogicBase>().PlayerIdentities.Values.FirstOrDefault(pi => pi.Player.Equals(m_VoiceInstance.Player));
+            m_VoiceInstance.InGamePlayerNumber = identity != default(PlayerIdentity) ? identity.Number : -1;
+        }
+    }
+
+    private void UpdateVoiceInstanceDisplay()
+    {
+        if (m_VoiceInstance.IsLocal)
+        {
+            if (m_VoiceRecorder.IsTransmitting)
+            {
+                if (!m_NetVocie.VoiceInstanceListView.UpdateItemInList(m_VoiceInstance.Player.userId, m_VoiceInstance))
+                {
+                    m_NetVocie.VoiceInstanceListView.AddItemToList(m_VoiceInstance.Player.userId, m_VoiceInstance);
+                }
+            }
+            else
+            {
+                m_NetVocie.VoiceInstanceListView.DeleteItemFromList(m_VoiceInstance.Player.userId);
+            }
         }
         else
         {
-            // add/update/remove instance UI
-            // use Speaker.isSpeaking
+            if (m_VoiceSpeaker.IsPlaying)
+            {
+                if (!m_NetVocie.VoiceInstanceListView.UpdateItemInList(m_VoiceInstance.Player.userId, m_VoiceInstance))
+                {
+                    m_NetVocie.VoiceInstanceListView.AddItemToList(m_VoiceInstance.Player.userId, m_VoiceInstance);
+                }
+            }
+            else
+            {
+                m_NetVocie.VoiceInstanceListView.DeleteItemFromList(m_VoiceInstance.Player.userId);
+            }
         }
     }
 }

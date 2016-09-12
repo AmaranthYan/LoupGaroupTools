@@ -9,9 +9,13 @@ public class NetVoice : PunBehaviour
     private const string VOICE_MODE_KEY = "voice_mode";
     private const string PTT_KEYCODE_KEY = "ptt_keycode";
 
-    [Header("Injections")]
+    [Header("Prefabs")]
     [SerializeField]
     private string m_VoiceInstancePrefabName = string.Empty;
+    [Header("UI")]
+    [SerializeField]
+    private VoiceInstanceListView m_VoiceInstanceListView = null;
+    public VoiceInstanceListView VoiceInstanceListView { get { return m_VoiceInstanceListView; } }
 
     [Header("Events")]
     public UnityTypedEvent.StringEvent onPhotonEvent = new UnityTypedEvent.StringEvent();

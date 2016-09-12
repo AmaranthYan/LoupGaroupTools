@@ -20,6 +20,7 @@ public class CreateNewRoomView : MonoBehaviour
         RoomOptions options = new RoomOptions();
         if (!byte.TryParse(m_MaxPlayers.text, out options.MaxPlayers)) { options.MaxPlayers = 0; };
         options.PlayerTtl = MAX_PLAYER_TTL_MILLISECONDS;
+        options.PublishUserId = true;
         options.CleanupCacheOnLeave = true;
         options.IsOpen = true;
         options.IsVisible = true;
