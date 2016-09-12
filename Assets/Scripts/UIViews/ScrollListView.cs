@@ -33,8 +33,7 @@ public abstract class ScrollListView<T> : MonoBehaviour
         {
             if (!itemDictionary.Contains(itemId))
             {
-                Destroy(m_CurrentScrollList[itemId].gameObject);
-                m_CurrentScrollList.Remove(itemId);
+                DeleteItemFromList(itemId);
             }
         }
         
@@ -46,12 +45,7 @@ public abstract class ScrollListView<T> : MonoBehaviour
             }
             else
             {
-                m_CurrentScrollList[itemId] = InstantiateItemView();
-
-                ToggleGroup toggleGroup = m_AllowMultiSelect ? null : m_DefaultToggleGroup;
-                m_CurrentScrollList[itemId].InitItemView(itemId, toggleGroup, this);
-
-                UpdateItemView(m_CurrentScrollList[itemId], itemDictionary[itemId]);                
+                AddItemToList(itemId, itemDictionary[itemId]);               
             }
         }
     }
@@ -70,11 +64,34 @@ public abstract class ScrollListView<T> : MonoBehaviour
         itemView.UpdateItem(value);
     }
 
-    public virtual void UpdateItemInList(string idInList, T value)
+    public virtual bool AddItemToList(string idInList, object value)
     {
-        if (!m_CurrentScrollList.ContainsKey(idInList)) { return; }
+        if (m_CurrentScrollList.ContainsKey(idInList)) { return false; }
+
+        m_CurrentScrollList[idInList] = InstantiateItemView();
+
+        ToggleGroup toggleGroup = m_AllowMultiSelect ? null : m_DefaultToggleGroup;
+        m_CurrentScrollList[idInList].InitItemView(idInList, toggleGroup, this);
 
         UpdateItemView(m_CurrentScrollList[idInList], value);
+        return true;
+    }
+
+    public virtual bool UpdateItemInList(string idInList, T value)
+    {
+        if (!m_CurrentScrollList.ContainsKey(idInList)) { return false; }
+
+        UpdateItemView(m_CurrentScrollList[idInList], value);
+        return true;
+    }
+
+    public virtual void DeleteItemFromList(string idInList)
+    {
+        if (!m_CurrentScrollList.ContainsKey(idInList)) { return false; }
+
+        Destroy(m_CurrentScrollList[idInList].gameObject);
+        m_CurrentScrollList.Remove(idInList);
+        return true;
     }
 
     public void SelectItemInList(string idInList, bool isSelected)
