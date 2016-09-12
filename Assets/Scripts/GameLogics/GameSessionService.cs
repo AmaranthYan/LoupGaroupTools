@@ -10,6 +10,7 @@
 
         private static GameObject m_GameSession = null;
         public static GameObject GameSession { get { return m_GameSession; } }
+        public static bool IsInGame { get { return m_GameSession != null; } }
 
         private static List<int> m_AllocatedPhotonViewIds = new List<int>();
 
