@@ -12,7 +12,6 @@ public class VoiceInstance : PunBehaviour
     private PhotonVoiceSpeaker m_VoiceSpeaker = null;
 
     VoiceInstanceModel m_VoiceInstance = new VoiceInstanceModel();
-    private bool isLocal = false;
 
     void Awake()
     {
@@ -45,7 +44,7 @@ public class VoiceInstance : PunBehaviour
         m_VoiceInstance.IsInGame = GameSessionService.IsInGame;
         if (GameSessionService.IsInGame)
         {
-            PlayerIdentity identity = GameSessionService.GameSession.GetComponent<GameLogicBase>().PlayerIdentities.Values.FirstOrDefault(pi => pi.Player.Equals(m_VoiceInstance.Player));
+            PlayerIdentity identity = GameSessionService.GameSession.GetComponent<GameLogicBase>().PlayerIdentities.Values.FirstOrDefault(pi => m_VoiceInstance.Player.Equals(pi.Player));
             m_VoiceInstance.InGamePlayerNumber = identity != default(PlayerIdentity) ? identity.Number : -1;
         }
     }
@@ -56,9 +55,9 @@ public class VoiceInstance : PunBehaviour
         {
             if (m_VoiceRecorder.IsTransmitting)
             {
-                if (!m_NetVocie.VoiceInstanceListView.UpdateItemInList(m_VoiceInstance.Player.userId, m_VoiceInstance))
+                if (!m_NetVocie.VoiceInstanceListView.AddItemToList(m_VoiceInstance.Player.userId, m_VoiceInstance))
                 {
-                    m_NetVocie.VoiceInstanceListView.AddItemToList(m_VoiceInstance.Player.userId, m_VoiceInstance);
+                    m_NetVocie.VoiceInstanceListView.UpdateItemInList(m_VoiceInstance.Player.userId, m_VoiceInstance);
                 }
             }
             else
@@ -70,9 +69,9 @@ public class VoiceInstance : PunBehaviour
         {
             if (m_VoiceSpeaker.IsPlaying)
             {
-                if (!m_NetVocie.VoiceInstanceListView.UpdateItemInList(m_VoiceInstance.Player.userId, m_VoiceInstance))
+                if (!m_NetVocie.VoiceInstanceListView.AddItemToList(m_VoiceInstance.Player.userId, m_VoiceInstance))
                 {
-                    m_NetVocie.VoiceInstanceListView.AddItemToList(m_VoiceInstance.Player.userId, m_VoiceInstance);
+                    m_NetVocie.VoiceInstanceListView.UpdateItemInList(m_VoiceInstance.Player.userId, m_VoiceInstance);
                 }
             }
             else

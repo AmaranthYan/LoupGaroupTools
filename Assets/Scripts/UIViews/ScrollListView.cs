@@ -77,19 +77,19 @@ public abstract class ScrollListView<T> : MonoBehaviour
         return true;
     }
 
-    public virtual bool UpdateItemInList(string idInList, T value)
+    public virtual void UpdateItemInList(string idInList, T value)
     {
-        if (!m_CurrentScrollList.ContainsKey(idInList)) { return false; }
+        if (!m_CurrentScrollList.ContainsKey(idInList)) { return; }
 
         UpdateItemView(m_CurrentScrollList[idInList], value);
-        return true;
+        return;
     }
 
     public virtual bool DeleteItemFromList(string idInList)
     {
         if (!m_CurrentScrollList.ContainsKey(idInList)) { return false; }
 
-        Destroy(m_CurrentScrollList[idInList].gameObject);
+        if (m_CurrentScrollList[idInList]) { Destroy(m_CurrentScrollList[idInList].gameObject); }
         m_CurrentScrollList.Remove(idInList);
         return true;
     }

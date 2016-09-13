@@ -8,6 +8,7 @@ public class NetVoice : PunBehaviour
 
     private const string VOICE_MODE_KEY = "voice_mode";
     private const string PTT_KEYCODE_KEY = "ptt_keycode";
+    private const int CALIBRATION_DURATION_MS = 2000;
 
     [Header("Prefabs")]
     [SerializeField]
@@ -59,9 +60,12 @@ public class NetVoice : PunBehaviour
         m_LocalVoiceInstance = PhotonNetwork.Instantiate(m_VoiceInstancePrefabName, Vector3.zero, Quaternion.identity, 0);
         // todo : parenting of other players voice instance
         m_LocalVoiceInstance.transform.SetParent(transform);
-        m_LocalVoiceInstance.GetComponent<PhotonVoiceRecorder>().Transmit = false;
-        m_LocalVoiceInstance.GetComponent<PhotonVoiceRecorder>().MicrophoneDevice = m_Microphone;
+        PhotonVoiceRecorder recorder = m_LocalVoiceInstance.GetComponent<PhotonVoiceRecorder>();
+        recorder.Transmit = false;
+        recorder.MicrophoneDevice = m_Microphone;
         onPhotonEvent.Invoke(Timestamp.ImprintLocalTime() + "已加入房间语音信道" + (m_Microphone == null ? ",当前无可用麦克风。" : "，当前麦克风" + m_Microphone));
+
+        //recorder.VoiceDetectorCalibrate(CALIBRATION_DURATION_MS);
     }
 
     public override void OnLeftRoom()
@@ -113,6 +117,7 @@ public class NetVoice : PunBehaviour
     private void ValidateLocalVoiceTransmission()
     {
         if (!m_LocalVoiceInstance) { return; }
+        //if (m_LocalVoiceInstance.GetComponent<PhotonVoiceRecorder>().VoiceDetectorCalibrating) { return; }
 
         switch (m_Mode)
         {
