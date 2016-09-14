@@ -7,6 +7,8 @@ using System.Collections.Specialized;
 
 public class NetPlayer : PunBehaviour
 {
+    public delegate void CustomPhotonCallback();
+
     public const string ANONYMOUS = "匿名爆狼";
     public const string ANONYMOUS_FORMAT = "{0}#{1:00}";
 
