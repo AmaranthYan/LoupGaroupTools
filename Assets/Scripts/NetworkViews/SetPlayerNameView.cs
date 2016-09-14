@@ -32,8 +32,6 @@ public class SetPlayerNameView : PunBehaviour
         base.OnConnectedToPhoton();
         m_IsConnected = true;
         OnConnected_Callback();
-        Debug.Log(PhotonNetwork.playerName);
-        Debug.Log(PhotonNetwork.player.userId);
     }
 
     public override void OnDisconnectedFromPhoton()
