@@ -9,6 +9,8 @@
 
     public class GenericGameLogic : GameLogicBase
     {
+        public UnityEvent onPlayerDisconnect = new UnityEvent();
+
         public UnityEvent onIsMaster = new UnityEvent();
         public UnityEvent onIsNotMaster = new UnityEvent();
         public UnityEvent onGameRestart = new UnityEvent();
@@ -40,15 +42,25 @@
         }
 
         #region PhotonCallbacks
-        //若上帝玩家离开则强制结束游戏进程
+        //若上帝玩家离开(或因未知原因发生Master转移)则强制结束游戏进程
+        public override void OnMasterClientSwitched(PhotonPlayer newMasterClient)
+        {
+            base.OnMasterClientSwitched(newMasterClient);
+            FindObjectOfType<GameSessionServiceView>().UpdateLog("<color=#800000ff>" + Timestamp.ImprintLocalTime() + "房主已丢失，即将结束当前游戏...</color>");
+            EndLocalGame();
+        }
+
         public override void OnPhotonPlayerDisconnected(PhotonPlayer otherPlayer)
         {
             base.OnPhotonPlayerDisconnected(otherPlayer);
 
+            onPlayerDisconnect.Invoke();
+            /**
             if (otherPlayer.isMasterClient)
             {
                 EndLocalGame();
             }
+            */
         }
         #endregion
         

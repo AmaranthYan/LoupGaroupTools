@@ -75,7 +75,7 @@ public class NetVoice : PunBehaviour
         if (!m_LocalVoiceInstance) { return; }
             
         m_LocalVoiceInstance = null;
-        onPhotonEvent.Invoke(Timestamp.ImprintLocalTime() + "已离开房间语音信道");
+        onPhotonEvent.Invoke(Timestamp.ImprintLocalTime() + "已离开房间语音频道。");
     }
     #endregion
 

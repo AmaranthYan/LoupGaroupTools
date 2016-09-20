@@ -14,6 +14,8 @@
         [SerializeField]
         private GameConfigView m_GameConfigView = null;
         
+        public UnityTypedEvent.StringEvent onLogUpdate = new UnityTypedEvent.StringEvent();
+
         public UnityEvent onStartRemoteGameSession = new UnityEvent();
         public UnityEvent onEndRemoteGameSession = new UnityEvent();
         public UnityEvent onEndLocalGameSession = new UnityEvent();
@@ -29,7 +31,7 @@
                 if (PhotonNetwork.playerList.Length <= maxPlayerNumber)
                 {
                     int[] allocatedPhotonViewIds = GameSessionService.AllocatePhotonViewIds();
-                    photonView.RPC("StartRemoteGameSession", PhotonTargets.AllBufferedViaServer, allocatedPhotonViewIds, PhotonNetwork.playerList, gameModeId, characterSet);
+                    photonView.RPC("StartRemoteGameSession", PhotonTargets.AllViaServer, allocatedPhotonViewIds, PhotonNetwork.playerList, gameModeId, characterSet);
                 }
                 else
                 {
@@ -58,13 +60,14 @@
             }
             GameSessionService.GameSession.transform.parent = this.transform;
             onStartRemoteGameSession.Invoke();
+            UpdateLog(Timestamp.ImprintLocalTime() + "游戏已开始。");
         }
 
         public void EndGameSession()
         {
             if (PhotonNetwork.player.isMasterClient)
             {
-                photonView.RPC("EndRemoteGameSession", PhotonTargets.AllBufferedViaServer);
+                photonView.RPC("EndRemoteGameSession", PhotonTargets.AllViaServer);
                 PhotonNetwork.room.open = true;
             }
         }
@@ -74,12 +77,19 @@
         {
             GameSessionService.EndGameSession();
             onEndRemoteGameSession.Invoke();
+            UpdateLog(Timestamp.ImprintLocalTime() + "当前游戏已结束。");
         }
 
         public void EndLocalGameSession()
         {
             GameSessionService.EndGameSession();
             onEndLocalGameSession.Invoke();
+            UpdateLog(Timestamp.ImprintLocalTime() + "已退出当前游戏。");
+        }
+
+        public void UpdateLog(string log)
+        {
+            onLogUpdate.Invoke(log);
         }
     }
 }
