@@ -21,6 +21,8 @@
         private int m_DefaultChannelCount = 1;
 
         public UnityTypedEvent.OrderedDictionaryEvent onChannelsUpdate = new UnityTypedEvent.OrderedDictionaryEvent();
+        public UnityEvent onIsMaster = new UnityEvent();
+        public UnityEvent onIsOtherPlayer = new UnityEvent();
 
         [Header("Messager Configuration")]
         [SerializeField]
