@@ -1,7 +1,6 @@
 ﻿namespace LoupsGarous
 {
     using UnityEngine;
-    using UnityEngine.Events;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text.RegularExpressions;
@@ -12,10 +11,10 @@
         private const string PLAYER_NUMBERS_REGEX = @"\[([0-9]+)\]";
 
         [Header("Events")]
-        public UnityTypedEvent.BoolEvent onIsDefaultChannel = new UnityTypedEvent.BoolEvent();
+        public UnityTypedEvent.BoolEvent onIsEditable = new UnityTypedEvent.BoolEvent();
         public UnityTypedEvent.StringEvent onChannelNameUpdate = new UnityTypedEvent.StringEvent();
-        public UnityTypedEvent.StringEvent onPlayerNumbersUpdate = new UnityTypedEvent.StringEvent();
-        public UnityTypedEvent.BoolEvent onIsMessageChannelAsync = new UnityTypedEvent.BoolEvent();
+        public UnityTypedEvent.StringEvent onPlayerNumbersUpdate = new UnityTypedEvent.StringEvent();        
+        public UnityTypedEvent.BoolEvent onIsAsync = new UnityTypedEvent.BoolEvent();
 
         MessageChannelModel m_AsyncItem = null;
 
@@ -23,14 +22,14 @@
         {
             base.UpdateItem(value);
             m_Item = (MessageChannelModel)value;
+            onIsEditable.Invoke(m_Item.ChannelId != 0);
+            DisplayChannelName(m_Item.ChannelName);
+            DisplayPlayerNumbers(m_Item.PlayerNumbers);
+
             m_AsyncItem = new MessageChannelModel(m_Item.ChannelId);
             m_AsyncItem.ChannelName = m_Item.ChannelName;
             m_AsyncItem.PlayerNumbers = m_Item.PlayerNumbers;
-            onIsMessageChannelAsync.Invoke(IsAsync());
-
-            onIsDefaultChannel.Invoke(m_Item.ChannelId == 0);
-            DisplayChannelName(m_Item.ChannelName);
-            DisplayPlayerNumbers(m_Item.PlayerNumbers);
+            onIsAsync.Invoke(IsAsync());
         }
 
         private void DisplayChannelName(string channelName)
@@ -74,7 +73,7 @@
             if (!string.IsNullOrEmpty(name))
             {
                 m_AsyncItem.ChannelName = name;
-                onIsMessageChannelAsync.Invoke(IsAsync());
+                onIsAsync.Invoke(IsAsync());
             }
             DisplayChannelName(m_AsyncItem.ChannelName);
         }
@@ -100,7 +99,7 @@
             m_AsyncItem.PlayerNumbers = playerNumbers;
             DisplayPlayerNumbers(m_AsyncItem.PlayerNumbers);
 
-            onIsMessageChannelAsync.Invoke(IsAsync());
+            onIsAsync.Invoke(IsAsync());
         }
 
         public void SyncMessageChannel()

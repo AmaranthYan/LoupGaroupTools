@@ -12,8 +12,13 @@
     {
         public const int MAX_CHANNEL_COUNT = 10;
         public const string ALL_CHANNEL_NAME = "全体玩家";
-        public const string CHANNEL_DISPLAY_FORMAT = "{{0}}";
+        //频道名称格式为{组名}
+        public const string CHANNEL_DISPLAY_FORMAT = "{{{0}}}";
         public const string PLAYER_NUMBER_DISPLAY_FORMAT = "[{0}]";
+
+        public const string MSG_FORMAT_FROM_CHANNEL = "{{{0}}}中的[{1}]:{2}";
+        public const string MSG_FORMAT_PLAYER_FROM_PLAYER = "[{0}]对你:{1}";
+        public const string MSG_FORMAT_MASTER_ONE_PLAYER_TO_ANOTHER = "[{0}]对[{1}]:{2}";
 
         [Header("Channel Configuration")]
         [SerializeField]
@@ -31,6 +36,7 @@
         private Dropdown m_ChannelDropdown = null;
 
         public UnityEvent onCurrentChannelIndexReset = new UnityEvent();
+        public UnityEvent onMessageSent = new UnityEvent();
 
         private GameLogicBase m_GameLogic = null;
 
@@ -52,10 +58,12 @@
         {
             if (PhotonNetwork.isMasterClient)
             {
+                onIsMaster.Invoke();
                 InitMaster();
             }
             else
             {
+                onIsOtherPlayer.Invoke();
                 InitOtherPlayer();
             }
         }
@@ -96,6 +104,7 @@
                 m_GameLogic.InitGameLogic_Callback += handler;
             }
 
+            UpdateChannels();
             UpdateChannelDropdown();
         }
 
@@ -215,7 +224,7 @@
         }
 
         [PunRPC]
-        private void RequestToBroadcastMessageInChannel(PhotonPlayer sender, string message, int channelId)
+        private void RequestToBroadcastMessageInChannel(PhotonPlayer sender, int channelId, string message)
         {
             Dictionary<int, PlayerIdentity> playerIdentities = m_GameLogic.PlayerIdentities;
 
@@ -252,11 +261,11 @@
             }
 
             //Master显示消息
-            ShowMessage("{{0}}中的[{1}]:{2}", channel.ChannelName, sender, message);
+            ShowMessage(MSG_FORMAT_FROM_CHANNEL, channel.ChannelName, senderNumber, message);
         }
 
         [PunRPC]
-        private void RequestToSendMessageToPlayer(PhotonPlayer sender, string message, int receiverNumber)
+        private void RequestToSendMessageToPlayer(PhotonPlayer sender, int receiverNumber, string message)
         {
             Dictionary<int, PlayerIdentity> playerIdentities = m_GameLogic.PlayerIdentities;
 
@@ -285,7 +294,7 @@
             photonView.RPC("ReceiveMessageFromPlayer", receiver, senderNumber, message);
 
             //Master显示消息
-            ShowMessage("[{0}]对[{1}]:{2}", senderNumber, receiverNumber, message);            
+            ShowMessage(MSG_FORMAT_MASTER_ONE_PLAYER_TO_ANOTHER, senderNumber, receiverNumber, message);            
         }
         #endregion
 
@@ -331,23 +340,27 @@
             if (m_CurrentChannelIndex < m_AvailableChannels.Count)
             {
                 photonView.RPC("RequestToBroadcastMessageInChannel", PhotonTargets.MasterClient, PhotonNetwork.player, m_AvailableChannels[m_CurrentChannelIndex].ChannelId, m_Message);
+                SetMessage(string.Empty);
+                onMessageSent.Invoke();
             }
             else
             {
                 photonView.RPC("RequestToSendMessageToPlayer", PhotonTargets.MasterClient, PhotonNetwork.player, m_AvailablePlayerNumbers[m_CurrentChannelIndex - m_AvailableChannels.Count], m_Message);
+                SetMessage(string.Empty);
+                onMessageSent.Invoke();
             }
         }
 
         [PunRPC]
         private void ReceiveMessageFromChannel(int channelId, int senderNumber, string message)
         {
-            ShowMessage("{{0}}中的[{1}]:{2}", m_AvailableChannels.FirstOrDefault(mc => mc.ChannelId == channelId).ChannelName, senderNumber, message);
+            ShowMessage(MSG_FORMAT_FROM_CHANNEL, m_AvailableChannels.FirstOrDefault(mc => mc.ChannelId == channelId).ChannelName, senderNumber, message);
         }
 
         [PunRPC]
         private void ReceiveMessageFromPlayer(int senderNumber, string message)
         {
-            ShowMessage("[{0}]对你:{1}", senderNumber, message);
+            ShowMessage(MSG_FORMAT_PLAYER_FROM_PLAYER, senderNumber, message);
         }
 
         [PunRPC]
