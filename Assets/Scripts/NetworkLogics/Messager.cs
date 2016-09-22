@@ -79,7 +79,6 @@
                 {
                     MessageChannelModel channel = new MessageChannelModel(i);
                     m_ActiveChannels.Add(i, channel);
-                    m_AvailableChannels.Add(channel);
                 }
                 else
                 {
@@ -89,6 +88,7 @@
 
             //默认0号频道为全部玩家频道
             m_ActiveChannels[0].ChannelName = ALL_CHANNEL_NAME;
+            m_AvailableChannels.Add(m_ActiveChannels[0]);
 
             if (m_GameLogic.IsInitialized)
             {
@@ -191,6 +191,23 @@
                 photonView.RPC("SubscribeToOrUpdateChannel", playerIdentities[addedNumber].Player, channelId, m_ActiveChannels[channelId].ChannelName, m_ActiveChannels[channelId].PlayerNumbers.ToArray());
             }
 
+            //根据频道中是否有玩家决定是否为AvailableChannel
+            MessageChannelModel channel = m_ActiveChannels[channelId];
+            if (channel.PlayerNumbers.Count() > 0)
+            {
+                if (!m_AvailableChannels.Contains(channel))
+                {
+                    m_AvailableChannels.Add(channel);
+                }
+            }
+            else
+            {
+                if (m_AvailableChannels.Contains(channel))
+                {
+                    m_AvailableChannels.Remove(channel);
+                }
+            }
+
             UpdateChannels();
         }
 
@@ -204,7 +221,6 @@
             {
                 MessageChannelModel channel = new MessageChannelModel(id);
                 m_ActiveChannels.Add(id, channel);
-                m_AvailableChannels.Add(channel);
 
                 UpdateChannels();
             }
