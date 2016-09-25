@@ -18,6 +18,7 @@
 
         public const string MSG_FORMAT_FROM_CHANNEL = "{{{0}}}中的[{1}]:{2}";
         public const string MSG_FORMAT_PLAYER_FROM_PLAYER = "[{0}]对你:{1}";
+        public const string MSG_FORMAT_PLAYER_TO_PLAYER = "你对[{0}]:{1}";
         public const string MSG_FORMAT_MASTER_ONE_PLAYER_TO_ANOTHER = "[{0}]对[{1}]:{2}";
 
         [Header("Channel Configuration")]
@@ -34,9 +35,11 @@
         private NetLogger m_NetLogger = null;
         [SerializeField]
         private Dropdown m_ChannelDropdown = null;
-
+        
+        public UnityTypedEvent.OrderedDictionaryEvent onAvailableChannelListUpdate = new UnityTypedEvent.OrderedDictionaryEvent();
         public UnityEvent onCurrentChannelIndexReset = new UnityEvent();
         public UnityEvent onMessageSent = new UnityEvent();
+        public UnityEvent onMessageReceived = new UnityEvent();
 
         private GameLogicBase m_GameLogic = null;
 
@@ -117,11 +120,14 @@
                 m_ActiveChannels[id].PlayerNumbers = new HashSet<int>();
             }            
             ReleaseAllPlayersFromChannels();
-            
+
+            m_AvailableChannels.Clear();
+            m_AvailableChannels.Add(m_ActiveChannels[0]);
+
             UpdateChannels();
         }
 
-        private void UpdateChannels()
+        public void UpdateChannels()
         {            
             OrderedDictionary dictionary = new OrderedDictionary();
             foreach (KeyValuePair<int, MessageChannelModel> channel in m_ActiveChannels)
@@ -159,14 +165,14 @@
                 photonView.RPC("SubscribeToOrUpdateChannel", playerIdentities[playerNumber].Player, channelId, m_ActiveChannels[channelId].ChannelName, m_ActiveChannels[channelId].PlayerNumbers.ToArray());
             }
 
-            UpdateChannels();
+            //UpdateChannels();
         }
 
         public bool ValidatePlayerNumber(int playerNumber)
         {
             Dictionary<int, PlayerIdentity> playerIdentities = m_GameLogic.PlayerIdentities;
 
-            return playerIdentities.ContainsKey(playerNumber) && playerIdentities[playerNumber].Player != null;
+            return playerNumber != 0 && playerIdentities.ContainsKey(playerNumber) && playerIdentities[playerNumber].Player != null;
         }
 
         public void UpdateChannel(int channelId, int[] newNumbers)
@@ -208,7 +214,7 @@
                 }
             }
 
-            UpdateChannels();
+            //UpdateChannels();
         }
 
         public void AddChannel()
@@ -259,25 +265,32 @@
             if (!sender.isMasterClient)
             {
                 //检查玩家广播目标频道的合法性
-                if (!channel.PlayerNumbers.Contains(senderNumber)) {
+                if (channel.ChannelId != 0 && !channel.PlayerNumbers.Contains(senderNumber)) {
                     photonView.RPC("ReceiveRequestRejection", sender, "发送者不在频道中");
                     return;
                 }
             }
 
-            foreach (int receiverNumber in channel.PlayerNumbers)
+            if (channel.ChannelId == 0)
             {
-                if (!ValidatePlayerNumber(receiverNumber)) { continue; }
-                PhotonPlayer receiver = playerIdentities[receiverNumber].Player;
-
-                if (receiverNumber != senderNumber)
-                {
-                    photonView.RPC("ReceiveMessageFromChannel", receiver, channelId, senderNumber, message);
-                }
+                photonView.RPC("ReceiveMessageFromChannel", PhotonTargets.AllViaServer, channelId, senderNumber, message);
             }
+            else
+            {
+                foreach (int receiverNumber in channel.PlayerNumbers)
+                {
+                    if (!ValidatePlayerNumber(receiverNumber)) { continue; }
+                    PhotonPlayer receiver = playerIdentities[receiverNumber].Player;
 
-            //Master显示消息
-            ShowMessage(MSG_FORMAT_FROM_CHANNEL, channel.ChannelName, senderNumber, message);
+                    //if (receiverNumber != senderNumber)
+                    //{
+                    photonView.RPC("ReceiveMessageFromChannel", receiver, channelId, senderNumber, message);
+                    //}
+                }
+
+                //Master显示消息
+                ShowMessage(MSG_FORMAT_FROM_CHANNEL, channel.ChannelName, senderNumber, message);
+            }
         }
 
         [PunRPC]
@@ -308,9 +321,13 @@
             }
 
             photonView.RPC("ReceiveMessageFromPlayer", receiver, senderNumber, message);
+            photonView.RPC("SendMessageToPlayer", sender, receiverNumber, message);
 
             //Master显示消息
-            ShowMessage(MSG_FORMAT_MASTER_ONE_PLAYER_TO_ANOTHER, senderNumber, receiverNumber, message);            
+            if ((senderNumber != 0) && (receiverNumber != 0))
+            {
+                ShowMessage(MSG_FORMAT_MASTER_ONE_PLAYER_TO_ANOTHER, senderNumber, receiverNumber, message);
+            }           
         }
         #endregion
 
@@ -371,18 +388,26 @@
         private void ReceiveMessageFromChannel(int channelId, int senderNumber, string message)
         {
             ShowMessage(MSG_FORMAT_FROM_CHANNEL, m_AvailableChannels.FirstOrDefault(mc => mc.ChannelId == channelId).ChannelName, senderNumber, message);
+            onMessageReceived.Invoke();
         }
 
         [PunRPC]
         private void ReceiveMessageFromPlayer(int senderNumber, string message)
         {
             ShowMessage(MSG_FORMAT_PLAYER_FROM_PLAYER, senderNumber, message);
+            onMessageReceived.Invoke();
+        }
+
+        [PunRPC]
+        private void SendMessageToPlayer(int receiverNumber, string message)
+        {
+            ShowMessage(MSG_FORMAT_PLAYER_TO_PLAYER, receiverNumber, message);
         }
 
         [PunRPC]
         private void ReceiveRequestRejection(string err)
         {
-            ShowMessage("<color=#800000ff>消息发送请求失败:{0}</color>", err);
+            ShowMessage("消息发送请求失败:{0}", err);
         }
 
         private void ShowMessage(string format, params object[] args)
@@ -400,6 +425,7 @@
             MessageChannelModel channel = new MessageChannelModel(0);
             channel.ChannelName = ALL_CHANNEL_NAME;
             m_AvailableChannels.Insert(0, channel);
+            DisplayAvailableChannels();
 
             m_AvailablePlayerNumbers = new List<int>{0};
 
@@ -410,29 +436,60 @@
         private void UnsubscribeFromChannels()
         {
             m_AvailableChannels.RemoveAll(mc => mc.ChannelId != 0);
+            DisplayAvailableChannels();
+
             UpdateChannelDropdown();
         }
 
         [PunRPC]
         private void UnsubscribeFromChannel(int channelId)
         {
-            m_AvailableChannels.Remove(m_AvailableChannels.Find(mc => mc.ChannelId == channelId));
+            MessageChannelModel channel = m_AvailableChannels.FirstOrDefault(mc => mc.ChannelId == channelId);
+            if (channel != null)
+            {
+                m_AvailableChannels.Remove(channel);
+            }
+            DisplayAvailableChannels();
+
             UpdateChannelDropdown();
         }
 
         [PunRPC]
         private void SubscribeToOrUpdateChannel(int channelId, string channelName, int[] playerNumbers)
         {
-            MessageChannelModel channel = m_AvailableChannels.Find(mc => mc.ChannelId == channelId);
-            if (channel.Equals(default(MessageChannelModel)))
+            MessageChannelModel channel = m_AvailableChannels.FirstOrDefault(mc => mc.ChannelId == channelId);
+            if (channel == null)
             {
                 channel = new MessageChannelModel(channelId);
+                m_AvailableChannels.Add(channel);
             }
             channel.ChannelName = channelName;
             channel.PlayerNumbers = new HashSet<int>(playerNumbers);
-            m_AvailableChannels.Add(channel);
+            DisplayAvailableChannels();
+
             UpdateChannelDropdown();
         }        
+
+        private void DisplayAvailableChannels()
+        {
+            OrderedDictionary dictionary = new OrderedDictionary();
+            foreach (MessageChannelModel channel in m_AvailableChannels)
+            {
+                string text = string.Format(CHANNEL_DISPLAY_FORMAT, channel.ChannelName);
+                if (channel.ChannelId != 0)
+                {
+                    text += " << ";
+                    List<int> list = channel.PlayerNumbers.ToList();
+                    list.Sort();
+                    foreach (int playerNumber in list)
+                    {
+                        text += string.Format(PLAYER_NUMBER_DISPLAY_FORMAT, playerNumber);
+                    }
+                }
+                dictionary.Add(channel.ChannelId.ToString(), text);
+            }
+            onAvailableChannelListUpdate.Invoke(dictionary);
+        }
         #endregion
     }
 }

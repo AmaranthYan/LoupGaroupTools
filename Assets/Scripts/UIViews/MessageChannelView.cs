@@ -116,6 +116,9 @@
             {
                 messager.UpdateChannel(m_AsyncItem.ChannelId, m_AsyncItem.ChannelName);
             }
+
+            //强制执行Messager频道更新
+            messager.UpdateChannels();
         }
     }
 }
