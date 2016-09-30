@@ -92,7 +92,7 @@
         public void StartVote()
         {
             if (!PhotonNetwork.isMasterClient) { return; }
-            if ((m_CandidateList == null) || (m_VoterList == null)) { return; }
+            if ((m_CandidateList == null || m_CandidateList.Count == 0) || (m_VoterList == null || m_VoterList.Count == 0)) { return; }
 
             //提取候选玩家编号
             int[] candidateNumbers = new int[m_CandidateList.Count];
@@ -244,6 +244,9 @@
         [PunRPC]
         public void DisplayPoll()
         {
+            //如果玩家正在投票则无视投票结果事件
+            if (m_VoteCountdown_Coroutine != null) { return; }
+
             onPollDisplay.Invoke();
         }
 

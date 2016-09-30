@@ -1,0 +1,305 @@
+Initialize engine version: 5.4.1f1 (649f48bbbf0f)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: NVIDIA GeForce GTX 765M        (ID=0x11e2)
+    Vendor:   NVIDIA
+    VRAM:     1990 MB
+Begin MonoManager ReloadAssembly
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\Assembly-CSharp-firstpass.dll (this message is harmless)
+Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\Assembly-CSharp-firstpass.dll into Unity Child Domain
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\Photon3Unity3D.dll (this message is harmless)
+Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\Photon3Unity3D.dll into Unity Child Domain
+- Completed reload, in  0.161 seconds
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\System.dll (this message is harmless)
+<RI> Initializing input.
+<RI> Input initialized.
+desktop: 1920x1080 60Hz; virtual: 4608x1296 at -2304,0
+<RI> Initialized touch support.
+UnloadTime: 1.077685 ms
+Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.950672 ms
+PUNVoice: Attempt to create multiple instances of PhotonVoiceSettings
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+
+Unloading 7 unused Assets to reduce memory usage. Loaded Objects now: 3142.
+Total: 2.860143 ms (FindLiveObjects: 0.128295 ms CreateObjectMapping: 0.115893 ms MarkObjects: 2.577465 ms  DeleteObjects: 0.021810 ms)
+
+SwitchToProtocol: Udp PhotonNetwork.connected: False
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Best region found in PlayerPrefs. Connecting to: eu
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Setting up 2 worker threads for Enlighten.
+  Thread -> id: 4444 -> priority: 1 
+  Thread -> id: 4b68 -> priority: 1 
+PUNVoice: connecting to region eu
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+PUNVoice: MicWrapper does not support suggested frequency 24000 (min: 48000, max: 48000). Setting to 48000
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+PUNVoice: [PV] Local voice #1 audio source frequency 48000 and encoder sampling rate 24000 do not match. Resampling will occur before encoding.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\System.Xml.dll (this message is harmless)
+Initialize engine version: 5.4.1f1 (649f48bbbf0f)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: NVIDIA GeForce GTX 765M        (ID=0x11e2)
+    Vendor:   NVIDIA
+    VRAM:     1990 MB
+Begin MonoManager ReloadAssembly
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\Assembly-CSharp-firstpass.dll (this message is harmless)
+Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\Assembly-CSharp-firstpass.dll into Unity Child Domain
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\Photon3Unity3D.dll (this message is harmless)
+Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\Photon3Unity3D.dll into Unity Child Domain
+- Completed reload, in  0.046 seconds
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\System.dll (this message is harmless)
+<RI> Initializing input.
+<RI> Input initialized.
+desktop: 1920x1080 60Hz; virtual: 4608x1296 at -2304,0
+<RI> Initialized touch support.
+UnloadTime: 0.911756 ms
+Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 1.042618 ms
+PUNVoice: Attempt to create multiple instances of PhotonVoiceSettings
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+
+Unloading 7 unused Assets to reduce memory usage. Loaded Objects now: 3142.
+Total: 2.683095 ms (FindLiveObjects: 0.141553 ms CreateObjectMapping: 0.109051 ms MarkObjects: 2.411108 ms  DeleteObjects: 0.015395 ms)
+
+SwitchToProtocol: Udp PhotonNetwork.connected: False
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Best region found in PlayerPrefs. Connecting to: eu
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Setting up 2 worker threads for Enlighten.
+  Thread -> id: 4a40 -> priority: 1 
+  Thread -> id: 5208 -> priority: 1 
+PUNVoice: connecting to region eu
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+PUNVoice: MicWrapper does not support suggested frequency 24000 (min: 48000, max: 48000). Setting to 48000
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+PUNVoice: [PV] Local voice #1 audio source frequency 48000 and encoder sampling rate 24000 do not match. Resampling will occur before encoding.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+PUNVoice: Player 1 voice #1 speaker created.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+PUNVoice: Player 2 voice #1 speaker created.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+PUNVoice: Player 2 voice # 1 speaker unlinked.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+PUNVoice: Player 1 voice # 1 speaker unlinked.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+PUNVoice: Voice #1 of player 2 not found.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+PUNVoice: Voice #1 of player 1 not found.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Ignoring Connect() because app gets closed. If this is an error, check PhotonHandler.AppQuits.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Ignoring Connect() because app gets closed. If this is an error, check PhotonHandler.AppQuits.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Initialize engine version: 5.4.1f1 (649f48bbbf0f)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: NVIDIA GeForce GTX 765M        (ID=0x11e2)
+    Vendor:   NVIDIA
+    VRAM:     1990 MB
+Begin MonoManager ReloadAssembly
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\Assembly-CSharp-firstpass.dll (this message is harmless)
+Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\Assembly-CSharp-firstpass.dll into Unity Child Domain
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\Photon3Unity3D.dll (this message is harmless)
+Loading D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\Photon3Unity3D.dll into Unity Child Domain
+- Completed reload, in  0.045 seconds
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\System.dll (this message is harmless)
+<RI> Initializing input.
+<RI> Input initialized.
+desktop: 1920x1080 60Hz; virtual: 4608x1296 at -2304,0
+<RI> Initialized touch support.
+UnloadTime: 0.889090 ms
+Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.882675 ms
+PUNVoice: Attempt to create multiple instances of PhotonVoiceSettings
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+
+Unloading 7 unused Assets to reduce memory usage. Loaded Objects now: 3142.
+Total: 2.581313 ms (FindLiveObjects: 0.143263 ms CreateObjectMapping: 0.106485 ms MarkObjects: 2.308043 ms  DeleteObjects: 0.016678 ms)
+
+SwitchToProtocol: Udp PhotonNetwork.connected: False
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Best region found in PlayerPrefs. Connecting to: eu
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Setting up 2 worker threads for Enlighten.
+  Thread -> id: ad4 -> priority: 1 
+  Thread -> id: 57f4 -> priority: 1 
+PUNVoice: connecting to region eu
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+PUNVoice: MicWrapper does not support suggested frequency 24000 (min: 48000, max: 48000). Setting to 48000
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+PUNVoice: [PV] Local voice #1 audio source frequency 48000 and encoder sampling rate 24000 do not match. Resampling will occur before encoding.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+PUNVoice: Player 1 voice #1 speaker created.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Ignoring Connect() because app gets closed. If this is an error, check PhotonHandler.AppQuits.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Ignoring Connect() because app gets closed. If this is an error, check PhotonHandler.AppQuits.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+PUNVoice: Player 1 voice # 1 speaker unlinked.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+PUNVoice: MicWrapper does not support suggested frequency 24000 (min: 48000, max: 48000). Setting to 48000
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+PUNVoice: [PV] Local voice #2 audio source frequency 48000 and encoder sampling rate 24000 do not match. Resampling will occur before encoding.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+PUNVoice: Player 1 voice #1 speaker created.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+PUNVoice: Player 1 voice # 1 speaker unlinked.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+PUNVoice: MicWrapper does not support suggested frequency 24000 (min: 48000, max: 48000). Setting to 48000
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+PUNVoice: [PV] Local voice #3 audio source frequency 48000 and encoder sampling rate 24000 do not match. Resampling will occur before encoding.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+PUNVoice: Player 1 voice #1 speaker created.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+PUNVoice: Player 1 voice # 1 speaker unlinked.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+PUNVoice: MicWrapper does not support suggested frequency 24000 (min: 48000, max: 48000). Setting to 48000
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+PUNVoice: [PV] Local voice #4 audio source frequency 48000 and encoder sampling rate 24000 do not match. Resampling will occur before encoding.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+PUNVoice: Player 2 voice #1 speaker created.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Platform assembly: D:\Unity Project\LoupsGarous Net\Build\LoupGaroupNet_v1.9_Data\Managed\System.Xml.dll (this message is harmless)
+PUNVoice: Player 2 voice # 1 speaker unlinked.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+PUNVoice: Player 3 voice #1 speaker created.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+PUNVoice: Player 3 voice # 1 speaker unlinked.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+PUNVoice: Player 4 voice #1 speaker created.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+PUNVoice: Player 4 voice # 1 speaker unlinked.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Ignoring Connect() because app gets closed. If this is an error, check PhotonHandler.AppQuits.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Ignoring Connect() because app gets closed. If this is an error, check PhotonHandler.AppQuits.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
