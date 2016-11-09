@@ -24,7 +24,7 @@ v2.x
     - add game history
       - players can now view all other players' identities at the end of each game
   - v1.9
-    - add in-rome and in-game real time voice chat  
+    - add in-room and in-game real time voice chat  
 
 ## In Dev
 1. Localization to English/French
