@@ -22,7 +22,7 @@ v2.x
   - v1.8
     - introduce the voting system
     - add game history
-      - players can now view all other players' identities at the end of each game
+      - players will now receive all other players' identities at the end of each game
   - v1.9
     - add in-room and in-game real time voice chat  
 
