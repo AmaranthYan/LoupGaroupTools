@@ -3,6 +3,7 @@ Attention : README in progress...
 This is a 3-month personal project that I have worked on during the summer of 2016  
 ## Intro
 This application is used to create online real time game sessions of the famous board game *Les Loups-garous de Thiercelieux*. It is designed and developped for LoupsGarous enthusiasts (such as myself :D) across the world to play games together.  
+
 I personally use this application to play LoupsGarous with my friends in China (that's why the whole user interface is in Chinese and I'm currently working on the i18n).
 
 ## Changelogs
